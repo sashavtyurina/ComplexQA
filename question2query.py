@@ -19,8 +19,9 @@ def chooseRandomQuestions(index_name, n):
     # get index length in documents - L
     # produce n random numbers in range 1:L
     # return either a list of ids or a list of actual questions
+    elastic = ES()
 
-    total_docs = cat.count(index=index_name, v=True)
+    total_docs = elastic.count(index=index_name, v=True)
     print(type(total_docs))
     print(total_docs)
 
