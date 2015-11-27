@@ -6,6 +6,8 @@ the initial information need and will produce good results (that contain an answ
 from elasticsearch import Elasticsearch as ES
 from elasticsearch.client import CatClient as cat
 import random
+import pprint
+
 
 class ESHelper:
     def __init__(self):
@@ -39,5 +41,17 @@ class ESHelper:
             single_doc = self.elasticClient.get(index=index_name, doc_type=doc_type, id=doc_id)
             print(single_doc)
 
+    def searchQuery(self, query_string, index_name, doc_type, size=10):
+      es_query = {}
+      es_query['query'] = {'dis_max': {'queries':[{'match':{'title':query_string}}, {'match':{'body':query_string}}]}}
+      #print(es_query)
+      searchres = self.elasticClient.search(index=index_name, doc_type=doc_type, body=es_query, size=size)
+      pprint.pprint(searchres)
+      return searches
 eshelper = ESHelper()
-eshelper.chooseRandomQuestions('yahoo', 100)
+eshelper.searchQuery('how should i dye my hair', 'yahoo', 'qapair', size=2)
+#test_sample = eshelper.chooseRandomQuestions('yahoo', 5)
+#print(test_sample)
+#eshelper.getDocumentsByIds(test_sample, 'yahoo', 'qapair')
+
+
