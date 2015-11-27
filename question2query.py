@@ -46,7 +46,7 @@ class ESHelper:
       es_query['query'] = {'dis_max': {'queries':[{'match':{'title':query_string}}, {'match':{'body':query_string}}]}}
       #print(es_query)
       searchres = self.elasticClient.search(index=index_name, doc_type=doc_type, body=es_query, size=size)
-      print('test test')
+      print('test test again')
       pprint.pprint(searchres)
       return searches
 eshelper = ESHelper()
