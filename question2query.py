@@ -21,7 +21,10 @@ def chooseRandomQuestions(index_name, n):
     # return either a list of ids or a list of actual questions
     elastic = ES()
 
-    total_docs = elastic.count(index=index_name, v=True)
+    total_docs = int(elastic.count(index=index_name).get('count', -1))
+    if total_docs == -1:
+      print('Could not fetch document count. Failed.')
+      return
     print(type(total_docs))
     print(total_docs)
 
