@@ -21,13 +21,6 @@ class ESHelper:
         :param n: how many questions would you like to pick
         :return: a list of questions
         '''
-
-        # get index length in documents - L
-        # produce n random numbers in range 1:L
-        # return either a list of ids or a list of actual questions
-        elastic = ES()
-
-        # total_docs = int(elastic.count(index=index_name).get('count', -1))
         total_docs = int(self.elasticClient.count(index=index_name).get('count', -1))
         if total_docs == -1:
             print('Could not fetch document count. Failed.')
@@ -37,22 +30,47 @@ class ESHelper:
         return test_sample
 
     def getDocumentsByIds(self, ids, index_name='yahoo', doc_type='qapair'):
+        '''
+        Given a list of ids, find them in the index and return the corresponding records.
+        :param ids: id of a document
+        :param index_name: the name of the index('yahoo' for WebScopeL6 )
+        :param doc_type: the type of the record ('qapair' for WebScopeL6)
+        :return: a list of the documents with the corresponding ids.
+        '''
+
+        documents = []
         for doc_id in ids:
             single_doc = self.elasticClient.get(index=index_name, doc_type=doc_type, id=doc_id)
+            documents.append(single_doc)
             print(single_doc)
+        return documents
 
     def searchQuery(self, query_string, index_name, doc_type, size=10):
-      es_query = {}
-      es_query['query'] = {'dis_max': {'queries':[{'match':{'title':query_string}}, {'match':{'body':query_string}}]}}
-      #print(es_query)
-      searchres = self.elasticClient.search(index=index_name, doc_type=doc_type, body=es_query, size=size)
-      print('test test again')
-      pprint.pprint(searchres)
-      return searches
+        '''
+        Given a query string, this function searches for it in titles and bodies of the questions
+        Returns a list of hits. Every hit is a json object with the fields: _id, _index, _score, _source,
+        _type. Where _source is a json object with the fields: title, body, answers.
+        :param query_string: the query that you would like to look for
+        :param index_name: the name of te index. For Yahoo WebScopeL6 the name is 'yahoo'
+        :param doc_type: the doc_type of the records in the index. For WebScopeL6 doc_type= "qapair"
+        :param size: how many results would you like to get
+        :return: returns a list of hits. See the function's description for details.
+        '''
+
+        es_query = {}
+        es_query['query'] = {'dis_max': {'queries':[{'match':{'title':query_string}}, {'match':{'body':query_string}}]}}
+        #print(es_query)
+        searchres = self.elasticClient.search(index=index_name, doc_type=doc_type, body=es_query, size=size)
+        print('test test again')
+        pprint.pprint(searchres['hits']['hits'])
+        return searchres['hits']['hits']
+
+
+
 eshelper = ESHelper()
-eshelper.searchQuery('how should i dye my hair', 'yahoo', 'qapair', size=2)
-#test_sample = eshelper.chooseRandomQuestions('yahoo', 5)
-#print(test_sample)
-#eshelper.getDocumentsByIds(test_sample, 'yahoo', 'qapair')
+# eshelper.searchQuery('how should i dye my hair', 'yahoo', 'qapair', size=2)
+# test_sample = eshelper.chooseRandomQuestions('yahoo', 5)
+# print(test_sample)
+# eshelper.getDocumentsByIds(test_sample, 'yahoo', 'qapair')
 
 
