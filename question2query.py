@@ -127,13 +127,28 @@ print(str(qapairs))
 i = 0
 for pair in qapairs:
     i += 1
-    print('Processing questions #%d' %i)
+    print('Processing questions #%d' % i)
     body = pair['_source']['body']
     title = pair['_source']['title']
     answers = pair['_source']['answers']
 
     stats = eshelper.statistics4docid(index_name, doc_type, pair['_id'])
-    pprint.pprint(str(stats))
+    # pprint.pprint(str(stats))
+
+    # merge stats. We want to have a single dictionary with all the values
+    body_stats = stats['term_vectors']['body']['terms']
+    title_stats = stats['term_vectors']['title']['terms']
+    merged_stats = {}
+    for term_stat in body_stats.items() + title_stats.items():
+        if term_stat[0] in merged_stats.keys():
+            merged_stats[term_stat[0]]['term_freq'] += term_stat['term_freq']
+            merged_stats[term_stat[0]]['doc_freq'] += term_stat['doc_freq']
+            merged_stats[term_stat[0]]['ttf'] += term_stat['ttf']
+        else:
+            merged_stats[term_stat[0]] = term_stat[1]
+
+    pprint.pprint(str(merged_stats))
+
 
 
 
