@@ -8,6 +8,7 @@ from elasticsearch.client import CatClient as cat
 import random
 import pprint
 
+stop_list = [w.strip() for w in open('stop_words.txt').readlines()]
 
 class ESHelper:
     def __init__(self):
@@ -65,9 +66,55 @@ class ESHelper:
         pprint.pprint(searchres['hits']['hits'])
         return searchres['hits']['hits']
 
+    def statistics4docid(self, index_name, doctype, doc_id):
+        request_body = {'fields': ['body', 'title'], 'term_statistics': True, 'field_statistics': True}
+        response = self.elasticClient.termvectors(index=index_name, doc_type=doctype, id=doc_id, body=request_body)
+        pprint.pprint(response)
 
+class IRUtils:
+    @staticmethod
+    def text2dict(text_list):
+        '''
+        Given a list return a dictionary with keys - unique word tokens, values - their frequencies
+        :param text: list of tokens
+        :return: dictionary
+        '''
+        final_dict = {}
+        for w in text_list:
+            final_dict[w]= final_dict.get(w, 0) + 1
+        return final_dict
+
+    @staticmethod
+    def tokenize(text):
+        '''
+        Tokenize string text
+        :param text: a string of text
+        :return: a list of tokens
+        '''
+        # TODO: add cleaning, removing strange symbols and so on
+        from nltk import tokenize
+        return tokenize.word_tokenize(text)
+
+    @staticmethod
+    def removeStop(text_list):
+        '''
+        Given a list of words removes stop words from it. Returns a clean list.
+        :param text_list: initial list of tokens
+        :return: Cleaned list of tokens. No stop words.
+        '''
+        clean_text = [w for w in text_list if w not in stop_list]
+        return clean_text
+
+    @staticmethod
+    def getGlobalProbs(words):
+        return ""
+
+    @staticmethod
+    def getTFIDF(words):
+        return ""
 
 eshelper = ESHelper()
+eshelper.statistics4docid(index_name='yahoo', doctype='qapair', doc_id=1)
 # eshelper.searchQuery('how should i dye my hair', 'yahoo', 'qapair', size=2)
 # test_sample = eshelper.chooseRandomQuestions('yahoo', 5)
 # print(test_sample)
