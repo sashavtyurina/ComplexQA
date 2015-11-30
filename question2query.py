@@ -14,13 +14,13 @@ class ESHelper:
     def __init__(self):
         self.elasticClient = ES()
 
-    def chooseRandomQuestions(self, index_name, n):
+    def chooseRandomQuestionIds(self, index_name, n):
         '''
         From a given index choose n random questions.
         We use them to test how well questions to query works.
         :param index_name: name of an index in ES
         :param n: how many questions would you like to pick
-        :return: a list of questions
+        :return: a list of question ids
         '''
         total_docs = int(self.elasticClient.count(index=index_name).get('count', -1))
         if total_docs == -1:
@@ -59,7 +59,7 @@ class ESHelper:
         '''
 
         es_query = {}
-        es_query['query'] = {'dis_max': {'queries':[{'match':{'title':query_string}}, {'match':{'body':query_string}}]}}
+        es_query['query'] = {'dis_max': {'queries': [{'match': {'title': query_string}}, {'match': {'body': query_string}}]}}
         #print(es_query)
         searchres = self.elasticClient.search(index=index_name, doc_type=doc_type, body=es_query, size=size)
         print('test test again')
@@ -67,7 +67,8 @@ class ESHelper:
         return searchres['hits']['hits']
 
     def statistics4docid(self, index_name, doctype, doc_id):
-        request_body = {'fields': ['body', 'title'], 'term_statistics': True, 'field_statistics': True}
+        request_body = {'fields': ['body', 'title'], 'term_statistics': True, 'field_statistics': False,
+                        'positions': False, 'offsets': False}
         response = self.elasticClient.termvectors(index=index_name, doc_type=doctype, id=doc_id, body=request_body)
         pprint.pprint(response)
 
@@ -114,7 +115,21 @@ class IRUtils:
         return ""
 
 eshelper = ESHelper()
-eshelper.statistics4docid(index_name='yahoo', doctype='qapair', doc_id=1)
+q_num = 1
+index_name = 'yahoo'
+doc_type = 'qapair'
+question_ids = eshelper.chooseRandomQuestionIds(index_name, q_num)
+i = 0
+
+for q_id in question_ids:
+    i += 1
+    print('Processing document #%d' % i)
+    qapair = eshelper.getDocumentsByIds([q_id], index_name, doc_type)
+    print(str(qapair))
+
+
+
+# eshelper.statistics4docid(index_name='yahoo', doctype='qapair', doc_id=1)
 # eshelper.searchQuery('how should i dye my hair', 'yahoo', 'qapair', size=2)
 # test_sample = eshelper.chooseRandomQuestions('yahoo', 5)
 # print(test_sample)
