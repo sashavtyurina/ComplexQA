@@ -43,7 +43,7 @@ class ESHelper:
         for doc_id in ids:
             single_doc = self.elasticClient.get(index=index_name, doc_type=doc_type, id=doc_id)
             documents.append(single_doc)
-            print(single_doc)
+            # print(single_doc)
         return documents
 
     def searchQuery(self, query_string, index_name, doc_type, size=10):
@@ -70,7 +70,8 @@ class ESHelper:
         request_body = {'fields': ['body', 'title'], 'term_statistics': True, 'field_statistics': False,
                         'positions': False, 'offsets': False}
         response = self.elasticClient.termvectors(index=index_name, doc_type=doctype, id=doc_id, body=request_body)
-        pprint.pprint(response)
+        # pprint.pprint(response)
+        return response
 
 class IRUtils:
     @staticmethod
@@ -119,13 +120,20 @@ q_num = 1
 index_name = 'yahoo'
 doc_type = 'qapair'
 question_ids = eshelper.chooseRandomQuestionIds(index_name, q_num)
-i = 0
 
-for q_id in question_ids:
+qapairs = eshelper.getDocumentsByIds(question_ids, index_name, doc_type)
+print(str(qapairs))
+
+i = 0
+for pair in qapairs:
     i += 1
-    print('Processing document #%d' % i)
-    qapair = eshelper.getDocumentsByIds([q_id], index_name, doc_type)
-    print(str(qapair))
+    print('Processing questions #%d' %i)
+    body = pair['_source']['body']
+    title = pair['_source']['title']
+    answers = pair['_source']['answers']
+
+    stats = eshelper.statistics4docid(index_name, doc_type, pair['_id'])
+    pprint.pprint(str(stats))
 
 
 
