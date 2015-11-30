@@ -7,6 +7,7 @@ from elasticsearch import Elasticsearch as ES
 from elasticsearch.client import CatClient as cat
 import random
 import pprint
+import operator
 
 stop_list = [w.strip() for w in open('stop_words.txt').readlines()]
 
@@ -127,7 +128,7 @@ qapairs = eshelper.getDocumentsByIds(question_ids, index_name, doc_type)
 i = 0
 for pair in qapairs:
     i += 1
-    print('Processing questions #%d' % i)
+    print('Processing question #%d' % i)
     body = pair['_source']['body']
     title = pair['_source']['title']
     answers = pair['_source']['answers']
@@ -137,30 +138,31 @@ for pair in qapairs:
     stats = eshelper.statistics4docid(index_name, doc_type, pair['_id'])
     # pprint.pprint(str(stats))
 
-    # merge stats. We want to have a single dictionary with all the values
+    # merge statistics for title and body.
+    # We want to have a single dictionary with all the values
     body_stats = stats['term_vectors']['body']['terms']
     title_stats = stats['term_vectors']['title']['terms']
     merged_stats = {}
     all_stats = list(body_stats.items()) + list(title_stats.items())
     for term_stat in all_stats:
         word = term_stat[0]
+        if word in stop_list:
+            continue
+
         word_ttf = term_stat[1]['ttf']
         word_local_freq = term_stat[1]['term_freq']
         word_doc_freq = term_stat[1]['doc_freq']
         if word in merged_stats.keys():
-        #print("next item")
-        #print(term_stat[0])
-        #print(term_stat[1]['ttf'])
-        #pprint.pprint(str(term_stat))
             merged_stats[word]['ttf'] += word_ttf 
             merged_stats[word]['term_freq'] += word_local_freq
             merged_stats[word]['doc_freq'] += word_doc_freq
         else:
             merged_stats[word] = term_stat[1]
 
-    for ii in merged_stats.items():
+    tfidfs = [(item[0], item[0]['ttf']/item[0]['doc_freq']) for item in merged_stats.items()]
+    for ii in sorted(tfidfs, key=operator.itemgetter(1), reverse=True):
         print(str(ii))
-      
+
     #print(str(merged_stats))
 
 
