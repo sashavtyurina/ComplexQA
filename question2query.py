@@ -122,7 +122,7 @@ doc_type = 'qapair'
 question_ids = eshelper.chooseRandomQuestionIds(index_name, q_num)
 
 qapairs = eshelper.getDocumentsByIds(question_ids, index_name, doc_type)
-print(str(qapairs))
+#print(str(qapairs))
 
 i = 0
 for pair in qapairs:
@@ -132,6 +132,8 @@ for pair in qapairs:
     title = pair['_source']['title']
     answers = pair['_source']['answers']
 
+    print(title)
+    print(body)
     stats = eshelper.statistics4docid(index_name, doc_type, pair['_id'])
     # pprint.pprint(str(stats))
 
@@ -139,15 +141,27 @@ for pair in qapairs:
     body_stats = stats['term_vectors']['body']['terms']
     title_stats = stats['term_vectors']['title']['terms']
     merged_stats = {}
-    for term_stat in body_stats.items() + title_stats.items():
-        if term_stat[0] in merged_stats.keys():
-            merged_stats[term_stat[0]]['term_freq'] += term_stat['term_freq']
-            merged_stats[term_stat[0]]['doc_freq'] += term_stat['doc_freq']
-            merged_stats[term_stat[0]]['ttf'] += term_stat['ttf']
+    all_stats = list(body_stats.items()) + list(title_stats.items())
+    for term_stat in all_stats:
+        word = term_stat[0]
+        word_ttf = term_stat[1]['ttf']
+        word_local_freq = term_stat[1]['term_freq']
+        word_doc_freq = term_stat[1]['doc_freq']
+        if word in merged_stats.keys():
+        #print("next item")
+        #print(term_stat[0])
+        #print(term_stat[1]['ttf'])
+        #pprint.pprint(str(term_stat))
+            merged_stats[word]['ttf'] += word_ttf 
+            merged_stats[word]['term_freq'] += word_local_freq
+            merged_stats[word]['doc_freq'] += word_doc_freq
         else:
-            merged_stats[term_stat[0]] = term_stat[1]
+            merged_stats[word] = term_stat[1]
 
-    pprint.pprint(str(merged_stats))
+    for ii in merged_stats.items():
+        print(str(ii))
+      
+    #print(str(merged_stats))
 
 
 
@@ -158,4 +172,4 @@ for pair in qapairs:
 # print(test_sample)
 # eshelper.getDocumentsByIds(test_sample, 'yahoo', 'qapair')
 
-
+  
