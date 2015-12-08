@@ -8,6 +8,7 @@ from elasticsearch.client import CatClient as cat
 import random
 import pprint
 import operator
+from collections import Counter
 
 stop_list = [w.strip() for w in open('stop_words.txt').readlines()]
 
@@ -140,24 +141,26 @@ for pair in qapairs:
 
     # merge statistics for title and body.
     # We want to have a single dictionary with all the values
-    body_stats = stats['term_vectors']['body']['terms']
-    title_stats = stats['term_vectors']['title']['terms']
-    merged_stats = {}
-    all_stats = list(body_stats.items()) + list(title_stats.items())
-    for term_stat in all_stats:
-        word = term_stat[0]
-        if word in stop_list:
-            continue
+    body_stats = Counter(stats['term_vectors']['body']['terms'])
+    title_stats = Counter(stats['term_vectors']['title']['terms'])
+    merged_stats = dict(body_stats + title_stats)
 
-        word_ttf = term_stat[1]['ttf']
-        word_local_freq = term_stat[1]['term_freq']
-        word_doc_freq = term_stat[1]['doc_freq']
-        if word in merged_stats.keys():
-            merged_stats[word]['ttf'] += word_ttf 
-            merged_stats[word]['term_freq'] += word_local_freq
-            merged_stats[word]['doc_freq'] += word_doc_freq
-        else:
-            merged_stats[word] = term_stat[1]
+
+    # all_stats = list(body_stats.items()) + list(title_stats.items())
+    # for term_stat in all_stats:
+    #     word = term_stat[0]
+    #     if word in stop_list:
+    #         continue
+    #
+    #     word_ttf = term_stat[1]['ttf']
+    #     word_local_freq = term_stat[1]['term_freq']
+    #     word_doc_freq = term_stat[1]['doc_freq']
+    #     if word in merged_stats.keys():
+    #         merged_stats[word]['ttf'] += word_ttf
+    #         merged_stats[word]['term_freq'] += word_local_freq
+    #         merged_stats[word]['doc_freq'] += word_doc_freq
+    #     else:
+    #         merged_stats[word] = term_stat[1]
 
     tfidfs = [(item[0], item[0]['ttf']/item[0]['doc_freq']) for item in merged_stats.items()]
     for ii in sorted(tfidfs, key=operator.itemgetter(1), reverse=True):
