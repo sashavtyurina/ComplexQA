@@ -110,12 +110,54 @@ class IRUtils:
         return clean_text
 
     @staticmethod
+    def removeStopDict(textDict):
+        '''
+        Given a dictionary with words as keys remove those pairs that have a stop word as their key
+        :param textDict: input dictionary. Has words as keys. Whatever else as values
+        :return: Clean dictionary
+        '''
+
+        clean_dict = {}
+        for word in textDict.keys():
+            if word in stop_list:
+                continue
+            clean_dict[word] = textDict[word]
+        return clean_dict
+
+    @staticmethod
     def getGlobalProbs(words):
         return ""
 
     @staticmethod
     def getTFIDF(words):
         return ""
+
+class CommonUtils:
+    @staticmethod
+    def mergeDicts(a, b):
+        '''
+        Merges dictionaries returned for every document by Elastic API.
+        :param a: dict 1
+        :param b: dict 2
+        :return: adds up all the values, returns the result
+        '''
+
+        result = {}
+        all_stats = list(a.items()) + list(b.items())
+        for term_stat in all_stats:
+            word = term_stat[0]
+            # if word in stop_list:
+            #     continue
+            word_ttf = term_stat[1]['ttf']
+            word_local_freq = term_stat[1]['term_freq']
+            word_doc_freq = term_stat[1]['doc_freq']
+            if word in result.keys():
+                result[word]['ttf'] += word_ttf
+                result[word]['term_freq'] += word_local_freq
+                result[word]['doc_freq'] += word_doc_freq
+            else:
+                result[word] = term_stat[1]
+        return result
 
 eshelper = ESHelper()
 q_num = 1
@@ -141,26 +183,11 @@ for pair in qapairs:
 
     # merge statistics for title and body.
     # We want to have a single dictionary with all the values
-    body_stats = Counter(stats['term_vectors']['body']['terms'])
-    title_stats = Counter(stats['term_vectors']['title']['terms'])
-    merged_stats = dict(body_stats + title_stats)
+    body_stats = stats['term_vectors']['body']['terms']
+    title_stats = stats['term_vectors']['title']['terms']
 
-
-    # all_stats = list(body_stats.items()) + list(title_stats.items())
-    # for term_stat in all_stats:
-    #     word = term_stat[0]
-    #     if word in stop_list:
-    #         continue
-    #
-    #     word_ttf = term_stat[1]['ttf']
-    #     word_local_freq = term_stat[1]['term_freq']
-    #     word_doc_freq = term_stat[1]['doc_freq']
-    #     if word in merged_stats.keys():
-    #         merged_stats[word]['ttf'] += word_ttf
-    #         merged_stats[word]['term_freq'] += word_local_freq
-    #         merged_stats[word]['doc_freq'] += word_doc_freq
-    #     else:
-    #         merged_stats[word] = term_stat[1]
+    merged_stats = CommonUtils.mergeDicts(body_stats, title_stats)
+    merged_stats = IRUtils.removeStopDict(merged_stats)
 
     tfidfs = [(item[0], item[0]['ttf']/item[0]['doc_freq']) for item in merged_stats.items()]
     for ii in sorted(tfidfs, key=operator.itemgetter(1), reverse=True):
