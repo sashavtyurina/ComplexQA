@@ -188,8 +188,9 @@ for pair in qapairs:
 
     merged_stats = CommonUtils.mergeDicts(body_stats, title_stats)
     merged_stats = IRUtils.removeStopDict(merged_stats)
-
-    tfidfs = [(item[0], item[0]['ttf']/item[0]['doc_freq']) for item in merged_stats.items()]
+    print(type(merged_stats.items()))
+    print(merged_stats.items())
+    tfidfs = [(item[0], item[1]['ttf']/item[1]['doc_freq']) for item in merged_stats.items()]
     for ii in sorted(tfidfs, key=operator.itemgetter(1), reverse=True):
         print(str(ii))
 
