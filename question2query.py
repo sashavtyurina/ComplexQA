@@ -16,6 +16,10 @@ class ESHelper:
     def __init__(self):
         self.elasticClient = ES()
 
+    def documentCount(self, index_name):
+        total_docs = int(self.elasticClient.count(index=index_name).get('count', -1))
+        return total_docs
+
     def chooseRandomQuestionIds(self, index_name, n):
         '''
         From a given index choose n random questions.
@@ -24,7 +28,8 @@ class ESHelper:
         :param n: how many questions would you like to pick
         :return: a list of question ids
         '''
-        total_docs = int(self.elasticClient.count(index=index_name).get('count', -1))
+        # total_docs = int(self.elasticClient.count(index=index_name).get('count', -1))
+        total_docs = self.documentCount(index_name)
         if total_docs == -1:
             print('Could not fetch document count. Failed.')
             return
@@ -74,6 +79,21 @@ class ESHelper:
         response = self.elasticClient.termvectors(index=index_name, doc_type=doctype, id=doc_id, body=request_body)
         # pprint.pprint(response)
         return response
+
+    def totalTokensInCorpus(self, index_name, doctype):
+        # starting with id of 2 (cause i screwed up the first one) we access it's title and body,
+        # claculate the length of the document in terms and ad it up to find the length of the corpus in the end
+
+        total_docs = self.documentCount(index_name)
+        total_tokens = 0
+        for doc_id in range(2, total_docs):
+            doc_stats = self.statistics4docid(index_name, doctype, doc_id)
+            doc_length = sum([item[1]['term_freq'] for item in doc_stats.items()])
+            total_tokens += doc_length
+        print(total_tokens)
+        return total_tokens
+
+
 
 class IRUtils:
     @staticmethod
@@ -163,6 +183,10 @@ eshelper = ESHelper()
 q_num = 1
 index_name = 'yahoo'
 doc_type = 'qapair'
+total_tokens = eshelper.totalTokensInCorpus(index_name, doc_type)
+print('Total tokens in corpus is: %d ' % total_tokens)
+input()
+
 question_ids = eshelper.chooseRandomQuestionIds(index_name, q_num)
 
 qapairs = eshelper.getDocumentsByIds(question_ids, index_name, doc_type)
@@ -189,7 +213,7 @@ for pair in qapairs:
     merged_stats = CommonUtils.mergeDicts(body_stats, title_stats)
     merged_stats = IRUtils.removeStopDict(merged_stats)
 
-    tfidfs = [(item[0], item[0]['ttf']/item[0]['doc_freq']) for item in merged_stats.items()]
+    tfidfs = [(item[0], item[1]['ttf']/item[1]['doc_freq']) for item in merged_stats.items()]
     for ii in sorted(tfidfs, key=operator.itemgetter(1), reverse=True):
         print(str(ii))
 
