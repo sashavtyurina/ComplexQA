@@ -9,6 +9,9 @@ import random
 import pprint
 import operator
 from collections import Counter
+import math
+TOTAL_TOKENS = 225643440  # in title + body
+TOTAL_DOCS = 4483001
 
 stop_list = [w.strip() for w in open('stop_words.txt').readlines()]
 
@@ -90,8 +93,6 @@ class ESHelper:
         for doc_id in range(2, total_docs):
             try:
                 doc_stats = self.statistics4docid(index_name, doctype, doc_id)
-
-                
                 body_stats = doc_stats['term_vectors']['body']['terms']
                 title_stats = doc_stats['term_vectors']['title']['terms']
                 merged_stats = CommonUtils.mergeDicts(body_stats, title_stats)
@@ -109,14 +110,35 @@ class ESHelper:
                 print('Currently total tokens number is %d' % total_tokens)
                 print('Current doc id is %d' % doc_id)
                 continue
-
-
         print(total_tokens)
         return total_tokens
 
 
 
 class IRUtils:
+    @staticmethod
+    def pwkld(term_dict):
+        # pointwise kld
+        # given a term dictionary containing a term and a term frequency in the document
+        # as well as total term frequency in the corpus
+        # return a dictionary where keys are words and values are their corresponding kld scores
+
+        pwkld = {}
+        doc_length = sum([item[1]['term_freq'] for item in term_dict.items()])
+        for item in term_dict.items():
+            word = item[0]
+            ttf = item[1]['ttf']  # total term frequency
+            doc_freq = item[1]['doc_freq']  # in how many documents this term occurs
+            term_freq = item[1]['term_freq']  # term frequency in this document
+
+            pwT = term_freq/doc_length  # p(w|T)
+            pwC = ttf/TOTAL_TOKENS  # p(w|C)
+            kld_score = pwT * math.log(pwT / pwC)  # p(w|T) * log (p(w|T)/p(w|C))
+
+            pwkld[word] = kld_score
+        return pwkld
+
+
     @staticmethod
     def text2dict(text_list):
         '''
@@ -204,9 +226,9 @@ eshelper = ESHelper()
 q_num = 1
 index_name = 'yahoo'
 doc_type = 'qapair'
-total_tokens = eshelper.totalTokensInCorpus(index_name, doc_type)
-print('Total tokens in corpus is: %d ' % total_tokens)
-input()
+
+# total_tokens = eshelper.totalTokensInCorpus(index_name, doc_type)
+# print('Total tokens in corpus is: %d ' % total_tokens)
 
 question_ids = eshelper.chooseRandomQuestionIds(index_name, q_num)
 
@@ -233,11 +255,13 @@ for pair in qapairs:
 
     merged_stats = CommonUtils.mergeDicts(body_stats, title_stats)
     merged_stats = IRUtils.removeStopDict(merged_stats)
-    print(type(merged_stats.items()))
+    # print(type(merged_stats.items()))
     print(merged_stats.items())
 
     tfidfs = [(item[0], item[1]['ttf']/item[1]['doc_freq']) for item in merged_stats.items()]
-    for ii in sorted(tfidfs, key=operator.itemgetter(1), reverse=True):
+    pwkld = IRUtils.pwkld(merged_stats)
+
+    for ii in sorted(pwkld, key=operator.itemgetter(1), reverse=True):
         print(str(ii))
 
     #print(str(merged_stats))
