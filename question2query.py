@@ -85,11 +85,32 @@ class ESHelper:
         # claculate the length of the document in terms and ad it up to find the length of the corpus in the end
 
         total_docs = self.documentCount(index_name)
+        print('Total docs is %d' %total_docs)
         total_tokens = 0
         for doc_id in range(2, total_docs):
-            doc_stats = self.statistics4docid(index_name, doctype, doc_id)
-            doc_length = sum([item[1]['term_freq'] for item in doc_stats.items()])
-            total_tokens += doc_length
+            try:
+                doc_stats = self.statistics4docid(index_name, doctype, doc_id)
+
+                
+                body_stats = doc_stats['term_vectors']['body']['terms']
+                title_stats = doc_stats['term_vectors']['title']['terms']
+                merged_stats = CommonUtils.mergeDicts(body_stats, title_stats)
+
+                doc_length = sum([item[1]['term_freq'] for item in merged_stats.items()])
+                # for item in merged_stats.items():
+                #     print(str(item))
+                #     input()
+
+                #     tf = item[1]['term_freq']
+                #     doc_length += tf
+                total_tokens += doc_length
+            except Exception as e:
+                print(str(e))
+                print('Currently total tokens number is %d' % total_tokens)
+                print('Current doc id is %d' % doc_id)
+                continue
+
+
         print(total_tokens)
         return total_tokens
 
