@@ -10,7 +10,7 @@ import pprint
 import operator
 from collections import Counter
 import math
-import statistics as stats
+import statistics 
 import json
 TOTAL_TOKENS = 225643440  # in title + body
 TOTAL_DOCS = 4483001
@@ -115,7 +115,7 @@ class ESHelper:
         print(total_tokens)
         return total_tokens
 
-    def multiword_search(self, index_name, doc_type, query):
+    def multiword_search(self, index_name, doc_type, query, except_ids, size=10):
         '''
         Implements multiword search in the corpus
         :param index_name:
@@ -131,8 +131,16 @@ class ESHelper:
             should.append({"match": {"body": word}})
 
         request_body = {'query': {'bool': {'should': should}}}
-        response = self.elasticClient.search(index=index_name, doc_type=doc_type, body=request_body)
-        print(str(response))
+        response = self.elasticClient.search(index=index_name, doc_type=doc_type, body=request_body, size=size)
+        response = response['hits']['hits']
+        similar_docs = []
+        for i in response:
+            if i['_id'] in except_ids:
+                continue
+            doc = {'id': i['_id'], 'title': i['_source']['title'], 'body': i['_source']['body'], 'answers': i['_source']['answers']}
+            print(doc)
+            similar_docs.append(doc)
+        #pprint.pprint(str(response['hits']['hits']))
 
 class IRUtils:
     @staticmethod
@@ -258,6 +266,8 @@ i = 0
 for pair in qapairs:
     i += 1
     print('Processing question #%d' % i)
+    doc_id = pair['_id']
+    print('Doc id is %s' % doc_id)
     body = pair['_source']['body']
     title = pair['_source']['title']
     answers = pair['_source']['answers']
@@ -283,7 +293,7 @@ for pair in qapairs:
     pwkld = IRUtils.pwkld(merged_stats)
     pwkld = sorted(pwkld.items(), key=operator.itemgetter(1), reverse=True)
 
-    median_kld = stats.median([i[1] for i in pwkld.items()])
+    median_kld = statistics.median([i[1] for i in pwkld])
     # todo: also try finding a mean and taking everything above it
 
     query = []
@@ -295,7 +305,7 @@ for pair in qapairs:
     print("query: %s" % ' '.join(query))
     input()
 
-    eshelper.multiword_search(index_name, doc_type, query)
+    eshelper.multiword_search(index_name, doc_type, query, [doc_id])
     input()
     #print(str(merged_stats))
 
