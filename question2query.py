@@ -10,6 +10,7 @@ import pprint
 import operator
 from collections import Counter
 import math
+import statistics as stats
 TOTAL_TOKENS = 225643440  # in title + body
 TOTAL_DOCS = 4483001
 
@@ -263,9 +264,17 @@ for pair in qapairs:
     tfidfs = [(item[0], item[1]['ttf']/item[1]['doc_freq']) for item in merged_stats.items()]
     pwkld = IRUtils.pwkld(merged_stats)
     pwkld = sorted(pwkld.items(), key=operator.itemgetter(1), reverse=True)
-    print(pwkld)
-    for iii in pwkld:
-        print(str(iii))
+
+    median_kld = stats.median([i[1] for i in pwkld.items()])
+    # todo: also try finding a mean and taking everything above it
+
+    query = []
+    for ii in pwkld:
+        if ii[1] > median_kld:
+            print(ii[0])
+            query.append(ii[0])
+
+    print("query: %s" % ' '.join(query))
     input()
     #print(str(merged_stats))
 
