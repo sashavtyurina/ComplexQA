@@ -223,7 +223,7 @@ class CommonUtils:
         return result
 
 eshelper = ESHelper()
-q_num = 1
+q_num = 10
 index_name = 'yahoo'
 doc_type = 'qapair'
 
@@ -256,14 +256,17 @@ for pair in qapairs:
     merged_stats = CommonUtils.mergeDicts(body_stats, title_stats)
     merged_stats = IRUtils.removeStopDict(merged_stats)
     # print(type(merged_stats.items()))
-    print(merged_stats.items())
+    # print(merged_stats.items())
+#    for ii in merged_stats.items():
+#        print(str(ii))
 
     tfidfs = [(item[0], item[1]['ttf']/item[1]['doc_freq']) for item in merged_stats.items()]
     pwkld = IRUtils.pwkld(merged_stats)
-
-    for ii in sorted(pwkld, key=operator.itemgetter(1), reverse=True):
-        print(str(ii))
-
+    pwkld = sorted(pwkld.items(), key=operator.itemgetter(1), reverse=True)
+    print(pwkld)
+    for iii in pwkld:
+        print(str(iii))
+    input()
     #print(str(merged_stats))
 
 
