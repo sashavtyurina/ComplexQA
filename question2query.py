@@ -11,6 +11,7 @@ import operator
 from collections import Counter
 import math
 import statistics as stats
+import json
 TOTAL_TOKENS = 225643440  # in title + body
 TOTAL_DOCS = 4483001
 
@@ -114,7 +115,24 @@ class ESHelper:
         print(total_tokens)
         return total_tokens
 
+    def multiword_search(self, index_name, doc_type, query):
+        '''
+        Implements multiword search in the corpus
+        :param index_name:
+        :param doc_type:
+        :param query: a list of words that we _should_ look for.
+        :return: The results of the search
+        todo: pass another parameter - n, how many results we should return
+        '''
 
+        should = []
+        for word in query:
+            should.append({"match": {"title": word}})
+            should.append({"match": {"body": word}})
+
+        request_body = {'query': {'bool': {'should': should}}}
+        response = self.elasticClient.search(index=index_name, doc_type=doc_type, body=request_body)
+        print(str(response))
 
 class IRUtils:
     @staticmethod
@@ -275,6 +293,9 @@ for pair in qapairs:
             query.append(ii[0])
 
     print("query: %s" % ' '.join(query))
+    input()
+
+    eshelper.multiword_search(index_name, doc_type, query)
     input()
     #print(str(merged_stats))
 
