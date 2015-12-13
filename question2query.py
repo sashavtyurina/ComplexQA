@@ -154,13 +154,17 @@ class ESHelper:
         body_length_distr = {}
         total_length_distr = {}
         for doc_id in range(2, total_docs):
-#            print(self.getDocumentsByIds([doc_id], index_name, doc_type))
+            # print(self.getDocumentsByIds([doc_id], index_name, doc_type))
             statistics = self.statistics4docid(index_name, doc_type, doc_id)
-            body_stats = statistics['term_vectors']['body']['terms']
-            title_stats = statistics['term_vectors']['title']['terms']
+            if 'body' not in statistics['term_vectors']:
+                body_length = 0
+            else:
+                body_stats = statistics['term_vectors']['body']['terms']
+                body_length = sum([item[1]['term_freq'] for item in body_stats.items()])
 
+            title_stats = statistics['term_vectors']['title']['terms']
             title_length = sum([item[1]['term_freq'] for item in title_stats.items()])
-            body_length = sum([item[1]['term_freq'] for item in body_stats.items()])
+
             title_length_distr[title_length] = title_length_distr.get(title_length, 0) + 1
             body_length_distr[body_length] = body_length_distr.get(body_length, 0) + 1            
             
@@ -169,11 +173,11 @@ class ESHelper:
 
            # print('doc_id = %d, title = %d, body = %d' % (doc_id, title_length, body_length))
            # input()
-            with open ('title_length_distr.txt', 'w') as t:
+            with open('title_length_distr.txt', 'w') as t:
                 t.write(str(title_length_distr))
-            with open ('body_length_distr.txt', 'w') as b:
+            with open('body_length_distr.txt', 'w') as b:
                 b.write(str(body_length_distr))
-            with open ('total_length_distr.txt', 'w') as tt:
+            with open('total_length_distr.txt', 'w') as tt:
                 tt.write(str(total_length_distr))
 
 class IRUtils:
