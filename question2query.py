@@ -142,6 +142,26 @@ class ESHelper:
             similar_docs.append(doc)
         #pprint.pprint(str(response['hits']['hits']))
 
+    def length_distribution(self, index_name, doc_type):
+        '''
+        We want to take each and every question and count the number of words in each.
+        Then save it to a probably dictionary with keys - lengths, values - number of questions with such length
+        :return:
+        '''
+
+        total_docs = self.documentCount(index_name)
+
+        for doc_id in range(2, total_docs):
+            statistics = self.statistics4docid(index_name, doc_type, doc_id)['hits']['hits']
+            body_stats = statistics['term_vectors']['body']['terms']
+            title_stats = statistics['term_vectors']['title']['terms']
+
+            title_length = sum([item[1]['term_freq'] for item in title_stats.items()])
+            body_length = sum([item[1]['term_freq'] for item in body_stats.items()])
+
+            print('doc_id = %d, title = %d, body = %d' % (doc_id, title_length, body_length))
+            input()
+
 class IRUtils:
     @staticmethod
     def pwkld(term_dict):
