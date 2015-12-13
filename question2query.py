@@ -180,14 +180,14 @@ class ESHelper:
 
            # print('doc_id = %d, title = %d, body = %d' % (doc_id, title_length, body_length))
            # input()
-            with open('title_length_distr.txt', 'w') as t:
-                t.write(str(title_length_distr))
-            with open('body_length_distr.txt', 'w') as b:
-                b.write(str(body_length_distr))
-            with open('total_length_distr.txt', 'w') as tt:
-                tt.write(str(total_length_distr))
+        with open('title_length_distr.txt', 'w') as t:
+            t.write(str(title_length_distr))
+        with open('body_length_distr.txt', 'w') as b:
+            b.write(str(body_length_distr))
+        with open('total_length_distr.txt', 'w') as tt:
+            tt.write(str(total_length_distr))
 
-            print('No body: %d questions, no title: %d questions' % (no_body, no_title))
+        print('No body: %d questions, no title: %d questions' % (no_body, no_title))
 
 class IRUtils:
     @staticmethod
