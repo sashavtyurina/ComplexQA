@@ -153,17 +153,24 @@ class ESHelper:
         title_length_distr = {}
         body_length_distr = {}
         total_length_distr = {}
+        no_body = 0
+        no_title = 0
         for doc_id in range(2, total_docs):
             # print(self.getDocumentsByIds([doc_id], index_name, doc_type))
             statistics = self.statistics4docid(index_name, doc_type, doc_id)
             if 'body' not in statistics['term_vectors']:
                 body_length = 0
+                no_body += 1
             else:
                 body_stats = statistics['term_vectors']['body']['terms']
                 body_length = sum([item[1]['term_freq'] for item in body_stats.items()])
 
-            title_stats = statistics['term_vectors']['title']['terms']
-            title_length = sum([item[1]['term_freq'] for item in title_stats.items()])
+            if 'title' not in statistics['term_vectors']:
+                title_length = 0
+                no_title += 1
+            else:
+                title_stats = statistics['term_vectors']['title']['terms']
+                title_length = sum([item[1]['term_freq'] for item in title_stats.items()])
 
             title_length_distr[title_length] = title_length_distr.get(title_length, 0) + 1
             body_length_distr[body_length] = body_length_distr.get(body_length, 0) + 1            
@@ -179,6 +186,8 @@ class ESHelper:
                 b.write(str(body_length_distr))
             with open('total_length_distr.txt', 'w') as tt:
                 tt.write(str(total_length_distr))
+
+            print('No body: %d questions, no title: %d questions' % (no_body, no_title))
 
 class IRUtils:
     @staticmethod
