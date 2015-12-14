@@ -79,7 +79,7 @@ class ESHelper:
         return searchres['hits']['hits']
 
     def statistics4docid(self, index_name, doctype, doc_id):
-        request_body = {'fields': ['body', 'title'], 'term_statistics': True, 'field_statistics': False,
+        request_body = {'fields': ['body', 'title', 'answers'], 'term_statistics': True, 'field_statistics': False,
                         'positions': False, 'offsets': False}
         response = self.elasticClient.termvectors(index=index_name, doc_type=doctype, id=doc_id, body=request_body)
         # pprint.pprint(response)
@@ -158,6 +158,8 @@ class ESHelper:
         for doc_id in range(2, total_docs):
             # print(self.getDocumentsByIds([doc_id], index_name, doc_type))
             statistics = self.statistics4docid(index_name, doc_type, doc_id)
+            print(str(statistics))
+            input()
             if 'body' not in statistics['term_vectors']:
                 body_length = 0
                 no_body += 1
@@ -188,6 +190,19 @@ class ESHelper:
             tt.write(str(total_length_distr))
 
         print('No body: %d questions, no title: %d questions' % (no_body, no_title))
+
+    def collect_length_statistics(self, index_name, doc_type):
+        '''
+        Want to create a text file with
+        id - title length - body length - [length of each answer]
+        :param index_name:
+        :param doc_type:
+        :return:
+        '''
+
+        json_obj = json.dump('id': doc_id, 'title': title_length, 'body': body_length, 'answers_length': [ans_lengths])
+
+
 
 class IRUtils:
     @staticmethod
