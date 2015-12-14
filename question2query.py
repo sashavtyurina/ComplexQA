@@ -12,6 +12,7 @@ from collections import Counter
 import math
 import statistics 
 import json
+from nltk import tokenize
 TOTAL_TOKENS = 225643440  # in title + body
 TOTAL_DOCS = 4483001
 
@@ -142,65 +143,94 @@ class ESHelper:
             similar_docs.append(doc)
         #pprint.pprint(str(response['hits']['hits']))
 
-    def length_distribution(self, index_name, doc_type):
-        '''
-        We want to take each and every question and count the number of words in each.
-        Then save it to a probably dictionary with keys - lengths, values - number of questions with such length
-        :return:
-        '''
+    # def length_distribution(self, index_name, doc_type):
+    #     '''
+    #     We want to take each and every question and count the number of words in each.
+    #     Then save it to a probably dictionary with keys - lengths, values - number of questions with such length
+    #     :return:
+    #     '''
+    #
+    #     total_docs = self.documentCount(index_name)
+    #     title_length_distr = {}
+    #     body_length_distr = {}
+    #     total_length_distr = {}
+    #     no_body = 0
+    #     no_title = 0
+    #     for doc_id in range(2, total_docs):
+    #         # print(self.getDocumentsByIds([doc_id], index_name, doc_type))
+    #         statistics = self.statistics4docid(index_name, doc_type, doc_id)
+    #         if 'body' not in statistics['term_vectors']:
+    #             body_length = 0
+    #             no_body += 1
+    #         else:
+    #             body_stats = statistics['term_vectors']['body']['terms']
+    #             body_length = sum([item[1]['term_freq'] for item in body_stats.items()])
+    #
+    #         if 'title' not in statistics['term_vectors']:
+    #             title_length = 0
+    #             no_title += 1
+    #         else:
+    #             title_stats = statistics['term_vectors']['title']['terms']
+    #             title_length = sum([item[1]['term_freq'] for item in title_stats.items()])
+    #
+    #         title_length_distr[title_length] = title_length_distr.get(title_length, 0) + 1
+    #         body_length_distr[body_length] = body_length_distr.get(body_length, 0) + 1
+    #
+    #         total_length = title_length + body_length
+    #         total_length_distr[total_length] = total_length_distr.get(total_length, 0) + 1
+    #
+    #        # print('doc_id = %d, title = %d, body = %d' % (doc_id, title_length, body_length))
+    #        # input()
+    #     with open('title_length_distr.txt', 'w') as t:
+    #         t.write(str(title_length_distr))
+    #     with open('body_length_distr.txt', 'w') as b:
+    #         b.write(str(body_length_distr))
+    #     with open('total_length_distr.txt', 'w') as tt:
+    #         tt.write(str(total_length_distr))
+    #
+    #     print('No body: %d questions, no title: %d questions' % (no_body, no_title))
 
+    def collect_length(self, index_name, doc_type):
         total_docs = self.documentCount(index_name)
         title_length_distr = {}
         body_length_distr = {}
+        answers_length_dictr = {}
         total_length_distr = {}
         no_body = 0
         no_title = 0
-        for doc_id in range(2, total_docs):
-            # print(self.getDocumentsByIds([doc_id], index_name, doc_type))
-            statistics = self.statistics4docid(index_name, doc_type, doc_id)
-            print(str(statistics))
-            input()
-            if 'body' not in statistics['term_vectors']:
-                body_length = 0
-                no_body += 1
-            else:
-                body_stats = statistics['term_vectors']['body']['terms']
-                body_length = sum([item[1]['term_freq'] for item in body_stats.items()])
+        no_answers = 0
+        with open('statistics.txt', 'w') as s_file:
+            for doc_id in range(2, total_docs):
+                try:
+                    doc = self.getDocumentsByIds([doc_id], index_name, doc_type)[0]['_source']
+                    if 'title' not in doc:
+                        title_length = 0
+                        no_title += 1
+                    else:
+                        title_length = len(tokenize.word_tokenize(doc['title']))
 
-            if 'title' not in statistics['term_vectors']:
-                title_length = 0
-                no_title += 1
-            else:
-                title_stats = statistics['term_vectors']['title']['terms']
-                title_length = sum([item[1]['term_freq'] for item in title_stats.items()])
+                    if 'body' not in doc:
+                        body_length = 0
+                        no_body += 1
+                    else:
+                        body_length = len(tokenize.word_tokenize(doc['body']))
 
-            title_length_distr[title_length] = title_length_distr.get(title_length, 0) + 1
-            body_length_distr[body_length] = body_length_distr.get(body_length, 0) + 1            
-            
-            total_length = title_length + body_length
-            total_length_distr[total_length] = total_length_distr.get(total_length, 0) + 1
+                    if 'answers' not in doc:
+                        answers_length = []
+                        no_answers += 1
+                    else:
+                        answers_length = []
+                        for a in doc['answers']:
+                            answers_length.append(len(tokenize.word_tokenize(a)))
 
-           # print('doc_id = %d, title = %d, body = %d' % (doc_id, title_length, body_length))
-           # input()
-        with open('title_length_distr.txt', 'w') as t:
-            t.write(str(title_length_distr))
-        with open('body_length_distr.txt', 'w') as b:
-            b.write(str(body_length_distr))
-        with open('total_length_distr.txt', 'w') as tt:
-            tt.write(str(total_length_distr))
-
-        print('No body: %d questions, no title: %d questions' % (no_body, no_title))
-
-    def collect_length_statistics(self, index_name, doc_type):
-        '''
-        Want to create a text file with
-        id - title length - body length - [length of each answer]
-        :param index_name:
-        :param doc_type:
-        :return:
-        '''
-
-        json_obj = json.dump('id': doc_id, 'title': title_length, 'body': body_length, 'answers_length': [ans_lengths])
+                    json_obj = json.dump({'title_length': title_length, 'body_length': body_length,
+                                          'answers_length': answers_length})
+                    s_file.write('%s\n' % str(json_obj))
+                except Exception as e:
+                    print(str(e))
+                    continue
+            s_file.write('No body: %d questions, no title: %d questions, '
+                         'no answers: %d questions' % (no_body, no_title, no_answers))
 
 
 
@@ -316,7 +346,8 @@ q_num = 10
 index_name = 'yahoo'
 doc_type = 'qapair'
 
-eshelper.length_distribution(index_name, doc_type)
+# eshelper.length_distribution(index_name, doc_type)
+eshelper.collect_length(index_name, doc_type)
 input()
 
 # total_tokens = eshelper.totalTokensInCorpus(index_name, doc_type)
