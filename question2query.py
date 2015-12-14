@@ -236,7 +236,6 @@ class ESHelper:
                          'no answers: %d questions' % (no_body, no_title, no_answers))
 
 
-
 class IRUtils:
     @staticmethod
     def pwkld(term_dict):
@@ -319,6 +318,47 @@ class IRUtils:
 
 class CommonUtils:
     @staticmethod
+    def length_distribution(filename):
+        '''
+        Given a file with a json on every line with lengths of body, title, etc
+        We want to find a distribution of lengths
+        :param filename:
+        We can find the distribution of question length alone no problem
+        But we also want to see how they correspond to their answers
+        :return:
+        '''
+        tl_distr = {}
+        bl_distr = {}
+        t_distr = {}
+        al_distr = {}
+        best_distr = {}
+        with open(filename) as f:
+            for line in f:
+                obj = eval(line.strip())
+                tl = obj['tl']
+                bl = obj['bl']
+                t = tl + bl
+                best = obj['best']
+                tl_distr[tl] = tl_distr.get(tl, 0) + 1
+                bl_distr[bl] = bl_distr.get(bl, 0) + 1
+                t_distr[t] = t_distr.get(t, 0) + 1
+                best_distr[best] = best_distr.get(best, 0) + 1
+
+                for a in obj['al']:
+                    al_distr[a] = al_distr.get(a, 0) + 1
+            with open('distributions.txt', 'w') as d:
+                d.write('%s\n' % str(tl_distr))
+                d.write('%s\n' % str(bl_distr))
+                d.write('%s\n' % str(t_distr))
+                d.write('%s\n' % str(best_distr))
+                d.write('%s\n' % str(t_distr))
+
+
+
+
+
+
+    @staticmethod
     def mergeDicts(a, b):
         '''
         Merges dictionaries returned for every document by Elastic API.
@@ -350,7 +390,8 @@ index_name = 'yahoo'
 doc_type = 'qapair'
 
 # eshelper.length_distribution(index_name, doc_type)
-eshelper.collect_length(index_name, doc_type)
+# eshelper.collect_length(index_name, doc_type)
+CommonUtils.length_distribution('statistics copy.txt')
 input()
 
 # total_tokens = eshelper.totalTokensInCorpus(index_name, doc_type)
