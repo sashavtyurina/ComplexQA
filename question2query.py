@@ -202,6 +202,8 @@ class ESHelper:
         with open('statistics.txt', 'w') as s_file:
             for doc_id in range(2, total_docs):
                 try:
+                    if doc_id%100000 == 0:
+                        print('Currently working on doc_id %d' % doc_id)
                     doc = self.getDocumentsByIds([doc_id], index_name, doc_type)[0]['_source']
                     if 'title' not in doc:
                         title_length = 0
