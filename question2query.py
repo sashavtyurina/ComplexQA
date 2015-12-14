@@ -202,7 +202,7 @@ class ESHelper:
         with open('statistics.txt', 'w') as s_file:
             for doc_id in range(2, total_docs):
                 try:
-                    if doc_id%100000 == 0:
+                    if doc_id % 100000 == 0:
                         print('Currently working on doc_id %d' % doc_id)
                     doc = self.getDocumentsByIds([doc_id], index_name, doc_type)[0]['_source']
                     if 'title' not in doc:
@@ -225,8 +225,9 @@ class ESHelper:
                         for a in doc['answers']:
                             answers_length.append(len(tokenize.word_tokenize(a)))
 
-                    json_obj = json.dumps({'title_length': title_length, 'body_length': body_length,
-                                          'answers_length': answers_length})
+                    json_obj = json.dumps({'id': doc_id, 'tl': title_length,
+                                           'bl': body_length,
+                                          'al': answers_length})
                     s_file.write('%s\n' % str(json_obj))
                 except Exception as e:
                     print(str(e))
