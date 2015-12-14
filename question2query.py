@@ -223,7 +223,7 @@ class ESHelper:
                         for a in doc['answers']:
                             answers_length.append(len(tokenize.word_tokenize(a)))
 
-                    json_obj = json.dump({'title_length': title_length, 'body_length': body_length,
+                    json_obj = json.dumps({'title_length': title_length, 'body_length': body_length,
                                           'answers_length': answers_length})
                     s_file.write('%s\n' % str(json_obj))
                 except Exception as e:
