@@ -79,8 +79,9 @@ class ESHelper:
         pprint.pprint(searchres['hits']['hits'])
         return searchres['hits']['hits']
 
-    def statistics4docid(self, index_name, doctype, doc_id):
-        request_body = {'fields': ['body', 'title', 'answers'], 'term_statistics': True, 'field_statistics': False,
+    def statistics4docid(self, index_name, doctype, doc_id, add_fields=[]):
+        fields = ['body', 'title', 'answers'] + add_fields
+        request_body = {'fields': fields, 'term_statistics': True, 'field_statistics': False,
                         'positions': False, 'offsets': False}
         response = self.elasticClient.termvectors(index=index_name, doc_type=doctype, id=doc_id, body=request_body)
         # pprint.pprint(response)
@@ -332,6 +333,13 @@ class CommonUtils:
         t_distr = {}
         al_distr = {}
         best_distr = {}
+
+        # question length against average answer length. list of tuples.
+        q_mean_answer = []
+
+        # question length against best answer length. list of tuples.
+        q_best_answer = []
+
         with open(filename) as f:
             for line in f:
                 obj = eval(line.strip())
@@ -344,6 +352,12 @@ class CommonUtils:
                 t_distr[t] = t_distr.get(t, 0) + 1
                 best_distr[best] = best_distr.get(best, 0) + 1
 
+                if len(obj['al']):
+                    q_mean_answer.append((t, sum(obj['al'])/len(obj['al'])))
+
+                if best:
+                    q_best_answer.append((t, best))
+
                 for a in obj['al']:
                     al_distr[a] = al_distr.get(a, 0) + 1
             with open('distributions.txt', 'w') as d:
@@ -351,12 +365,9 @@ class CommonUtils:
                 d.write('%s\n' % str(bl_distr))
                 d.write('%s\n' % str(t_distr))
                 d.write('%s\n' % str(best_distr))
-                d.write('%s\n' % str(t_distr))
-
-
-
-
-
+                d.write('%s\n' % str(al_distr))
+                d.write('%s\n' % str(q_mean_answer))
+                d.write('%s\n' % str(q_best_answer))
 
     @staticmethod
     def mergeDicts(a, b):
@@ -384,70 +395,69 @@ class CommonUtils:
                 result[word] = term_stat[1]
         return result
 
-eshelper = ESHelper()
-q_num = 10
-index_name = 'yahoo'
-doc_type = 'qapair'
-
-# eshelper.length_distribution(index_name, doc_type)
-# eshelper.collect_length(index_name, doc_type)
-CommonUtils.length_distribution('statistics copy.txt')
-input()
-
-# total_tokens = eshelper.totalTokensInCorpus(index_name, doc_type)
-# print('Total tokens in corpus is: %d ' % total_tokens)
-
-question_ids = eshelper.chooseRandomQuestionIds(index_name, q_num)
-
-qapairs = eshelper.getDocumentsByIds(question_ids, index_name, doc_type)
-#print(str(qapairs))
-
-i = 0
-for pair in qapairs:
-    i += 1
-    print('Processing question #%d' % i)
-    doc_id = pair['_id']
-    print('Doc id is %s' % doc_id)
-    body = pair['_source']['body']
-    title = pair['_source']['title']
-    answers = pair['_source']['answers']
-
-    print(title)
-    print(body)
-    stats = eshelper.statistics4docid(index_name, doc_type, pair['_id'])
-    # pprint.pprint(str(stats))
-
-    # merge statistics for title and body.
-    # We want to have a single dictionary with all the values
-    body_stats = stats['term_vectors']['body']['terms']
-    title_stats = stats['term_vectors']['title']['terms']
-
-    merged_stats = CommonUtils.mergeDicts(body_stats, title_stats)
-    merged_stats = IRUtils.removeStopDict(merged_stats)
-    # print(type(merged_stats.items()))
-    # print(merged_stats.items())
-#    for ii in merged_stats.items():
-#        print(str(ii))
-
-    tfidfs = [(item[0], item[1]['ttf']/item[1]['doc_freq']) for item in merged_stats.items()]
-    pwkld = IRUtils.pwkld(merged_stats)
-    pwkld = sorted(pwkld.items(), key=operator.itemgetter(1), reverse=True)
-
-    median_kld = statistics.median([i[1] for i in pwkld])
-    # todo: also try finding a mean and taking everything above it
-
-    query = []
-    for ii in pwkld:
-        if ii[1] > median_kld:
-            print(ii[0])
-            query.append(ii[0])
-
-    print("query: %s" % ' '.join(query))
-    input()
-
-    eshelper.multiword_search(index_name, doc_type, query, [doc_id])
-    input()
-    #print(str(merged_stats))
+# eshelper = ESHelper()
+# q_num = 10
+# index_name = 'yahoo'
+# doc_type = 'qapair'
+#
+# # eshelper.length_distribution(index_name, doc_type)
+# # eshelper.collect_length(index_name, doc_type)
+# CommonUtils.length_distribution('statistics copy.txt')
+# input()
+#
+# # total_tokens = eshelper.totalTokensInCorpus(index_name, doc_type)
+# # print('Total tokens in corpus is: %d ' % total_tokens)
+#
+# question_ids = eshelper.chooseRandomQuestionIds(index_name, q_num)
+#
+# qapairs = eshelper.getDocumentsByIds(question_ids, index_name, doc_type)
+# #print(str(qapairs))
+#
+# i = 0
+# for pair in qapairs:
+#     i += 1
+#     print('Processing question #%d' % i)
+#     doc_id = pair['_id']
+#     print('Doc id is %s' % doc_id)
+#     body = pair['_source']['body']
+#     title = pair['_source']['title']
+#     answers = pair['_source']['answers']
+#
+#     print(title)
+#     print(body)
+#     stats = eshelper.statistics4docid(index_name, doc_type, pair['_id'])
+#     # pprint.pprint(str(stats))
+#
+#     # merge statistics for title and body.
+#     # We want to have a single dictionary with all the values
+#     body_stats = stats['term_vectors']['body']['terms']
+#     title_stats = stats['term_vectors']['title']['terms']
+#
+#     merged_stats = CommonUtils.mergeDicts(body_stats, title_stats)
+#     merged_stats = IRUtils.removeStopDict(merged_stats)
+#     # print(type(merged_stats.items()))
+#     # print(merged_stats.items())
+# #    for ii in merged_stats.items():
+# #        print(str(ii))
+#
+#     tfidfs = [(item[0], item[1]['ttf']/item[1]['doc_freq']) for item in merged_stats.items()]
+#     pwkld = IRUtils.pwkld(merged_stats)
+#     pwkld = sorted(pwkld.items(), key=operator.itemgetter(1), reverse=True)
+#
+#     median_kld = statistics.median([i[1] for i in pwkld])
+#     # todo: also try finding a mean and taking everything above it
+#
+#     query = []
+#     for ii in pwkld:
+#         if ii[1] > median_kld:
+#             print(ii[0])
+#             query.append(ii[0])
+#
+#     print("query: %s" % ' '.join(query))
+#     input()
+#
+#     eshelper.multiword_search(index_name, doc_type, query, [doc_id])
+#     input()
 
 
 
