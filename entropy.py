@@ -1,5 +1,6 @@
 __author__ = 'Alex'
 import math
+from nltk import tokenize
 '''
 The corpus WebScope L6 is indexed with Elastic search and is on my lab machine.
 
@@ -22,6 +23,29 @@ def entropy(qid, index_name, doc_type):
             entr += term_entropy
         return entr
 
+    def entropy_answers(answers, answers_stats):
+        '''
+
+        :param answers: list of answers
+        :param answers_stats: stats for answers field
+        :return:
+        '''
+
+        result = {}
+        for a in answers:
+            cur_answer_stats = {}
+            tokens = [t.lower() for t in tokenize.word_tokenize(a)]
+            for t in tokens:
+                try:
+                    if t in answers_stats.keys():
+                        cur_answer_stats[t] = answers_stats[t]
+                except Exception as e:
+                    print(str(e))
+            cur_answer_entropy = entropy_stat(cur_answer_stats)
+            result[a] = cur_answer_entropy
+        return result
+
+
     f = open('question_entropy.txt', 'a')
 
     es = ESHelper()
@@ -38,18 +62,18 @@ def entropy(qid, index_name, doc_type):
     best_answer_stats = stats['term_vectors']['best']['terms']
 
     question_entropy = entropy_stat(question_stats)
-    answers_entropy = entropy_stat(answers_stats)
+    answers_entropy = entropy_answers(answers_stats)
     best_entropy = entropy_stat(best_answer_stats)
 
     f.write('***Question:\n%s\nQuestion entropy:\n%f\nBest answer:\n%s\n, Best answer entropy:\n%f\n,'
-            'Answers:\n%s\n, Answers entropy:\n%f\n'
+            'Answers:\n%s\n, Answers entropy:\n%s\n'
             % (doc[0]['_source']['title']+' ' + doc[0]['_source']['body'], question_entropy,
-               doc[0]['_source']['best'], best_entropy, doc[0]['_source']['answers'], answers_entropy))
+               doc[0]['_source']['best'], best_entropy, doc[0]['_source']['answers'], str(answers_entropy)))
 
     print('***Question:\n%s\nQuestion entropy:\n%f\nBest answer:\n%s\n, Best answer entropy:\n%f\n,'
-          'Answers:\n%s\n, Answers entropy:\n%f\n'
+          'Answers:\n%s\n, Answers entropy:\n%s\n'
           % (doc[0]['_source']['title']+' ' + doc[0]['_source']['body'], question_entropy,
-             doc[0]['_source']['best'], best_entropy, doc[0]['_source']['answers'], answers_entropy))
+             doc[0]['_source']['best'], best_entropy, doc[0]['_source']['answers'], str(answers_entropy)))
     input()
     f.close()
 
