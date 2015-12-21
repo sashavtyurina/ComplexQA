@@ -10,6 +10,18 @@ The next step is to look at entropy distributions. And this is what I'm going to
 from question2query import ESHelper, TOTAL_TOKENS, CommonUtils
 
 def entropy(qid, index_name, doc_type):
+    def entropy_stat(stats):
+        entr = 0
+        for item in stats.items():
+            # estimate token's prior probability
+            ttf = item[1]['ttf']
+            prior = ttf/TOTAL_TOKENS
+
+            term_entropy = - prior * math.log(prior, 2)
+
+            entr += term_entropy
+        return entr
+
     f = open('question_entropy.txt', 'a')
 
     es = ESHelper()
@@ -25,20 +37,19 @@ def entropy(qid, index_name, doc_type):
     answers_stats = stats['term_vectors']['answers']['terms']
     best_answer_stats = stats['term_vectors']['best']['terms']
 
-    question_entropy = 0
-    for item in question_stats.items():
-        # estimate token's prior probability
-        term = item[0]
-        ttf = item[1]['ttf']
-        prior = ttf/TOTAL_TOKENS
+    question_entropy = entropy_stat(question_stats)
+    answers_entropy = entropy_stat(answers_stats)
+    best_entropy = entropy_stat(best_answer_stats)
 
-        term_entropy = - prior * math.log(prior, 2)
+    f.write('***Question:\n%s\nQuestion entropy:\n%f\nBest answer:\n%s\n, Best answer entropy:\n%f\n,'
+            'Answers:\n%s\n, Answers entropy:\n%f\n'
+            % (doc[0]['_source']['title']+' ' + doc[0]['_source']['body'], question_entropy,
+               doc[0]['_source']['best'], best_entropy, doc[0]['_source']['answers'], answers_entropy))
 
-        question_entropy += term_entropy
-
-    f.write('***\nQuestion:\n%s\nEntropy: %f' % (doc['_source'], question_entropy))
-    print(doc['_source'])
-    print('Question entropy = %f' % question_entropy)
+    print('***Question:\n%s\nQuestion entropy:\n%f\nBest answer:\n%s\n, Best answer entropy:\n%f\n,'
+          'Answers:\n%s\n, Answers entropy:\n%f\n'
+          % (doc[0]['_source']['title']+' ' + doc[0]['_source']['body'], question_entropy,
+             doc[0]['_source']['best'], best_entropy, doc[0]['_source']['answers'], answers_entropy))
     input()
     f.close()
 
