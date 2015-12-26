@@ -22,6 +22,9 @@ class ESHelper:
     def __init__(self):
         self.elasticClient = ES()
 
+    def addDocument(self, index_name, doc_type, json_doc, doc_id):
+        self.elasticClient.index(index_name, doc_type, json_doc, doc_id)
+
     def documentCount(self, index_name):
         total_docs = int(self.elasticClient.count(index=index_name).get('count', -1))
         return total_docs
@@ -395,11 +398,44 @@ class CommonUtils:
                 result[word] = term_stat[1]
         return result
 
-# eshelper = ESHelper()
-# q_num = 10
-# index_name = 'yahoo'
-# doc_type = 'qapair'
+
+def createLongQuestionsIndex(index_name, doc_type, newindex_name, newdoc_type):
+    es = ESHelper()
+    j = 0
+    for i in range(0, TOTAL_DOCS):
+        stats = eshelper.statistics4docid(index_name, doc_type, i)
+        body_terms = stats['term_vectors']['body']['terms']
+        if len(body_terms.keys()) > 20:
+            j += 1
+            qapair = eshelper.getDocumentsByIds([i], index_name, doc_type)[0]
+            json_obj = eval(qapair['_source'])
+            es.addDocument(newindex_name, newdoc_type, str(json_obj), j)
+
+
+
+'''Probing ClueWeb with random subsets of words from the question.'''
+eshelper = ESHelper()
+q_num = 10
+index_name = 'yahoo_'
+doc_type = 'qa'
+
+createLongQuestionsIndex(index_name, doc_type, 'yahoo_long', doc_type)
+print('Done')
+
+# question_ids = eshelper.chooseRandomQuestionIds(index_name, q_num)
+# qapairs = eshelper.getDocumentsByIds(question_ids, index_name, doc_type)
+# i = 0
+# for pair in qapairs:
+#     i += 1
+#     print('Processing question #%d' % i)
+#     doc_id = pair['_id']
+#     print('Doc id is %s' % doc_id)
+#     body = pair['_source']['body']
+#     title = pair['_source']['title']
 #
+#     question_text = title + ' ' + body
+#     tokens = tokenize.word_tokenize(question_text)
+
 # # eshelper.length_distribution(index_name, doc_type)
 # # eshelper.collect_length(index_name, doc_type)
 # CommonUtils.length_distribution('statistics copy.txt')
