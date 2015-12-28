@@ -402,14 +402,18 @@ class CommonUtils:
 def createLongQuestionsIndex(index_name, doc_type, newindex_name, newdoc_type):
     es = ESHelper()
     j = 0
-    for i in range(0, TOTAL_DOCS):
+    for i in range(1, TOTAL_DOCS):
         stats = eshelper.statistics4docid(index_name, doc_type, i)
-        body_terms = stats['term_vectors']['body']['terms']
+       # print(stats)
+        try:
+            body_terms = stats['term_vectors']['body']['terms']
+        except KeyError as e:
+            continue
         if len(body_terms.keys()) > 20:
             j += 1
             qapair = eshelper.getDocumentsByIds([i], index_name, doc_type)[0]
-            json_obj = eval(qapair['_source'])
-            es.addDocument(newindex_name, newdoc_type, str(json_obj), j)
+            json_obj = qapair['_source']
+            es.addDocument(newindex_name, newdoc_type, json_obj, j)
 
 
 
