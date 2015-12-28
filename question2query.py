@@ -415,15 +415,32 @@ def createLongQuestionsIndex(index_name, doc_type, newindex_name, newdoc_type):
             json_obj = qapair['_source']
             es.addDocument(newindex_name, newdoc_type, json_obj, j)
 
+def questions2json(index_name, doc_type, jsonfilename):
+    '''
+    Pick the questions and their answers by ids amd create a write them to a json file
+    Every question being on a new line
+    :param index_name:
+    :param doc_type:
+    :param ids: the list of ids of questions
+    :param jsonfilename: where to save the questions
+    :return:
+    '''
+    eshelper = ESHelper()
+    qapairs = eshelper.chooseRandomQuestionIds(index_name, doc_type, 10)
+    with open(jsonfilename, 'w') as f:
+        for qa in qapairs:
+            json = qa['_source']
+            f.write('%s\n' % str(json))
 
 
 '''Probing ClueWeb with random subsets of words from the question.'''
 eshelper = ESHelper()
 q_num = 10
-index_name = 'yahoo_'
+index_name = 'yahoo_long'
 doc_type = 'qa'
 
-createLongQuestionsIndex(index_name, doc_type, 'yahoo_long', doc_type)
+questions2json(index_name, doc_type, 'lq.txt')
+# createLongQuestionsIndex(index_name, doc_type, 'yahoo_long', doc_type)
 print('Done')
 
 # question_ids = eshelper.chooseRandomQuestionIds(index_name, q_num)
