@@ -187,64 +187,73 @@ public class LuceneHelper {
         int docID = scoreDocs[0].doc;
         Document d = reader.document(docID);
         // System.out.println(d.get("tokenized"));
-        input.next();
+        // input.next();
 
         String doc_body = d.get(FIELD_BODY);
         System.out.println(doc_body);
-        HashMap<String, Vector<Integer>> postings = new HashMap<String, Vector<Integer>>();
-        Vector<String> parsed_words = new Vector<String> ();
+        Index ind = new Index(doc_body);
+        // ind.seeIndex();
+        // input.next();
+        // HashMap<String, Vector<Integer>> postings = new HashMap<String, Vector<Integer>>();
+        Vector<String> parsed_words = Utils.lucene_tokenize(new EnglishAnalyzer(), queryString);
+        System.out.println(parsed_words);
 
-        for (String s : query_words) {
-            String parsed = queryParser.parse(s).toString(FIELD_BODY);
-            System.out.println(parsed + " -- " + createPostingList(parsed, docID));
-            postings.put(parsed, createPostingList(parsed, docID));
-            parsed_words.add(parsed);
-        }
+        // for (String s : query_words) {
+        //     String parsed = queryParser.parse(s).toString(FIELD_BODY);
+        //     System.out.println(parsed + " -- " + createPostingList(parsed, docID));
+        //     postings.put(parsed, createPostingList(parsed, docID));
+        //     parsed_words.add(parsed);
+        // }
 
 
-        int position = 0;
-        int m = 3;
+        // int position = 0;
+        // int m = 3;
+        // Range r = ind.nextCover(parsed_words, 0, 3);
+        // System.out.println(ind.getPassage(r));
+        ind.getPassages(parsed_words, 100);
+
+
         // next cover
-        Vector<Integer> V = new Vector<Integer>();
-        for (int i = 0; i < parsed_words.size(); ++i) {
-            String t = parsed_words.get(i);
-            V.add(next(postings.get(t), position));
-        }
-        Vector<Integer> V_sorted = new Vector<Integer>(V);
-        Collections.sort(V_sorted, null);
-        int v = V_sorted.get(m - 1);
-        System.out.println("V = " + V);
-        System.out.println("v = " + v);
+        // Vector<Integer> V = new Vector<Integer>();
+        // for (int i = 0; i < parsed_words.size(); ++i) {
+        //     String t = parsed_words.get(i);
+        //     V.add(next(postings.get(t), position));
+        // }
+        // Vector<Integer> V_sorted = new Vector<Integer>(V);
+        // Collections.sort(V_sorted, null);
+        // int v = V_sorted.get(m - 1);
+        // System.out.println("V = " + V);
+        // System.out.println("v = " + v);
 
 
-        if (v == Integer.MAX_VALUE) {
-            System.out.println("Bad range");
-            return null;
-        }
+        // if (v == Integer.MAX_VALUE) {
+        //     System.out.println("Bad range");
+        //     return null;
+        // }
 
-        int u = v;
-        for (int i = 0; i < parsed_words.size(); ++i) {
-            String t = parsed_words.get(i);
-            int prev = prev(postings.get(t), v + 1);
+        // int u = v;
+        // for (int i = 0; i < parsed_words.size(); ++i) {
+        //     String t = parsed_words.get(i);
+        //     int prev = prev(postings.get(t), v + 1);
 
-            System.out.println(t + " -- " + prev);
-            if ((V.get(i) < v) && ( prev < u )) {
-                u = prev;
-                System.out.println("u = " + prev);
-            }
-        }
+        //     System.out.println(t + " -- " + prev);
+        //     if ((V.get(i) < v) && ( prev < u )) {
+        //         u = prev;
+        //         System.out.println("u = " + prev);
+        //     }
+        // }
 
-        System.out.println(u + " -- " + v);
+        // System.out.println(u + " -- " + v);
         // List<String> tokens = lucene_tokenize(new EnglishAnalyzer(), doc_body);
-        // System.out.println(tokens);
+        // System.out.println(tokenizeds);
 
-        Vector<String> tokens = Utils.tokenizeAndClean(doc_body, false, false, false, false, false);
-        System.out.println(tokens);
+        // Vector<String> tokens = Utils.tokenizeAndClean(doc_body, false, false, false, false, false);
+        // System.out.println(tokens);
         // for (int i = u-1; i <=v+1; ++i) {
         //     System.out.print(tokens.get(i) + " ");
         // }
 
-        return new Range(u, v);
+        return null ; // new Range(u, v);
         // Vector<Document> docs = new Vector<Document>();
         // // for (int i = 0; i < scoreDocs.length; ++i) {
         //     // int docID = scoreDocs[i].doc;

@@ -3,24 +3,35 @@ import opennlp.tools.tokenize.SimpleTokenizer;
 
 //util
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.Scanner;
 
 
 // io
-import java.io.IOException;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
-import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
+
+//lucene
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.util.AttributeSource;
 
 
 public class Utils {
   private static Vector<String> stopwords;
 
 public static Vector<String> tokenizeAndClean(String text, boolean lower, boolean nopunct, boolean shrink_rep, 
-    boolean drop_stop, boolean stem) {
+    boolean drop_stop, boolean stem) throws FileNotFoundException {
     if (lower) {
       text = text.toLowerCase();
     }
@@ -66,20 +77,30 @@ public static Vector<String> tokenizeAndClean(String text, boolean lower, boolea
   }
 
   private static Vector<String> dropStopWords(Vector<String> tokens) {
+    if (stopwords == null) {
+      Utils.loadStopWords();
+    }
     tokens.removeAll(stopwords);
     return tokens;
   }
 
-  private static void loadStopWords() throws FileNotFoundException, IOException {
-      stopwords = new Vector<String>();
-      FileInputStream fstream = new FileInputStream("stop_words.txt");
-      BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-      String strLine;
-      
-      while ((strLine = br.readLine()) != null)   {
-          stopwords.add(strLine.trim().toLowerCase());
+  private static void loadStopWords() {
+      Utils.stopwords = new Vector<String>();
+      try {
+        FileInputStream fstream = new FileInputStream("stop_words.txt");
+        BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+        String strLine;
+        
+        while ((strLine = br.readLine()) != null)   {
+            Utils.stopwords.add(strLine.trim().toLowerCase());
+        }
+        br.close();  
+      } catch (FileNotFoundException e) {
+        System.out.println("No stop_words.txt in the current folder");
+      } catch (IOException e) {
+        System.out.println("IOException. Something went wrong. " + e.getMessage());
       }
-      br.close();
+      
   }
 
   private static Vector<String> s_stemmer(Vector<String> tokens) {
@@ -103,4 +124,20 @@ public static Vector<String> tokenizeAndClean(String text, boolean lower, boolea
     }
     return stemmed;
   }
+
+    public static Vector<String> lucene_tokenize(Analyzer analyzer, String text) {
+      Vector<String> result = new Vector<String>();
+      try {
+        TokenStream stream  = analyzer.tokenStream(null, new StringReader(text));
+        stream.reset();
+        while (stream.incrementToken()) {
+          result.add(stream.getAttribute(CharTermAttribute.class).toString());
+        }
+      } catch (IOException e) {
+        // not thrown b/c we're using a string reader...
+        throw new RuntimeException(e);
+      }
+      return result;
+
+    }
 }
