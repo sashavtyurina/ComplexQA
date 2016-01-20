@@ -34,6 +34,7 @@ import java.text.DecimalFormat;
 import org.apache.lucene.document.Document;
 
 
+
 public class KeywordRanking {
 
   private static Vector<String> stopwords;
@@ -125,9 +126,9 @@ public class KeywordRanking {
       SimpleTokenizer tokenizer = SimpleTokenizer.INSTANCE;
       String[] tokens1 = tokenizer.tokenize(text1);
       String[] tokens2 = tokenizer.tokenize(text2);
-      Set <String> vocab1 = new HashSet<String>(Arrays.asList(tokens1));
-      Set <String> vocab2 = new HashSet<String>(Arrays.asList(tokens2));
-      Set <String> vocabulary = new HashSet<String>(vocab1);
+      Set<String> vocab1 = new HashSet<String>(Arrays.asList(tokens1));
+      Set<String> vocab2 = new HashSet<String>(Arrays.asList(tokens2));
+      Set<String> vocabulary = new HashSet<String>(vocab1);
       vocabulary.addAll(vocab2);
 
       // System.out.println(vocabulary.toString());
@@ -749,16 +750,16 @@ static public String FIELD_ID = "id";
           long_answer += answer + " ";
         }
 
-        System.out.println("QUESTION");
-        System.out.println(question);
+        // System.out.println("QUESTION");
+        // System.out.println(question);
 
-        System.out.println("COLLABORATIVE ANSWER");
-        System.out.println(long_answer);
+        // System.out.println("COLLABORATIVE ANSWER");
+        // System.out.println(long_answer);
 
-        PrintWriter writer1 = new PrintWriter(new FileOutputStream(new File(filename),true));
-        writer1.println("QUESTION: " + question + "\n");
-        writer1.println("ANSWER: " + long_answer + "\n");
-        writer1.close();
+        // PrintWriter writer1 = new PrintWriter(new FileOutputStream(new File(filename),true));
+        // writer1.println("QUESTION: " + question + "\n");
+        // writer1.println("ANSWER: " + long_answer + "\n");
+        // writer1.close();
         
 
 // make queries
@@ -768,12 +769,12 @@ static public String FIELD_ID = "id";
 
         // we want to compare to both question text and answer text
         atokens.addAll(qtokens);
-        System.out.println("BACKGROUND MODEL: " + atokens.toString() + "\n");
+        // System.out.println("BACKGROUND MODEL: " + atokens.toString() + "\n");
 
 
         // Drop duplicate tokens while preserving the order of words
         Vector<String> no_dupl = removeDuplicateTokens(qtokens);
-        System.out.println(no_dupl);
+        // System.out.println(no_dupl);
 
         // Compose queries
         // We first pick random queries of different lengths and them combine them all together
@@ -781,7 +782,7 @@ static public String FIELD_ID = "id";
         HashMap<Integer, Vector<String>> all_queries = composeQueries1(no_dupl, 5);
         Date now = Calendar.getInstance().getTime();
         long timeElapsed = now.getTime() - startingTime.getTime();
-        System.out.println("Time to compose queries " + timeElapsed);
+        // System.out.println("Time to compose queries " + timeElapsed);
         
 
         Vector<String> queries = pickRandomSample(all_queries.get(2), query_num);
@@ -812,44 +813,28 @@ static public String FIELD_ID = "id";
 
             String current_query = queries.get(i);
 
-          
-            
-            Vector<Document> docs = luc.performSearch_Doc(current_query, max_doc);
-            for (int ii = 0; ii < docs.size(); ++ii) {
-              Document doc = docs.get(ii);
-
-              // System.out.println(doc);
-              // input.next();
-
-              String doc_id = doc.get(FIELD_ID);
-              Vector<String> dtokens = tokenizeAndClean(doc.get(FIELD_BODY), true, true, true, true, true);
-
-
-
-              
-              // double kld = KLD_JelinekMercerSmoothing(dtokens, atokens, 0.9f);
-              // double kld = similarityNoFreq(dtokens, atokens);
-              // ave_kld += kld;
-              
-            }
 
             // search and calc similarity
-            // Vector<String> docs = luc.performSearch(current_query, max_doc);
-            // for (int ii = 0; ii < docs.size(); ++ii) {
-            //   String doc = docs.get(ii);
+            Vector<String> docs = luc.performSearch(current_query, max_doc);
+            for (int ii = 0; ii < docs.size(); ++ii) {
+              String doc = docs.get(ii);
 
-            //   // System.out.println(doc);
-            //   // input.next();
+              System.out.println(current_query);
+              // input.next();
+
+              // test passage selection 
+              LuceneHelper.Range best_passage = luc.bestPassage(current_query);
+              input.next();
               
-            //   Vector<String> dtokens = tokenizeAndClean(doc, true, true, true, true, true);
+              Vector<String> dtokens = tokenizeAndClean(doc, true, true, true, true, true);
 
 
               
-            //   double kld = KLD_JelinekMercerSmoothing(dtokens, atokens, 0.9f);
-            //   // double kld = similarityNoFreq(dtokens, atokens);
-            //   ave_kld += kld;
+              double kld = KLD_JelinekMercerSmoothing(dtokens, atokens, 0.9f);
+              // double kld = similarityNoFreq(dtokens, atokens);
+              ave_kld += kld;
               
-            // }
+            }
             
             ave_kld /= docs.size();
             ave_kld = Double.parseDouble(decimalFormat.format(ave_kld));
