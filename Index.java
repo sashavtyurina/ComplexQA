@@ -54,9 +54,6 @@ public class Index {
 		}
 	}
 
-	
-
-
 	private int prev(String token, int pos) {
 		if (! this.index.containsKey(token)) {
 			return INFINITY;
@@ -138,7 +135,7 @@ public class Index {
 	public Index(String corp) throws FileNotFoundException {
 		this.corpus = corp;
 		// this.tokens = Utils.tokenizeAndClean(this.corpus, lower, nopunct, shrink_rep, drop_stop, stem);
-		this.tokens = Utils.lucene_tokenize(new EnglishAnalyzer(), this.corpus);
+		this.tokens = Utils.lucene_tokenize(this.corpus);
 		this.buildIndex();
 	}
 
@@ -189,10 +186,11 @@ public class Index {
         return new LuceneHelper.Range (u, v);
 	}
 
-	public void getPassages(Vector<String> tokens, int maxLength) {
+	public Vector<String> getPassages(Vector<String> tokens, int maxLength) {
+		Vector<String> passages = new Vector<String>();
 		int n = tokens.size();
 		for (int m = n; m >=2; m--) {
-			System.out.println("M covers. M = " + m);
+			// System.out.println("M covers. M = " + m);
 			int u = -1;
 			while (u < INFINITY) {
 				LuceneHelper.Range r = this.nextCover(tokens, u, m);
@@ -200,7 +198,7 @@ public class Index {
 				// input.next();
 
 				u = r.left;
-				
+
 				if (u == INFINITY) {
 					break;
 				}
@@ -209,13 +207,14 @@ public class Index {
 				if (length > maxLength) {
 					continue;
 				}
-
-				System.out.println(this.getPassage(r));
-				System.out.println("***");
+				passages.add(this.getPassage(r));
+				// System.out.println(this.getPassage(r));
+				// System.out.println("***");
 
 			}
 
 		}
+		return passages;
 	}
 
 	public String getPassage(LuceneHelper.Range r) {

@@ -148,176 +148,54 @@ public class LuceneHelper {
     }
 
 
-    public Vector<Integer> createPostingList(String term, int docID) throws IOException {
-        // int docID = 7768699;
-        Document d = reader.document(docID);
-        TermsEnum termsIt = this.reader.getTermVector(docID, FIELD_BODY).iterator();
+    // public Vector<Integer> createPostingList(String term, int docID) throws IOException {
+    //     // int docID = 7768699;
+    //     Document d = reader.document(docID);
+    //     TermsEnum termsIt = this.reader.getTermVector(docID, FIELD_BODY).iterator();
 
-        BytesRef w = new BytesRef(term.getBytes());    
-        termsIt.seekExact(w);
+    //     BytesRef w = new BytesRef(term.getBytes());    
+    //     termsIt.seekExact(w);
 
-        PostingsEnum postingsInDoc = termsIt.postings(null, PostingsEnum.POSITIONS);
-        postingsInDoc.nextDoc();
+    //     PostingsEnum postingsInDoc = termsIt.postings(null, PostingsEnum.POSITIONS);
+    //     postingsInDoc.nextDoc();
 
-        int totalFreq = postingsInDoc.freq();
-        Vector<Integer> positions = new Vector<Integer>();
+    //     int totalFreq = postingsInDoc.freq();
+    //     Vector<Integer> positions = new Vector<Integer>();
 
-        for (int j = 0; j < totalFreq; j++) {
-            int pos = postingsInDoc.nextPosition();
-            positions.add(new Integer(pos));
-        }
-        return positions;
-    }
+    //     for (int j = 0; j < totalFreq; j++) {
+    //         int pos = postingsInDoc.nextPosition();
+    //         positions.add(new Integer(pos));
+    //     }
+    //     return positions;
+    // }
 
-    public Range bestPassage(String queryString) throws IOException, ParseException {
+    public Vector<String> performPassageSearch(String queryString, int max_docs, int max_passage_length) throws IOException, ParseException {
         QueryParser queryParser = new QueryParser(FIELD_BODY, new EnglishAnalyzer());
         queryParser.setDefaultOperator(QueryParser.Operator.AND);
         Query query = queryParser.parse(queryString);
 
         // System.out.println(query.toString(FIELD_BODY));
 
-        Scanner input = new Scanner(System.in);
+        // Scanner input = new Scanner(System.in);
 
-        int max_docs = 1;
-        
         ScoreDoc[] scoreDocs = this.searcher.search(query, max_docs).scoreDocs;
         
         Vector<String> query_words = new Vector<String>(Arrays.asList(queryString.split("\\s")));
 
-        int docID = scoreDocs[0].doc;
-        Document d = reader.document(docID);
-        // System.out.println(d.get("tokenized"));
-        // input.next();
+        Vector<String> passages = new Vector<String>();
 
-        String doc_body = d.get(FIELD_BODY);
-        System.out.println(doc_body);
-        Index ind = new Index(doc_body);
-        // ind.seeIndex();
-        // input.next();
-        // HashMap<String, Vector<Integer>> postings = new HashMap<String, Vector<Integer>>();
-        Vector<String> parsed_words = Utils.lucene_tokenize(new EnglishAnalyzer(), queryString);
-        System.out.println(parsed_words);
+        for (int i = 0; i < scoreDocs.length; ++i) {
+            int docID = scoreDocs[i].doc;    
+            Document d = reader.document(docID);
+            String doc_body = d.get(FIELD_BODY);
 
-        // for (String s : query_words) {
-        //     String parsed = queryParser.parse(s).toString(FIELD_BODY);
-        //     System.out.println(parsed + " -- " + createPostingList(parsed, docID));
-        //     postings.put(parsed, createPostingList(parsed, docID));
-        //     parsed_words.add(parsed);
-        // }
-
-
-        // int position = 0;
-        // int m = 3;
-        // Range r = ind.nextCover(parsed_words, 0, 3);
-        // System.out.println(ind.getPassage(r));
-        ind.getPassages(parsed_words, 100);
-
-
-        // next cover
-        // Vector<Integer> V = new Vector<Integer>();
-        // for (int i = 0; i < parsed_words.size(); ++i) {
-        //     String t = parsed_words.get(i);
-        //     V.add(next(postings.get(t), position));
-        // }
-        // Vector<Integer> V_sorted = new Vector<Integer>(V);
-        // Collections.sort(V_sorted, null);
-        // int v = V_sorted.get(m - 1);
-        // System.out.println("V = " + V);
-        // System.out.println("v = " + v);
-
-
-        // if (v == Integer.MAX_VALUE) {
-        //     System.out.println("Bad range");
-        //     return null;
-        // }
-
-        // int u = v;
-        // for (int i = 0; i < parsed_words.size(); ++i) {
-        //     String t = parsed_words.get(i);
-        //     int prev = prev(postings.get(t), v + 1);
-
-        //     System.out.println(t + " -- " + prev);
-        //     if ((V.get(i) < v) && ( prev < u )) {
-        //         u = prev;
-        //         System.out.println("u = " + prev);
-        //     }
-        // }
-
-        // System.out.println(u + " -- " + v);
-        // List<String> tokens = lucene_tokenize(new EnglishAnalyzer(), doc_body);
-        // System.out.println(tokenizeds);
-
-        // Vector<String> tokens = Utils.tokenizeAndClean(doc_body, false, false, false, false, false);
-        // System.out.println(tokens);
-        // for (int i = u-1; i <=v+1; ++i) {
-        //     System.out.print(tokens.get(i) + " ");
-        // }
-
-        return null ; // new Range(u, v);
-        // Vector<Document> docs = new Vector<Document>();
-        // // for (int i = 0; i < scoreDocs.length; ++i) {
-        //     // int docID = scoreDocs[i].doc;
-        //     int docID = 7768699;
-        //     Document d = reader.document(docID);
-
-
-        //     String doc_body = d.get(FIELD_BODY);
-        //     String doc_id = d.get(FIELD_ID);
-        //     System.out.println(docID);
-        //     System.out.println(doc_body);
-
-
-        //     Vector<String> query_words = new Vector<String>(Arrays.asList(queryString.split("\\s")));
-            
-        //     int position = 0;
-        //     int v = -1;
-        //     int m = 3;
-
-        //     Vector<Integer> V = new Vector<Integer>();
-        //     TermsEnum termsIt = this.reader.getTermVector(docID, FIELD_BODY).iterator();
-        //     for (String s : query_words) {
-        //         BytesRef w = new BytesRef(s.getBytes());    
-        //         termsIt.seekExact(w);
-        //         PostingsEnum postingsInDoc = termsIt.postings(null, PostingsEnum.POSITIONS);
-        //         postingsInDoc.nextDoc();
-        //         V.add(new Integer(this.next(s, position, postingsInDoc)));
-        //     }
-
-        //     Collections.sort(V, null);
-        //     System.out.println(V);
-
-        //     v = V.get(m - 1);
-        //     System.out.println(v);
-        //     if (v == -1) {
-        //         System.out.println("Infinity.");
-        //         return new Range(Integer.MAX_VALUE, Integer.MAX_VALUE);
-        //     }
-
-        //     int u = v;
-
-        //     TermsEnum termsIt1 = this.reader.getTermVector(docID, FIELD_BODY).iterator();
-        //     for (int j = 0; j < query_words.size(); ++j) {
-        //         String s = query_words.get(j);
-        //         System.out.println(s + " -- " + V.get(j));
-
-        //         BytesRef w = new BytesRef(s.getBytes());    
-        //         termsIt1.seekExact(w);
-        //         PostingsEnum postingsInDoc = termsIt1.postings(null, PostingsEnum.POSITIONS);
-        //         postingsInDoc.nextDoc();
-
-        //         int prev = this.prev(s, v + 1, postingsInDoc);
-
-                
-        //         System.out.println(prev);
-
-        //         if ((V.get(j) < v) && (prev < u)) {
-        //             u = prev;
-        //         }
-        //     }
-        //     System.out.println(u + " -- " + v);
-        //     return new Range(u, v);
-        // // }
-        // // return null;
+            // for every document build its own index 
+            Index ind = new Index(doc_body);
+            Vector<String> parsed_words = Utils.lucene_tokenize(queryString);
+            Vector<String> doc_passages = ind.getPassages(parsed_words, max_passage_length);
+            passages.addAll(doc_passages);
+        }
+        return passages;
     }
 
     private List<String> lucene_tokenize(Analyzer analyzer, String text) {
@@ -336,96 +214,64 @@ public class LuceneHelper {
 
     }
 
-    private int next(Vector<Integer> posting, int position) {
-        if (posting == null) {
-            return Integer.MAX_VALUE;
-        }
+    // private int next(Vector<Integer> posting, int position) {
+    //     if (posting == null) {
+    //         return Integer.MAX_VALUE;
+    //     }
 
-        if (posting.get(0) > position) {
-            return posting.get(0);
-        }
+    //     if (posting.get(0) > position) {
+    //         return posting.get(0);
+    //     }
 
-        for (int i = 0; i < posting.size(); ++i) {
-            if (posting.get(i) > position) {
-                return posting.get(i);
-            }
-        }
-        return Integer.MAX_VALUE;
-    }
-
-    private int prev(Vector<Integer> posting, int position) {
-        if (posting == null) {
-            return Integer.MAX_VALUE;
-        }
-
-        if (posting.get(0) > position) {
-            return Integer.MAX_VALUE;
-        }
-
-        for (int i = 1; i < posting.size(); ++i) {
-            if (position < posting.get(i)) {
-                return posting.get(i - 1);
-            }
-        }
-        return posting.get(posting.size() - 1);
-    }
-
-    // private int next1(String term, int position, PostingsEnum posting) throws IOException {
-    //     int totalFreq = posting.freq();
-    //     for (int j = 0; j < totalFreq; j++) {
-    //         int pos = posting.nextPosition();
-    //         if (pos > position) {
-    //             return pos;
+    //     for (int i = 0; i < posting.size(); ++i) {
+    //         if (posting.get(i) > position) {
+    //             return posting.get(i);
     //         }
     //     }
     //     return Integer.MAX_VALUE;
     // }
 
-    // private int prev1(String term, int position, PostingsEnum posting) throws IOException {
-    //     int totalFreq = posting.freq();
-    //     Vector<Integer> positions = new Vector<Integer>();
+    // private int prev(Vector<Integer> posting, int position) {
+    //     if (posting == null) {
+    //         return Integer.MAX_VALUE;
+    //     }
 
-    //     int prev_pos = -1;
+    //     if (posting.get(0) > position) {
+    //         return Integer.MAX_VALUE;
+    //     }
 
-    //     for (int j = 0; j < totalFreq; j++) {
-    //         int pos = posting.nextPosition();
-    //         positions.add(pos);
-
-    //         if ((j == 0) && (pos > position)) {
-    //             return Integer.MAX_VALUE;
-    //         }
-
-    //         // prev_pos = pos;
-    //         if ( pos > position ) {
-    //             return positions.get(j-1);
+    //     for (int i = 1; i < posting.size(); ++i) {
+    //         if (position < posting.get(i)) {
+    //             return posting.get(i - 1);
     //         }
     //     }
-    //     return Integer.MAX_VALUE;
+    //     return posting.get(posting.size() - 1);
     // }
 
-    private String nextMCover(Vector<String> query, int position, int m) {
-        return "";
-    }
+
+    // private String nextMCover(Vector<String> query, int position, int m) {
+    //     return "";
+    // }
 
 
-        public Vector<Document> performSearch1(String queryString, int n) throws IOException, ParseException {
-        QueryParser queryParser = new QueryParser(FIELD_BODY, new EnglishAnalyzer());
-        queryParser.setDefaultOperator(QueryParser.Operator.OR);
-        Query query = queryParser.parse(queryString);
-        // System.out.println("ANALYSED QUERY:");
-        // System.out.println(query);
+    //     public Vector<Document> performSearch1(String queryString, int n) throws IOException, ParseException {
+    //     QueryParser queryParser = new QueryParser(FIELD_BODY, new EnglishAnalyzer());
+    //     queryParser.setDefaultOperator(QueryParser.Operator.OR);
+    //     Query query = queryParser.parse(queryString);
+    //     // System.out.println("ANALYSED QUERY:");
+    //     // System.out.println(query);
 
-        // Query query = this.parser.parse(queryString);
-        ScoreDoc[] scoreDocs = this.searcher.search(query, n).scoreDocs;
-        Vector<Document> docs = new Vector<Document>();
-        for (int i = 0; i < scoreDocs.length; ++i) {
-            int docID = scoreDocs[i].doc;
-            Document d = reader.document(docID);
-            docs.add(d);
-            // System.out.println(d.get("contents"));
-        }
-        return docs;
-    }
+    //     // Query query = this.parser.parse(queryString);
+    //     ScoreDoc[] scoreDocs = this.searcher.search(query, n).scoreDocs;
+    //     Vector<Document> docs = new Vector<Document>();
+    //     for (int i = 0; i < scoreDocs.length; ++i) {
+    //         int docID = scoreDocs[i].doc;
+    //         Document d = reader.document(docID);
+    //         docs.add(d);
+    //         // System.out.println(d.get("contents"));
+    //     }
+    //     return docs;
+    // }
 
     public long totalTermFreq(String term) throws IOException, ParseException {
         QueryParser queryParser = new QueryParser(FIELD_BODY, new EnglishAnalyzer());
@@ -484,8 +330,6 @@ public class LuceneHelper {
 
         // // IndexWriterConfig conf = new IndexWriterConfig(new EnglishAnalyzer());
         // // spellchecker.indexDictionary(new PlainTextDictionary(dictPath), conf, false);
-
-
 ///Spell checker ///
         DirectSpellChecker checker = new DirectSpellChecker();
 
