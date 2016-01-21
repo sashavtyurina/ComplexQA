@@ -42,6 +42,7 @@ import org.json.*;
 
 public class Utils {
   private static Vector<String> stopwords;
+  private static Scanner input = new Scanner(System.in);
 
   public static Vector<String> tokenizeAndClean(String text, boolean lower, boolean nopunct, boolean shrink_rep, 
     boolean drop_stop, boolean stem) throws FileNotFoundException {
@@ -97,7 +98,7 @@ public class Utils {
     return tokens;
   }
 
-  public static void loadStopWords() {
+  private static void loadStopWords() {
       Utils.stopwords = new Vector<String>();
       try {
         FileInputStream fstream = new FileInputStream("stop_words.txt");
@@ -587,6 +588,63 @@ public class Utils {
     }
     return result;
   } 
+
+  public static  Vector<Entry<String, Double>> answersIntersection(JSONArray answers) {
+    /* Given a set of answers find which words (except stop words) are repeated throughout all of them.
+    For every repetition (in another answer) give that word +1 point.  
+    Sort words by the number of points - high to low.
+    Words with high repetition score should be indicative of what the topic of the discussion is. */
+    HashMap<String, Integer> wordsRep = new HashMap<String, Integer>();
+    HashSet<String> allWords = new HashSet<String>();
+    int answersCount = answers.length();
+    int maxReps = 1;
+      for (int i = 0;  i < answersCount; ++i) {
+        try{
+          String answer = answers.get(i).toString();
+
+          // clean and tokenize with lucene heavy tokenizer
+          Vector<String> atokens = Utils.dropStopWords(Utils.lucene_tokenize(Utils.shrinkRepeatedChars(Utils.removePunct(answer))));
+
+          allWords.addAll(atokens);
+          HashSet<String> setAtokens = new HashSet<String>();
+          setAtokens.addAll(atokens);
+
+          setAtokens.retainAll(allWords); // setAtokens contains only tokens occuring in bother sets
+          for (String s : setAtokens) {
+            if (wordsRep.containsKey(s)) {
+              int reps = wordsRep.get(s) + 1;
+              wordsRep.put(s, reps);
+              if (reps > maxReps) {
+                maxReps = reps;
+              }
+            } else {
+              wordsRep.put(s, 1);
+            }
+          }
+
+          System.out.println(atokens);
+          // input.next();
+        } catch (JSONException e) {
+          System.out.println("JSONException in Utils.answersIntersection" + e.getMessage());
+          continue;
+        }
+
+      }
+      System.out.println(answersCount); 
+      // List<Entry<String, Integer>> sorted = entriesSortedByValues(wordsRep);
+      Vector<Entry<String, Double>> topRepWords = new Vector<Entry<String, Double>>();
+      for (Entry<String, Integer> e : wordsRep.entrySet()) {
+        double repFraction = e.getValue().doubleValue() / maxReps;
+
+        if (repFraction > 0.5) {
+          Map.Entry<String, Double> newEntry = new AbstractMap.SimpleEntry<String, Double>(e.getKey(), new Double(repFraction));
+          topRepWords.add(newEntry);
+          // System.out.println(e.getKey() + " -- " + e.getValue() + " -- " + repFraction);
+        }
+        // 
+      }
+      return topRepWords;
+  }
 
 
     // private static void loadStopWords() throws FileNotFoundException, IOException {
