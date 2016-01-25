@@ -1,9 +1,6 @@
+
+
 QUESTION: why is my 5 month old pit bull puppy eating rocks? my dog is very active and has a really good appetite. she loves to play and is very well mannered. lately she has been eating small pea gravel from my landscaping. is she just being a puppy or is something wrong?
-INETRSECTING WORDS: 
-eat --- 0.75
-puppi --- 0.625
-dog --- 1.0
-thing --- 0.625
 ANSWERS: 
 nothing wrong, but you shouldn't let her eat that. Its not like they are nutrious or anything.
 ***
@@ -37,6 +34,11 @@ some dogs are prone to eat things they shouldn't ....don't allow her to eat them
 ***
 She is just being a puppy.  Make sure she doesn't choke on or swallow any of the gravel.
 ***
+INETRSETING WORDS: 
+eat --- 0.75
+puppi --- 0.625
+dog --- 1.0
+thing --- 0.625
 
 *********************
 
@@ -45,9 +47,6 @@ QUESTION: microsoft points for 360? i got bored, so i was looking around on my x
 what kind of promotions do they mean?
 
 and is there a way to get them for free?
-INETRSECTING WORDS: 
-free --- 1.0
-point --- 1.0
 ANSWERS: 
 With Microsoft pts, you can download Xbox Live Arcade games (lots of classic arcade games in here), extras and add-ons for games you already own (like extra quests for Oblivion or car bundles for NFS: Carbon)...I don't know of a way to get them for free, but they are not that expensive and can be purchased directly from Xbox Live or in a gift-card-type form from GameStop (or whatever your local equivalent is) that provides you a code to enter on Xbox Live and then transfers those points to your account.
 
@@ -61,22 +60,39 @@ I don't think anyone has ever gotten free MS points from promotions.
 
 But if there should be MS points for a promotion, it might be through the 20 oz soda caps or from buying MS products, like the new Zune players.
 ***
+INETRSETING WORDS: 
+free --- 1.0
+point --- 1.0
 
 *********************
 
 QUESTION: for high schoolers how many hours a day is perfect for school? give me some specifics... how many class periods should they have, how long for lunch, how long the class periods should be. and give me some realistic answers. don't say 2 hours should be for lunch or something like that.
-INETRSECTING WORDS: 
+ANSWERS: 
+Im answering this question from an adult point of view. I work in a high school and there are 8 periods that run about 45 minutes each. There is a 10 minute break in the morning and a 25 minute lunch. Although the break and lunch seem short, they are actually a good amout of time. Any longer than that gives the students time to start fooling around and lose focus. The school day should be well structured and the transition between classes should be about 3 minutes for a smaller school.
+***
+From my perspective, I believe 6 periods a day. Each period should go for 45-50 minutes. Then there should be one recess break that should last for 20 minutes between 2nd and 3rd period. While lunch should be about 45 minutes between period 4 and 5. = ]
+***
+INETRSETING WORDS: 
 break --- 1.0
 lunch --- 1.0
 minut --- 1.0
 45 --- 1.0
 dai --- 1.0
 period --- 1.0
+
+*********************
+
+QUESTION: looking for whereabouts of a fishing boat from boston (30's-40's) where do i  search for information? the boat was at one time owned by peter busalacchi, and named "nina b".  it was one of seven boats, some of which were sold to carry troops to europe during wwii.
 ANSWERS: 
-Im answering this question from an adult point of view. I work in a high school and there are 8 periods that run about 45 minutes each. There is a 10 minute break in the morning and a 25 minute lunch. Although the break and lunch seem short, they are actually a good amout of time. Any longer than that gives the students time to start fooling around and lose focus. The school day should be well structured and the transition between classes should be about 3 minutes for a smaller school.
+Contact the DOD.  More likey than not it has been sold as scrap by now.
 ***
-From my perspective, I believe 6 periods a day. Each period should go for 45-50 minutes. Then there should be one recess break that should last for 20 minutes between 2nd and 3rd period. While lunch should be about 45 minutes between period 4 and 5. = ]
-***
+INETRSETING WORDS: 
+dod --- 1.0
+likei --- 1.0
+scrap --- 1.0
+contact --- 1.0
+ha --- 1.0
+sold --- 1.0
 
 *********************
 
@@ -86,10 +102,6 @@ i just moved in with a new roommate. i am finding out that her cat loves to eat 
 
 thanks for any answers,
 -chris
-INETRSECTING WORDS: 
-try --- 0.6
-plant --- 1.0
-cat --- 0.6
 ANSWERS: 
 Not that I know of.  It might if you put it directly on the leaves though.  Try it on a single leaf.  It's also said that cat's don't like citrus so maybe spray your plants with some diluted orange oil.
 
@@ -107,13 +119,14 @@ I don't think the pepper will hurt, but im not a plant expert.
 ***
 No it shouldn't hurt your plants. It never hurt mine. The catnip idea is a good one. Place the pot where the cat is most likely to get to it. And place your plants in different spots. he may be too lazy to go after your plants with the catnip so easy to get to. Also, most pets stores and vet offices sell a product called bitter apple spray. It is made from apple skins and is very sour and bitter to animals. If sprayed around the outside of the pot it may deter him after one taste. My neoghbor used it to stop her dogs from chewing up thecouch. One taste worked.
 ***
+INETRSETING WORDS: 
+try --- 0.6
+plant --- 1.0
+cat --- 0.6
 
 *********************
 
 QUESTION: best jeans for guys? guys... what jeans combine the best quality, value, non-metrosexuality, fit, and look?  or ladies... does your man where a certain pair of jeans that you like?
-INETRSECTING WORDS: 
-jean --- 1.0
-fit --- 0.6666666666666666
 ANSWERS: 
 Back in the late 70s & early 80s was a brand named 'Hash Jeans'. They were a better fit than Levi's, more stylish, and even had stylish bib-overalls for guys.
 ***
@@ -121,11 +134,23 @@ Ok, the best ones are Zara jeans for men.
 ***
 I, personally, like Old Navy jeans and my husband says they're a comfortable fit without looking too neat and tidy.
 ***
+INETRSETING WORDS: 
+jean --- 1.0
+fit --- 0.6666666666666666
 
 *********************
 
 QUESTION: how do you know when you are in love? ok see the love of my life called my house drunk and we are both under age and hes three years older than me but he cussed my dad out and he dont even remember.my dad told me that i am never allowed to talk to him again but he said hell quit drinking and smoking pot just to be with me! i love him with all my heart and i want to be with him for the reat of my life but i talk to him in the mornings an the bus and sometimes at night even though im not supposed to. he said he'll wait for me until i turn 18 but thats a while from now and i dont think my dad will forgive him.i dont know what to do or if he even loves me.any suggestions?
-INETRSECTING WORDS: 
+ANSWERS: 
+Please listen to your dad on this one.  Parents aren't always right, but he is right about this.  First off, if this guy loved you he wouldn't have called your dad and caused this problem in the first place.  I've had enough friends like this boy to know that while you waste your time for the next three years waiting to be with him, he will not be true to you and will just keep you on a string just for fun.  You are just begining to experience life, don't tie yourself down to a drunk who does pot and fights with your dad.  You need to take this time to experience life and be open to all it has to offer you.
+***
+o i just think that your story's soo sweet..
+i advice u to stick with him...hopefully he'll change his ways like he promised u...
+and your dad will just hav to understand that it's YOUR CHOICE that u want to  b with him.not trying to disrespect his authority,but to me,if it's love,then it's definitely worth it...good luck:)))
+***
+Please take what I'm saying to heart. When someone is involed with drugs and alcohol it makes things worse. If he is really into this stuff he will never ever pick you over the drugs he will go back to them time and time again. Your parents can see this being older than you and the fact that he disrespected your father and doesnt even remember is troubling to me. I spent a long time with someone like this and it only turned out bad. Your younge and you have so much life to live still, try living it and having fun with your girlfriends. Forget about this jerk, or see if he can really change. Things will come together once your older. You don't want to waste the best years of you life crying over some drug infested jerk.
+***
+INETRSETING WORDS: 
 time --- 1.0
 dad --- 1.0
 parent --- 1.0
@@ -137,15 +162,6 @@ wast --- 1.0
 disrespect --- 1.0
 take --- 1.0
 chang --- 1.0
-ANSWERS: 
-Please listen to your dad on this one.  Parents aren't always right, but he is right about this.  First off, if this guy loved you he wouldn't have called your dad and caused this problem in the first place.  I've had enough friends like this boy to know that while you waste your time for the next three years waiting to be with him, he will not be true to you and will just keep you on a string just for fun.  You are just begining to experience life, don't tie yourself down to a drunk who does pot and fights with your dad.  You need to take this time to experience life and be open to all it has to offer you.
-***
-o i just think that your story's soo sweet..
-i advice u to stick with him...hopefully he'll change his ways like he promised u...
-and your dad will just hav to understand that it's YOUR CHOICE that u want to  b with him.not trying to disrespect his authority,but to me,if it's love,then it's definitely worth it...good luck:)))
-***
-Please take what I'm saying to heart. When someone is involed with drugs and alcohol it makes things worse. If he is really into this stuff he will never ever pick you over the drugs he will go back to them time and time again. Your parents can see this being older than you and the fact that he disrespected your father and doesnt even remember is troubling to me. I spent a long time with someone like this and it only turned out bad. Your younge and you have so much life to live still, try living it and having fun with your girlfriends. Forget about this jerk, or see if he can really change. Things will come together once your older. You don't want to waste the best years of you life crying over some drug infested jerk.
-***
 
 *********************
 
@@ -154,8 +170,6 @@ QUESTION: songs needed for performance please read? i am doing a drama performan
 also i need sound effects like chatting and washing dishes, what songs can provide me with this, or websites (which has songs in em?)
 
 thanks :)
-INETRSECTING WORDS: 
-song --- 1.0
 ANSWERS: 
 You should try "Love Song" by Korn
 ***
@@ -177,16 +191,12 @@ Um.....you could download share bear and delete it when done downloading songs :
 ***
 hello-evanescence
 ***
+INETRSETING WORDS: 
+song --- 1.0
 
 *********************
 
 QUESTION: how many inches should i set my html code at to create a website optimized for 800x600 viewing? alright, so i want to create a webpage that will be viewable on 800x600.  for this i want to know how many inches would be optimal for say a table that i wish to span across the whole screen.
-INETRSECTING WORDS: 
-set --- 1.0
-side --- 0.6666666666666666
-browser --- 0.6666666666666666
-horizont --- 0.6666666666666666
-left --- 0.6666666666666666
 ANSWERS: 
 Tough question :)
 
@@ -218,6 +228,12 @@ You could also do 100%
 ***
 who cares
 ***
+INETRSETING WORDS: 
+set --- 1.0
+side --- 0.6666666666666666
+browser --- 0.6666666666666666
+horizont --- 0.6666666666666666
+left --- 0.6666666666666666
 
 *********************
 
@@ -226,21 +242,62 @@ QUESTION: okay, i need actual help here? okay, so last night the american music 
 so, i've been looking online for the past hour for sites that have the eppisode online and can't find any. so can someone actually look and not just give me something that would have vids on it like youtube, because i looked there and it wasn't on there. also tried to cw site and everywhere else.
 
 if someone can actually find the site with the video on it, i'll give you 10pts. <33
-INETRSECTING WORDS: 
-tivo --- 1.0
-wyoutubecom --- 1.0
 ANSWERS: 
 www.youtube.com
 ***
 Get TiVo. :)
 ***
+INETRSETING WORDS: 
+tivo --- 1.0
+wyoutubecom --- 1.0
+
+*********************
+
+QUESTION: junior prom tickets? for the students, do we have "wedding style" tickets with an envelope, card, photo info, etc? or is that just for the chaperones? i was thinking of a huge "index card" length ticket. i dunno. just give me some input plz.
+ANSWERS: 
+I don't think it would really matter. It's your prom and you can be as creative as you want with it. 
+I think it would go along with whatever your theme is. If you had a really elegant, formal theme, a more elaborate invite would be appropriate. If it's a jungle theme, or something more fun, it can be more laid back. Just have fun with it. I promise you no one even pays attention to the invites. Go cheap and above all- EASY!
+***
+INETRSETING WORDS: 
+invit --- 1.0
+think --- 1.0
+realli --- 1.0
+matter --- 1.0
+theme --- 1.0
+promis --- 1.0
+back --- 1.0
+jungl --- 1.0
+pai --- 1.0
+fun --- 1.0
+prom --- 1.0
+abov --- 1.0
+someth --- 1.0
+creativ --- 1.0
+formal --- 1.0
+elabor --- 1.0
+easi --- 1.0
+appropri --- 1.0
+eleg --- 1.0
+attent --- 1.0
+laid --- 1.0
+cheap --- 1.0
+whatev --- 1.0
 
 *********************
 
 QUESTION: how can you ? who will approve the names of the newest elements? wil it be a) the scientist that discover each element
 b) a committee scientist
 c) the chemist's from a research insitution
-INETRSECTING WORDS: 
+ANSWERS: 
+The answer is B. The International Union of Pure and Applied Chemistry (IUPAC), an organization of chemical societies from 44 countries, makes the final decision when naming new elements. 
+
+The scientist who discovers the element can only suggest a name.
+***
+A
+***
+I agree, A
+***
+INETRSETING WORDS: 
 element --- 1.0
 final --- 1.0
 b --- 1.0
@@ -265,23 +322,10 @@ name --- 1.0
 intern --- 1.0
 make --- 1.0
 countri --- 1.0
-ANSWERS: 
-The answer is B. The International Union of Pure and Applied Chemistry (IUPAC), an organization of chemical societies from 44 countries, makes the final decision when naming new elements. 
-
-The scientist who discovers the element can only suggest a name.
-***
-A
-***
-I agree, A
-***
 
 *********************
 
 QUESTION: what do i wear...? i didnt shave my legs recently and and i dont have any pants and i need a outfit in 5 minutes. i cant get in the shower!!
-INETRSECTING WORDS: 
-skirt --- 1.0
-leg --- 1.0
-wear --- 0.75
 ANSWERS: 
 how about a long skirt or leggings?
 ***
@@ -301,16 +345,47 @@ CRISIS! well leggings work amazingly.
 ***
 panty hose
 ***
+INETRSETING WORDS: 
+skirt --- 1.0
+leg --- 1.0
+wear --- 0.75
+
+*********************
+
+QUESTION: what dance class other than poms? i am going to take a poms dance class i would like to know which other dance class i should take.dance classes as in hiphop , jazz , or ballet. what do you think?
+ANSWERS: 
+That's a very hard choice because all three can help you in poms. What do you want to do? Do you want a future as a professional dancer? If so, take ballet. Ballet is the base of all dance and it can only help you. If you're planning on doing poms/dance team in school, take jazz. There are many elements in jazz that are similar to those in poms and jazz also teaches good techniques.
+***
+INETRSETING WORDS: 
+element --- 1.0
+mani --- 1.0
+futur --- 1.0
+jazz --- 1.0
+danc --- 1.0
+profession --- 1.0
+choic --- 1.0
+good --- 1.0
+onli --- 1.0
+team --- 1.0
+teach --- 1.0
+veri --- 1.0
+techniqu --- 1.0
+pomsdanc --- 1.0
+school --- 1.0
+pom --- 1.0
+plan --- 1.0
+take --- 1.0
+base --- 1.0
+three --- 1.0
+becaus --- 1.0
+ballet --- 1.0
+hard --- 1.0
+dancer --- 1.0
+similar --- 1.0
 
 *********************
 
 QUESTION: king of the hill? how often do you guys watch king of the hill? what is your favorite episode? my favorite one is when luanne, meets this guy and the guy does something to her (like i don't know), so then, she tells, someone that she is pregant. then bobby, sneaks under her bed when she leaves. o'h my that one was really crazy.
-INETRSECTING WORDS: 
-show --- 1.0
-gui --- 1.0
-time --- 0.6666666666666666
-watch --- 0.6666666666666666
-yell --- 0.6666666666666666
 ANSWERS: 
 We watch a few times per week.  My favorite is when Bobby takes the female self-defense class and starts yelling at the bullies, "That's my purse!  I don't know you!"
 ***
@@ -324,14 +399,16 @@ I like the one when Hank get buck cheek replacements and joins a group for men j
 ***
 i've watched it a few times, but doesnt compare to the likes of south park and family guy
 ***
+INETRSETING WORDS: 
+show --- 1.0
+gui --- 1.0
+time --- 0.6666666666666666
+watch --- 0.6666666666666666
+yell --- 0.6666666666666666
 
 *********************
 
 QUESTION: serial killers? well i just got finished watching this thing about serial killers, and i was wondering what are the symphtoms of peple who are going to become serial killers when they grow up???????
-INETRSECTING WORDS: 
-peopl --- 0.6666666666666666
-anim --- 1.0
-killer --- 0.8333333333333334
 ANSWERS: 
 The professionals refer to it as "the triad" ...
 
@@ -373,15 +450,14 @@ sociopaths.....sometimes as kids they kill or hurt animals and think its ok or w
 ***
 Profile of a serial killer  has been involved with cruelty to animals, was abused by a family member, bed wetting, and there are many other symptoms. I recently watched a documentary where they were scanning the brains of people who were convicted of killing only one person and then scanning a subject who has been convicted of multiple killings and a normal person. The brain function in the person  that was convicted of multiple killings were different. Also they were doing a series of test. One where subjects were put in a quite room and watching a t.v. screen where you  would watch a  count down from 10. They were given headphones. When the countdown was over they would hear a noise kinda like nails across a chalkboard. Normal subjects, as they were counting down would sweat, heart rate would increase. Most serial killers, psychopatchs did not have that emotion.
 ***
+INETRSETING WORDS: 
+peopl --- 0.6666666666666666
+anim --- 1.0
+killer --- 0.8333333333333334
 
 *********************
 
 QUESTION: christina aguilera set list? does anyone know what songs christina aguilera plays in her concert.  i am going to see her on thursday and cant wait.  much obliged to anyone who knows.
-INETRSECTING WORDS: 
-song --- 1.0
-man --- 1.0
-hurt --- 1.0
-aint --- 1.0
 ANSWERS: 
 I remember she sang "Genie in a Bottle" in 1999.
 ***
@@ -392,14 +468,15 @@ LOL
 ***
 As the concert is called 'Back to Basics', I would imagine she'll be singing a lot of the songs from her album of that same name, eg., Back In The Day, Ain't No Other Man, Understand, Slow Down Baby, Oh Mother, On Our Way, Without You, Still Dirrty, Here To Stay, Thank You, Enter The Circus, Welcome, Candyman, Nasty Naughty Boy, I Got Trouble, Hurt, Mercy On Me.  Have a great time!
 ***
+INETRSETING WORDS: 
+song --- 1.0
+man --- 1.0
+hurt --- 1.0
+aint --- 1.0
 
 *********************
 
 QUESTION: scandalous!i just finished reading playboy magazine,is it possible? i cannot believe that females don't have penis.i always thought that they had a penis and a pair of marbles but they don't even have those.aren't they suppose to have one too,it seem like some of them act like that they actually have one and i'm not talking about lesbians.
-INETRSECTING WORDS: 
-girl --- 1.0
-know --- 1.0
-email --- 1.0
 ANSWERS: 
 Wow. Was that the first naked lady you've ever seen?
 
@@ -411,16 +488,14 @@ excuse us? you know what? we have 'penises' just not in ur way.... email me hiph
 ***
 I wouldn't know, I only read those for the articles
 ***
+INETRSETING WORDS: 
+girl --- 1.0
+know --- 1.0
+email --- 1.0
 
 *********************
 
 QUESTION: scared to death..? i took my daughter to the emergency room because of a limp. we sat 3 hours, had numerous x-rays done and then lots of blood work and the nurses came in and told me that she needed to see a hematologist on monday and that it wasn't her leg that was bothering her it was her blood. they said they "weren't comfortable" giving a diagnosis but when i said  that she didn't act sick or anything they said "well she feels pretty bad, i can guarantee that- probably too sick to complain." i'm nervous and scared and don't know what it could be. her white count was elevated and her iron was 22/3 when it should be 12/17. it's a long weekend and they want me to wait until monday to know anything..has anyone heard of this before? experienced it? any doctors out there that know what it might be?
-INETRSECTING WORDS: 
-someth --- 0.75
-doctor --- 0.75
-hope --- 1.0
-worri --- 1.0
-find --- 0.75
 ANSWERS: 
 I'm not a doctor, nor do I know what it might be. Unfortunately, as parents, we tend to worry and fear the worst when our kids get sick. I know I do. If they were willing to let you wait until Monday to find out what the results are, then I would take it as a sign that it must not be too bad. Otherwise they would have admitted her to the hospital right away. I hope this helps. I'll keep you and your sweet little girl in my prayers.
 ***
@@ -449,11 +524,24 @@ I hope U get a Doctor to respond but in the mean time before U worry Urself sick
 ***
 please don't assume anything. wait for the professionals to figure it out. good luck
 ***
+INETRSETING WORDS: 
+someth --- 0.75
+doctor --- 0.75
+hope --- 1.0
+worri --- 1.0
+find --- 0.75
 
 *********************
 
 QUESTION: what causes neck spasms? i have been getting spasms in my neck not all the time but occassionally they will happen... what causes the neck to spasm?  i do have tmj in my jaw...could that be why? and please no answers like "omg your dying!" k thanks.
-INETRSECTING WORDS: 
+ANSWERS: 
+Probably a Magnesium deficiency.  
+
+Mg is found in fresh vegetables - especially the green leafy ones - and almonds are a particularly good source.  It is excreted more if you are on diuretics, including caffeine, alcohol.  Magnesium supplements are good to get your levels up.
+***
+There are several reasons I think. I had them twice, shortly after I migrated from Holland to Australia by myself when I was 21. Only with hindsight I realize that this was pretty stressful.  The first time I went to see a DR because of the pain which is very severe. He told me there was nothing he could do and gave me a week off work. I was depressed and went to a bar, had a whiskey. I had another one and started to feel just fine. Then I had a third one, went home and had a sleep. When I woke up the spasm was gone. You beauty!!!!!!!!!! And still a week with no work.
+***
+INETRSETING WORDS: 
 almond --- 1.0
 particularli --- 1.0
 reason --- 1.0
@@ -513,13 +601,6 @@ gave --- 1.0
 whiskei --- 1.0
 holland --- 1.0
 found --- 1.0
-ANSWERS: 
-Probably a Magnesium deficiency.  
-
-Mg is found in fresh vegetables - especially the green leafy ones - and almonds are a particularly good source.  It is excreted more if you are on diuretics, including caffeine, alcohol.  Magnesium supplements are good to get your levels up.
-***
-There are several reasons I think. I had them twice, shortly after I migrated from Holland to Australia by myself when I was 21. Only with hindsight I realize that this was pretty stressful.  The first time I went to see a DR because of the pain which is very severe. He told me there was nothing he could do and gave me a week off work. I was depressed and went to a bar, had a whiskey. I had another one and started to feel just fine. Then I had a third one, went home and had a sleep. When I woke up the spasm was gone. You beauty!!!!!!!!!! And still a week with no work.
-***
 
 *********************
 
@@ -530,10 +611,6 @@ the sum of it's digits are 18
 the difference between the first and second digit equals the third digit.
 
   it's a real hard problem.
-INETRSECTING WORDS: 
-936 --- 1.0
-9 --- 0.6666666666666666
-divis --- 0.6666666666666666
 ANSWERS: 
 3 digit #'s divisible by 9 & 8 Are multiples of 72. Those whose digits add to 18 are:
 288, 576, 648, 792, 864, 936
@@ -609,17 +686,14 @@ It is not a hard problem.The number is 792.If however you are strict that the fi
 
 i got it right, right?
 ***
+INETRSETING WORDS: 
+936 --- 1.0
+9 --- 0.6666666666666666
+divis --- 0.6666666666666666
 
 *********************
 
 QUESTION: how to make jeans fit you better, how long do you sit in the bath with them on? i've heard that to make jeans fit you better, you should sit in the bath with them on before you first wash them. is this right?  how long for?
-INETRSECTING WORDS: 
-try --- 0.5555555555555556
-heard --- 0.8888888888888888
-jean --- 1.0
-dai --- 0.5555555555555556
-fit --- 0.8888888888888888
-dry --- 0.6666666666666666
 ANSWERS: 
 Have them tailored.  Jeans from the rack will not fit you perfectly.  I've never heard of the bathtub thing, but even if it did work, the results would be destroyed when you washed them.
 ***
@@ -679,23 +753,17 @@ uh, no you dont.
 when new
 if you have  us wranglers, or Levis, the best way is  to go in the sea for 20 Min's and lay on the Beach in the sun till dry. we do that  , I like  to see my girlfriend  wiggle out of them.  cheap jeans will fall a part
 ***
+INETRSETING WORDS: 
+try --- 0.5555555555555556
+heard --- 0.8888888888888888
+jean --- 1.0
+dai --- 0.5555555555555556
+fit --- 0.8888888888888888
+dry --- 0.6666666666666666
 
 *********************
 
 QUESTION: where can i get preppy pants? where can i get preppy pants not from hollister or anything like that i dont have enough money but are there any cheaper pants that are similar that i can afford? tell me what style please , also
-INETRSECTING WORDS: 
-old --- 0.6666666666666666
-store --- 0.6666666666666666
-arent --- 0.6666666666666666
-good --- 0.6666666666666666
-ha --- 1.0
-cheap --- 0.6666666666666666
-try --- 0.6666666666666666
-fit --- 0.6666666666666666
-style --- 1.0
-navi --- 0.6666666666666666
-pant --- 1.0
-brand --- 0.6666666666666666
 ANSWERS: 
 Try going to Queer-Mart,,, I think they'll have all the gay styles there.
 ***
@@ -717,19 +785,23 @@ www.forever21.com
 ***
 Old Navy has a few styles of pants, and they aren't terribly expensive. Aeropostale also is good.
 ***
+INETRSETING WORDS: 
+old --- 0.6666666666666666
+store --- 0.6666666666666666
+arent --- 0.6666666666666666
+good --- 0.6666666666666666
+ha --- 1.0
+cheap --- 0.6666666666666666
+try --- 0.6666666666666666
+fit --- 0.6666666666666666
+style --- 1.0
+navi --- 0.6666666666666666
+pant --- 1.0
+brand --- 0.6666666666666666
 
 *********************
 
 QUESTION: wat shud i do? recently my best boy friend has been treating me really unfairly! every chance he gets he starts me and shouts at me! he bosses me about and bullys me! recently he said 2me that he wants to hav a truths, i z that was grand but then he siad a whole pile of stuff, that people r sayin things bout me, wen i ask them they said that they did'nt say anything like that! im really startin 2 hate him! wat shud i do?
-INETRSECTING WORDS: 
-spell --- 0.6666666666666666
-treat --- 1.0
-find --- 1.0
-man --- 0.6666666666666666
-relationship --- 0.6666666666666666
-new --- 0.6666666666666666
-hurt --- 0.6666666666666666
-boyfriend --- 1.0
 ANSWERS: 
 he doesn't sound like a best boyfriend. Dump him before he hurts you even more and move on! You'll find someone who'll treat you like Gold!
 ***
@@ -751,18 +823,70 @@ dont tolelrate him n try to find out the reason why he behaving like that
 ***
 i'm sorry about how your boyfriend is treating you. but he keeps on doing that because you allow him to.  get out of that relationship at once! believe me, it would get worse! he is simply telling you he doesn't want you anymore, so what are you waiting for? love yourself.  this relationship has not and will not in any way diminish your chances of finding happiness elsewhere. your value as a person does not depend on any man's assessment of you.
 ***
+INETRSETING WORDS: 
+spell --- 0.6666666666666666
+treat --- 1.0
+find --- 1.0
+man --- 0.6666666666666666
+relationship --- 0.6666666666666666
+new --- 0.6666666666666666
+hurt --- 0.6666666666666666
+boyfriend --- 1.0
+
+*********************
+
+QUESTION: what are my rights as a consumer when i've paid for 15 montths of a service, used 12 and want to discontinue? i've practiced kunk fu at a school for the past year.  i'm not interested in continuing.  i signed a contract saying that if i need to discontinue, they'll reimburse.  the contract doesn't specify how much or a time-frame of paying back.  is the amount pro-rated by law? thanks for your time and expertise.  daniel, berkeley, ca.
+ANSWERS: 
+Ask them, they may give you a partial refund.  Look at the fine print in your contract as there is often a pro-rata refund for cancellations.
+***
+INETRSETING WORDS: 
+look --- 1.0
+mai --- 1.0
+give --- 1.0
+contract --- 1.0
+refund --- 1.0
+cancel --- 1.0
+ask --- 1.0
+partial --- 1.0
+fine --- 1.0
+prorata --- 1.0
+print --- 1.0
+
+*********************
+
+QUESTION: what is the best way to scan in magazine clippings w photos and file them in ms word? can buy new scanner. i will need to be able to classify and find articles easily. please recomend a scanner product that will help.
+ANSWERS: 
+Hp scanner is always the best =)
+***
+INETRSETING WORDS: 
+hp --- 1.0
+alwai --- 1.0
+best --- 1.0
+scanner --- 1.0
+
+*********************
+
+QUESTION: login button? i have the yahoo login button on my ie. i have sbc which has an agreement with yahoo. is there anyway to put it on my firefox. 
+thanks!
+ANSWERS: 
+You can install the Yahoo Toolbar for Firefox - http://toolbar.yahoo.com/firefox
+
+From there you can get a login button as well as links to other Yahoo services.
+***
+INETRSETING WORDS: 
+toolbar --- 1.0
+firefox --- 1.0
+button --- 1.0
+httptoolbaryahoocomfirefox --- 1.0
+instal --- 1.0
+link --- 1.0
+servic --- 1.0
+login --- 1.0
+yahoo --- 1.0
 
 *********************
 
 QUESTION: my new girlfriend has kids... should i tell my friends? my friends or people i hang out with in this case aren't really as important as say my girlfriend or closer friends. just more of a group of couples and stags that get together from time to time. they are high class and judgmental. their opinions of me mean little but they do enjoy gossip and i'd rather not give them some fuel. should i not let it known my new girl has children and if not, do you think its rude to ask my girlfriend not to mention it?
-INETRSECTING WORDS: 
-kid --- 0.9230769230769231
-tell --- 0.6923076923076923
-girlfriend --- 0.6923076923076923
-relationship --- 0.5384615384615384
-sai --- 0.6923076923076923
-friend --- 1.0
-matter --- 0.5384615384615384
 ANSWERS: 
 You're obviously not comfortable telling them that matter although you know that there's nothing wrong with somebody having kids.  You don't want to be the receiving end of their gossip so don't tell them, after all, it's your life and you do what you want to do without exposing yourself to negative stories of certain people.  If you explain this to your girlfriend quite nicely, she will understand that you're not having an issue with her and I think she will understand you.  Good luck.
 ***
@@ -825,11 +949,24 @@ High class does not mean they have any class. So don't tell anyone who is superf
 ***
 It is definitely rude to ask your girlfriend not to mention her kids.  It will shake the relationship, believe me.  If you say that you don't hold the opinion of your, so called "friends", you don't have to worry, it's your life, isn't it?
 ***
+INETRSETING WORDS: 
+kid --- 0.9230769230769231
+tell --- 0.6923076923076923
+girlfriend --- 0.6923076923076923
+relationship --- 0.5384615384615384
+sai --- 0.6923076923076923
+friend --- 1.0
+matter --- 0.5384615384615384
 
 *********************
 
 QUESTION: what are some websites that tell/teach you how to play different dynamics on a flute? i need to find 10 different websites that talk about playing different dynamics on a flute and am having a lot of trouble with it, can any one help me??
-INETRSECTING WORDS: 
+ANSWERS: 
+http://www.vcisinc.com/flute.htm
+***
+try the national flute association webpage or the larry krantz page.  both of these will have lots of links if not the direct answer to your question.
+***
+INETRSETING WORDS: 
 direct --- 1.0
 larri --- 1.0
 link --- 1.0
@@ -844,20 +981,10 @@ krantz --- 1.0
 lot --- 1.0
 question --- 1.0
 try --- 1.0
-ANSWERS: 
-http://www.vcisinc.com/flute.htm
-***
-try the national flute association webpage or the larry krantz page.  both of these will have lots of links if not the direct answer to your question.
-***
 
 *********************
 
 QUESTION: y do i keep having orgasms in my dreams? lately every since i have been wanting to make love to my friend i have been having orgasms in my dreams i had two of them today and they feel good but i am still a virgin. so what does this tell me?
-INETRSECTING WORDS: 
-normal --- 1.0
-try --- 1.0
-sex --- 1.0
-mean --- 1.0
 ANSWERS: 
 It means that you are fixated on sex right now.  Your hormones are bouncing and this is all new and unchartered territory.  Either get you some of that or take a cold shower and read a book.
 ***
@@ -873,18 +1000,15 @@ Having them while you are asleep is your bodies reaction to not getting release.
 ***
 Wet dreams are normal. They're just dreams with a plus. Don't try to gather any more meanings from them than you do other dreams. I'd get more shut-eye if I were you. Nighty night.
 ***
+INETRSETING WORDS: 
+normal --- 1.0
+try --- 1.0
+sex --- 1.0
+mean --- 1.0
 
 *********************
 
 QUESTION: how often do you incorporate the breastpump in your day?for how long? i tried 15 min and a probably filled 1/3 of a bottle..its so frustrating , how long does it take to fill a bottle?im i not producing enough milk? then it feels like one breast is not enough to feel the baby ..im really confused about this..
-INETRSECTING WORDS: 
-breast --- 0.7142857142857143
-try --- 0.5714285714285714
-pump --- 1.0
-milk --- 1.0
-stimul --- 0.5714285714285714
-work --- 0.5714285714285714
-onc --- 0.5714285714285714
 ANSWERS: 
 Try letting your husband suck it all out and spit it into a cereal bowl. Then pour some cornflakes into it to soak and preserve freshness. Freeze the cornflakes in an airtight container and rub it briskly once a decade.
 ***
@@ -908,26 +1032,18 @@ Are you just pumping while you're separated from your baby, or are you exclusive
 ***
 Try drinking plenty liquids (water and juice).  It can be frustrating but hang in there.  One day I went to the mall and i could feel i was very full(that hurt feeling)because i had not feed yet and when i went and sat in the car and I filled one of the bottles that come with the pump in least than 5 mins.  If you massage your breast close to your chest that will stimulate your milk ducts.
 ***
+INETRSETING WORDS: 
+breast --- 0.7142857142857143
+try --- 0.5714285714285714
+pump --- 1.0
+milk --- 1.0
+stimul --- 0.5714285714285714
+work --- 0.5714285714285714
+onc --- 0.5714285714285714
 
 *********************
 
 QUESTION: what kind of make-up would look good on a thirteen-year-old with curly brown hairand green eyes? i don't want to wear a lot and look like a tart. just a little to enhance my features...etc. what colours would suit me? bring out my eyes etc.
-INETRSECTING WORDS: 
-nice --- 0.5714285714285714
-try --- 0.7142857142857143
-shimmeri --- 0.5714285714285714
-look --- 1.0
-ey --- 0.8571428571428571
-purpl --- 0.5714285714285714
-brown --- 0.8571428571428571
-ag --- 0.5714285714285714
-makeup --- 0.5714285714285714
-littl --- 0.5714285714285714
-green --- 0.5714285714285714
-gloss --- 0.5714285714285714
-mascara --- 1.0
-lipgloss --- 0.5714285714285714
-lip --- 0.5714285714285714
 ANSWERS: 
 Very little
 for your eyes something soft and sheer in a mauve or lilac.
@@ -961,15 +1077,26 @@ Stick with lip gloss at your age. It's the most flattering, because your face is
 ***
 No makeup would look fabulous on you. The natural and no makeup look is all the rage with youths. A little lipgloss is fine but eyeshadow, mascara, et cetera is a little too much now. Your face will thank you for it when you're older.
 ***
+INETRSETING WORDS: 
+nice --- 0.5714285714285714
+try --- 0.7142857142857143
+shimmeri --- 0.5714285714285714
+look --- 1.0
+ey --- 0.8571428571428571
+purpl --- 0.5714285714285714
+brown --- 0.8571428571428571
+ag --- 0.5714285714285714
+makeup --- 0.5714285714285714
+littl --- 0.5714285714285714
+green --- 0.5714285714285714
+gloss --- 0.5714285714285714
+mascara --- 1.0
+lipgloss --- 0.5714285714285714
+lip --- 0.5714285714285714
 
 *********************
 
 QUESTION: does your spouse buy you christmas presents with your money? several years ago i got a computer for christmas from my wife. it was really great. what i didn't know was she bought it through the company i work for and i suddenly had an unexpected $125 a month coming off my pay cheque. the thought was great but the appearance of the bill was disturbing. has this type of thing ever happened to you?
-INETRSECTING WORDS: 
-monei --- 0.8
-gift --- 1.0
-work --- 0.6
-hi --- 0.8
 ANSWERS: 
 No, because i really don't want any store bought gift. Just being able to see his face in the morning. Just to hear the laughter in his voice. And to feel his warmth. And most of all just for that quality time he set aside for me makes it all good.
 ***
@@ -991,11 +1118,45 @@ no  cause they should have there own money
 ***
 Well now I guess that depends on how you look at it.  No I don't buy him gifts that appear as a deduction from his check but how different is that rom seeing the same gift show up on a credit card?  Should she of done that without speaking to you first?  I'd say no but it appears her heart was in the right place.  Explain to her that you would like to be made aware of "surprises" like that in the future but I hope you also thanked her for thinking of such a great gift for you.
 ***
+INETRSETING WORDS: 
+monei --- 0.8
+gift --- 1.0
+work --- 0.6
+hi --- 0.8
+
+*********************
+
+QUESTION: has anyone had a positive experience with mydatajob.com? i'm looking for a typing job from home in my spare time.  they are presently asking for $49.99 and you will be provided with names of companies that can utilize your service (more or less).
+ANSWERS: 
+I've always heard that anyone that requires you to pay money to find a job is a scam.
+***
+INETRSETING WORDS: 
+anyon --- 1.0
+requir --- 1.0
+heard --- 1.0
+iv --- 1.0
+alwai --- 1.0
+job --- 1.0
+pai --- 1.0
+scam --- 1.0
+find --- 1.0
+monei --- 1.0
 
 *********************
 
 QUESTION: woah! what happened here? theres so many questions about dating in this section? how is dating realted to yahoo answers? theres a reason there is a "singles and dating" section? why are so many questions miscategorized now? and yahoo still hasnt started policing the perverted questions on the "family and relationships" section yet. it would be really nice if they would. all who agree say something and report the miscatagorized questions and perverted questions.
-INETRSECTING WORDS: 
+ANSWERS: 
+yeah, u are right, i try my best to report the jerks on here! 
+
+its good to know someone else feels the same way i feel about the situation
+
+have a good day
+***
+O.K.
+***
+ok. lol.
+***
+INETRSETING WORDS: 
 lol --- 1.0
 jerk --- 1.0
 feel --- 1.0
@@ -1012,31 +1173,10 @@ best --- 1.0
 wai --- 1.0
 right --- 1.0
 try --- 1.0
-ANSWERS: 
-yeah, u are right, i try my best to report the jerks on here! 
-
-its good to know someone else feels the same way i feel about the situation
-
-have a good day
-***
-O.K.
-***
-ok. lol.
-***
 
 *********************
 
 QUESTION: both in love beyond words...cant be together...do i let go? we are both in love, more than i thought possible, but he has gone back to his wife and kids for their sake, hes not happy but cant cause more pain.  they do not have a physical relationship.  we still see each other and there are no promises made, but i truly doubt in my heart he will stay married after the kids are out of the house in 5 years or so.  do i keep a relationship, constantly reminded of how much i love and miss him when we are not together, having faith that it will work out in the end, or just cut it off completely, end the relationship, and try to move on.  i am not that young and have plenty of life experiences so this is not an infatuation.
-INETRSECTING WORDS: 
-wait --- 0.8333333333333334
-life --- 1.0
-best --- 0.6666666666666666
-love --- 1.0
-make --- 0.6666666666666666
-thing --- 0.6666666666666666
-hi --- 1.0
-know --- 0.8333333333333334
-wai --- 0.6666666666666666
 ANSWERS: 
 I understand what you are going through and it is the hardest thing to do is to love someone that you can't be with. We both know that the best thing we can do is move on in life but for the hope of true love we don't. So we just enjoy the few minutes that we have with each other and hope that is enough. Love hurts in so many ways but no way can be worst then being without the one you do love. The best thing is to let go and hope that time will stop the pain.
 ***
@@ -1065,14 +1205,72 @@ otherwise, if you are completely certain that you will be together in 5 years, t
 
 Take care
 ***
+INETRSETING WORDS: 
+wait --- 0.8333333333333334
+life --- 1.0
+best --- 0.6666666666666666
+love --- 1.0
+make --- 0.6666666666666666
+thing --- 0.6666666666666666
+hi --- 1.0
+know --- 0.8333333333333334
+wai --- 0.6666666666666666
+
+*********************
+
+QUESTION: why do my word documents have a wordpad icon? i consider myself somewhat of an "advanced" computer user, but this problem i have not resolved...
+
+all of my .doc files have a wordpad icon and wordpad association with them, but open in microsoft word. i have tried to uninstall and reinstall word with no success. i have also went into explorer and changed the file type association with all word files and still no luck.
+documents still open with word fine, but this is annoying.
+any suggestions? thanks in advance.
+ANSWERS: 
+as far as i can say its strange.....
+
+try this..
+
+right click on any such .doc files goto open with > choose program > select ms word from the list then click ok...might be it changes it this way. or else I can suggest you only one thing uninstall & reinstall the complete MS Office Package may be then when it'll reassociate it self with all office related files of local drive it'll chage the file icon.
+***
+INETRSETING WORDS: 
+uninstal --- 1.0
+itll --- 1.0
+chage --- 1.0
+strang --- 1.0
+click --- 1.0
+goto --- 1.0
+self --- 1.0
+sai --- 1.0
+open --- 1.0
+mai --- 1.0
+file --- 1.0
+drive --- 1.0
+relat --- 1.0
+choos --- 1.0
+reassoci --- 1.0
+right --- 1.0
+complet --- 1.0
+icon --- 1.0
+ani --- 1.0
+select --- 1.0
+okmight --- 1.0
+list --- 1.0
+onli --- 1.0
+suggest --- 1.0
+els --- 1.0
+reinstal --- 1.0
+packag --- 1.0
+program --- 1.0
+offic --- 1.0
+doc --- 1.0
+wai --- 1.0
+word --- 1.0
+chang --- 1.0
+local --- 1.0
+try --- 1.0
+thing --- 1.0
 
 *********************
 
 QUESTION: my sis has diabetes, its new to her? she is a hard worker and pays out her nose for prescriptions, co-pays ets. not to mention the rate for health insurance. is there anywhere a person get some discounted stuff for diabetics,meds, strips, lancets..please help me to help her.  cammie
-INETRSECTING WORDS: 
-lancet --- 0.6666666666666666
-diabet --- 1.0
-strip --- 0.6666666666666666
 ANSWERS: 
 You should also get her to check out http://diabetes.hammocksurvivalguide.com/
 It's got over 1,000 articles about diabetes.
@@ -1083,26 +1281,31 @@ I get my lancets & strips from my local diabetes centre  at no cost to me. Your 
 ***
 My husband is a dibetic also, go to the internet and look up Diabetes association for the state you live in, perhaps they have some hints on where she can get presciptions for less. Also the medication she takes, look up the manufacturer of the medication and write a letter to them, perhaps they can send her some coupons. Good Luck
 ***
+INETRSETING WORDS: 
+lancet --- 0.6666666666666666
+diabet --- 1.0
+strip --- 0.6666666666666666
+
+*********************
+
+QUESTION: did anyone see the camaro concepts in the november 2004 issue of popular hot rodding? they look so much more like the 60's camaros.the pictures are of a concept ss and a concept rs with hide-away headlights.who would have picked the design they are going with over these?
+ANSWERS: 
+yes, whatever they pick will be awesome. I can't wait. I think that they are going to blow mustangs out of the water on looks.
+***
+INETRSETING WORDS: 
+water --- 1.0
+look --- 1.0
+mustang --- 1.0
+think --- 1.0
+pick --- 1.0
+awesom --- 1.0
+wait --- 1.0
+whatev --- 1.0
+blow --- 1.0
 
 *********************
 
 QUESTION: kidney failure? my mother is suffering of kidney failure but she is not at the point of dialysis yet but she has too much protein in her urine.  does anyone know of anything that helps get rid off protein in the urine for someone suffering of kidney failure.  at this stage, food is not an issue that has been confirmed by a specialist. . .
-INETRSECTING WORDS: 
-treatment --- 0.6666666666666666
-protein --- 0.6666666666666666
-anoth --- 0.6666666666666666
-exampl --- 0.6666666666666666
-intak --- 0.6666666666666666
-urin --- 0.6666666666666666
-doctor --- 0.6666666666666666
-control --- 0.6666666666666666
-treat --- 0.6666666666666666
-condit --- 0.6666666666666666
-check --- 0.6666666666666666
-problem --- 0.6666666666666666
-kidnei --- 1.0
-caus --- 0.6666666666666666
-effect --- 0.6666666666666666
 ANSWERS: 
 The protein in the urine is a symptom of the kidney failure.  Kidney failure can be caused by many things. If that cause can be taken care of, then maybe the kidney can recover.  For example, if your mom has a kidney infection, then maybe she can regain kidney function.  I have been a dialysis technician for a year, so I'm not an expert, but I know a little.  
 
@@ -1122,6 +1325,22 @@ water helps the kidneys. you will have to check with a doctor. what might work p
 ***
 the protein is in the urine because the kidneys arent fitlering correctly, which is the problem youre trying to correct... unfortunately, theres not much you can do outside of a transplant
 ***
+INETRSETING WORDS: 
+treatment --- 0.6666666666666666
+protein --- 0.6666666666666666
+anoth --- 0.6666666666666666
+exampl --- 0.6666666666666666
+intak --- 0.6666666666666666
+urin --- 0.6666666666666666
+doctor --- 0.6666666666666666
+control --- 0.6666666666666666
+treat --- 0.6666666666666666
+condit --- 0.6666666666666666
+check --- 0.6666666666666666
+problem --- 0.6666666666666666
+kidnei --- 1.0
+caus --- 0.6666666666666666
+effect --- 0.6666666666666666
 
 *********************
 
@@ -1131,13 +1350,6 @@ guns n' roses vs anthrax
 van halen vs whitesnake
 megadeth vs wasp
 dio vs queensryce
-INETRSECTING WORDS: 
-whitesnak --- 0.6666666666666666
-rose --- 0.6666666666666666
-van --- 0.8333333333333334
-dio --- 0.6666666666666666
-megadeth --- 1.0
-halen --- 0.8333333333333334
 ANSWERS: 
 you rock hunni......guns n roses, van halen though i love whitesnake, WASP (F**k like a beast and wild child rocked) and dio
 ***
@@ -1181,17 +1393,17 @@ Van Halen
 Megadeth
 Queensryche
 ***
+INETRSETING WORDS: 
+whitesnak --- 0.6666666666666666
+rose --- 0.6666666666666666
+van --- 0.8333333333333334
+dio --- 0.6666666666666666
+megadeth --- 1.0
+halen --- 0.8333333333333334
 
 *********************
 
 QUESTION: how long would it take america to supply what china makes for us now? since china is the "wild card" nation, what would happen if she closed her ports? how long would it take america to produce and manufacture what we now purchase from china? would it even be practical at this point considering the state of our own limited manufacturing capability? i mean if things really hit the fan, wouldn't we be in a real fix?
-INETRSECTING WORDS: 
-china --- 1.0
-ha --- 0.6666666666666666
-make --- 0.6666666666666666
-issu --- 0.6666666666666666
-produc --- 0.6666666666666666
-labor --- 0.6666666666666666
 ANSWERS: 
 yes
 i guess
@@ -1203,11 +1415,39 @@ no time to replace that crap. Most of them are made by labors living in filth an
 ***
 money is the issue, we can't produce things at the price China can due to labor laws.  but what do they make that we really need?
 ***
+INETRSETING WORDS: 
+china --- 1.0
+ha --- 0.6666666666666666
+make --- 0.6666666666666666
+issu --- 0.6666666666666666
+produc --- 0.6666666666666666
+labor --- 0.6666666666666666
 
 *********************
 
 QUESTION: how can i get rid of gallstones without having surgery? i was just diagnosed with gallstones in my gallblatter i really dont want to have surgery and have been told that there are other ways to get rid of the stones so if anyone knows how im open for suggestions
-INETRSECTING WORDS: 
+ANSWERS: 
+Most gallstones are made of pure cholesterol.  You might try a diet with low fat and very low saturated fats.  Reducing the saturated fats will lower blood cholesterol and may (I'm not promising anything!) make the stones smaller.
+
+Lowering your total fat intake may also help reduce or prevent pain.  Gallstones hurt because when you eat fat, the stomach senses it and tells the gallbladder to release some of the gall into the intestines to help digest the fat.  If you have stones, that squeezing is about like squeezing a handfull of pointy rocks.
+
+However...   I've had the surgery and it really isn't a big deal.  There is minimal scarring and the incisions aren't that much bigger than a bug bite or a medium sized zit.  
+
+If you leave the gallstones there, they can get large enough to damage the gallbladder, with the result of a bad infection and that can cause death, which is a very Bad Thing!
+***
+They now have a way of zapping them with sound that caused them to shatter instead of operating.  I don't know the details though.
+***
+If you really want to seek other alternatives I would look into finding a holistic store near you and maybe call and ask if they have any organic remedies.... usually a reg. doc. wont tell you those type of remedies because its not considered western medicine.... good luck
+***
+Have you seen a gastroenterologist?  They can do a minimally invasive procedure called an ERCP (Endoscopic Retrograde Cholangiopancreatography - try saying that 3 times fast!).  An ERCP won't get rid of the stones that are in the gallbladder...just the stones that are stuck in the duct leading from the GB to the small intestine.  They can make a tiny cut in the duct and pull gallstones out with a small balloon.  If the stone is too large, they have equipment that will crush the stone so it will pass freely.  
+
+I had the surgery myself about 10 years ago.  It's not as bad as you'd imagine, and you feel much better after it's over.  You might still have phantom pain for a while, but it's nowhere near as bad as the pain you started with.  
+
+Eating a diet high in fat will make gallbladder disease worse, but you can't really get rid of the stones unless they pass naturally or you have them removed, either in surgery or with an ERCP.
+***
+The best remedy is surgury. I had surgery to have kidney stones removed. The surgery isn't as bad as you think it may be.
+***
+INETRSETING WORDS: 
 becaus --- 0.6666666666666666
 isnt --- 0.6666666666666666
 remov --- 0.6666666666666666
@@ -1233,27 +1473,6 @@ remedi --- 0.6666666666666666
 minim --- 0.6666666666666666
 gallbladd --- 0.6666666666666666
 caus --- 0.6666666666666666
-ANSWERS: 
-Most gallstones are made of pure cholesterol.  You might try a diet with low fat and very low saturated fats.  Reducing the saturated fats will lower blood cholesterol and may (I'm not promising anything!) make the stones smaller.
-
-Lowering your total fat intake may also help reduce or prevent pain.  Gallstones hurt because when you eat fat, the stomach senses it and tells the gallbladder to release some of the gall into the intestines to help digest the fat.  If you have stones, that squeezing is about like squeezing a handfull of pointy rocks.
-
-However...   I've had the surgery and it really isn't a big deal.  There is minimal scarring and the incisions aren't that much bigger than a bug bite or a medium sized zit.  
-
-If you leave the gallstones there, they can get large enough to damage the gallbladder, with the result of a bad infection and that can cause death, which is a very Bad Thing!
-***
-They now have a way of zapping them with sound that caused them to shatter instead of operating.  I don't know the details though.
-***
-If you really want to seek other alternatives I would look into finding a holistic store near you and maybe call and ask if they have any organic remedies.... usually a reg. doc. wont tell you those type of remedies because its not considered western medicine.... good luck
-***
-Have you seen a gastroenterologist?  They can do a minimally invasive procedure called an ERCP (Endoscopic Retrograde Cholangiopancreatography - try saying that 3 times fast!).  An ERCP won't get rid of the stones that are in the gallbladder...just the stones that are stuck in the duct leading from the GB to the small intestine.  They can make a tiny cut in the duct and pull gallstones out with a small balloon.  If the stone is too large, they have equipment that will crush the stone so it will pass freely.  
-
-I had the surgery myself about 10 years ago.  It's not as bad as you'd imagine, and you feel much better after it's over.  You might still have phantom pain for a while, but it's nowhere near as bad as the pain you started with.  
-
-Eating a diet high in fat will make gallbladder disease worse, but you can't really get rid of the stones unless they pass naturally or you have them removed, either in surgery or with an ERCP.
-***
-The best remedy is surgury. I had surgery to have kidney stones removed. The surgery isn't as bad as you think it may be.
-***
 
 *********************
 
@@ -1264,11 +1483,6 @@ which thereby also has two resurrections.
 
 which son should repent(change)?
 (hint: numbers 23:19)
-INETRSECTING WORDS: 
-think --- 1.0
-satan --- 1.0
-resurrect --- 1.0
-two --- 1.0
 ANSWERS: 
 check sunnah and Quran
 ***
@@ -1292,14 +1506,15 @@ Now, would this be satan's doctrine or GOD'S...ummm!
 ***
 ur weird
 ***
+INETRSETING WORDS: 
+think --- 1.0
+satan --- 1.0
+resurrect --- 1.0
+two --- 1.0
 
 *********************
 
 QUESTION: back 2 my other question about that girl who likes me...? i had a lot of people say stuff like get 2 know her better but i dont think i can i've knew her 4 about 6 years! i have asked her out a few times but she says she sees me as just a friend, what should i do?
-INETRSECTING WORDS: 
-move --- 0.6666666666666666
-look --- 0.6666666666666666
-friend --- 1.0
 ANSWERS: 
 The best you can do it wait her out or go look for another go. Show her you can be a good lover if she just gives you a chance. Good Luck!!
 ***
@@ -1309,6 +1524,10 @@ in that case, i would think that u should move on since u had known her 4 to 6 y
 ***
 MOVE ON. FIND SOMEONE ELSE, SHE JUST WANTS TO BE FRIENDS AND LOOKS LIKE SHE AIN'T CHANGING HER MIND.
 ***
+INETRSETING WORDS: 
+move --- 0.6666666666666666
+look --- 0.6666666666666666
+friend --- 1.0
 
 *********************
 
@@ -1319,11 +1538,6 @@ i wanted something inspiring, maybe...?
 i had "live", "believe", "dream", and "imagine" in mind...but i want something a bit more creative if at all possible. i'm having trouble trying to think of something that's not so cheesy or cliche.
 
 thanks :-)
-INETRSECTING WORDS: 
-good --- 1.0
-luck --- 0.75
-word --- 0.75
-achiev --- 0.75
 ANSWERS: 
 Me
 Forever
@@ -1405,20 +1619,15 @@ bouquets arrayed
 beauty rivalling
 greatness truly sings
 ***
+INETRSETING WORDS: 
+good --- 1.0
+luck --- 0.75
+word --- 0.75
+achiev --- 0.75
 
 *********************
 
 QUESTION: can you get pregnant after a tubal? i had a tubal 16 months ago after the birth of my son because my husband was abusive but since then i have left him and found a wonderful man we would love to have a baby togather but i want to know if its possible
-INETRSECTING WORDS: 
-procedur --- 0.6666666666666666
-lot --- 0.6666666666666666
-revers --- 0.6666666666666666
-possibl --- 0.6666666666666666
-unti --- 0.6666666666666666
-vitro --- 0.6666666666666666
-surgeri --- 0.6666666666666666
-tubal --- 1.0
-fertil --- 0.6666666666666666
 ANSWERS: 
 It's possible, but not likely. My aunt did get pregnant after ehr tubal, and had a son. Most likely though if you want more kids, you will need to have a tubal reversal. I've done a lot of research on reversal docs, feel free to IM me sometime if you want more info about reversals.
 ***
@@ -1440,12 +1649,20 @@ there is a surgical procedure where you can get your tubal reversed....It's expe
 ***
 Yes, but you'll have to have surgery to have them "untied."
 ***
+INETRSETING WORDS: 
+procedur --- 0.6666666666666666
+lot --- 0.6666666666666666
+revers --- 0.6666666666666666
+possibl --- 0.6666666666666666
+unti --- 0.6666666666666666
+vitro --- 0.6666666666666666
+surgeri --- 0.6666666666666666
+tubal --- 1.0
+fertil --- 0.6666666666666666
 
 *********************
 
 QUESTION: those who do not believe in god: mock him to his face.? considering the stories i read about those who mocked god and died, i thought it would be interesting to dare atheists to do the same. okay. so, you don't believe in god. i dare all atheists, then, to mock him. in particular, you all should challenge him to stop you from doing something, preferably while insulting him. say that god can't do it, and see what happens.
-INETRSECTING WORDS: 
-god --- 1.0
 ANSWERS: 
 Why are you trying to sow dissent here?  There are people on here trying to keep it less like a battlefield and more like a place for important questions on faith, and questions like this don't help.
 ***
@@ -1549,13 +1766,20 @@ And if God wants to come down, I will mock him to his face.
 ***
 mocking a person's religion is a bad thing to do and you should be ashamed of yourself while i am an atheist i do have moral and my principles forbid me to mock another person's beliefs
 ***
+INETRSETING WORDS: 
+god --- 1.0
 
 *********************
 
 QUESTION: what is this song called? it was played on the commericial with the honda civic. i think it was a new wave rock music. it also played on one tree hill: 
 http://youtube.com/watch?v=wrg50pqzcmq
 it starts playing when the raven cheerleaders start cheering. does anyone know what the song is called? thanks!
-INETRSECTING WORDS: 
+ANSWERS: 
+Huddle Formation by the Go! Team - awesome song
+***
+I was listening to it, but im sorry i don't know. I like new wave music, kinda.
+***
+INETRSETING WORDS: 
 music --- 1.0
 song --- 1.0
 new --- 1.0
@@ -1568,25 +1792,10 @@ awesom --- 1.0
 huddl --- 1.0
 listen --- 1.0
 know --- 1.0
-ANSWERS: 
-Huddle Formation by the Go! Team - awesome song
-***
-I was listening to it, but im sorry i don't know. I like new wave music, kinda.
-***
 
 *********************
 
 QUESTION: relationship advice? okay, here's the thing. this girl broke up with me last year. now i have a new girlfriend who i love very much. however, i got an email reminder of the first's birthday yesterday, with a note saying, "i do still love her." apparently, i saved that last year after she broke up with me when i still had feelings for her. anyway, when i read that, it almost felt like it was telling me that i do still love her, even just a little bit. but i love my girlfriend now...but what do i do? (preferably to get my mind off the one who broke up with me)...oh, yeah, she told me she still has feelings for me, too...but i told her i didn't because i didn't at the time, but now i'm not so sure. advice?
-INETRSECTING WORDS: 
-time --- 0.8
-alwai --- 0.6
-realli --- 0.6
-ex --- 0.6
-old --- 0.6
-love --- 1.0
-make --- 0.6
-girl --- 0.6
-feel --- 0.8
 ANSWERS: 
 Figure out whom you really have feelings for first and then make your choice and let both of them know what you've decided.
 ***
@@ -1618,11 +1827,26 @@ Ok, if she broke up with you that's her loss and you need to get over her. If yo
 ***
 remember she is your ex for a reason! sometimes we long for old relationships but that turns out to be stupid! I went back to an ex and left the most amazing man.. the ex had cheated on me and lied to me! fast forward a year later two months before the wedding i found out he cheated again! I met another man and married him now and four years later am has happy as I can be!!
 ***
+INETRSETING WORDS: 
+time --- 0.8
+alwai --- 0.6
+realli --- 0.6
+ex --- 0.6
+old --- 0.6
+love --- 1.0
+make --- 0.6
+girl --- 0.6
+feel --- 0.8
 
 *********************
 
 QUESTION: i need to start a tv show club with my friends? the show is the oc! i need help starting it! ideas ummmmmmmmmmmmmmm flyers, watch shows. something at my or my friends house. help me!
-INETRSECTING WORDS: 
+ANSWERS: 
+Get together at your house one week and another friends the next and so on.....and watch it together and make a OC party out of it.....Me and my friends use to do that with Beverly Hills 90210
+***
+Talk about the best & worst tv shows there is or was. *:]
+***
+INETRSETING WORDS: 
 beverli --- 1.0
 hill --- 1.0
 itm --- 1.0
@@ -1640,11 +1864,6 @@ make --- 1.0
 friend --- 1.0
 talk --- 1.0
 parti --- 1.0
-ANSWERS: 
-Get together at your house one week and another friends the next and so on.....and watch it together and make a OC party out of it.....Me and my friends use to do that with Beverly Hills 90210
-***
-Talk about the best & worst tv shows there is or was. *:]
-***
 
 *********************
 
@@ -1653,8 +1872,6 @@ QUESTION: why are bassoons so expensive? i was looking at bassoons over at music
 does anyone know?
 thanks
 m98s
-INETRSECTING WORDS: 
-made --- 1.0
 ANSWERS: 
 They are hand made from excellent and expensive wood.  The wood pieces must be structurally perfect in large sizes and are rare.  They take FAR longer to make than any other instrument.
 
@@ -1662,6 +1879,40 @@ The cheap plastic ones aren't that much more than other instruments.  Also, they
 ***
 because they are so beautiful and probably have to be individually made and such.
 ***
+INETRSETING WORDS: 
+made --- 1.0
+
+*********************
+
+QUESTION: am i at fault here? i met a young lady on hotornot.com, and we hit it off. we haven't met, but we've im'd back and forth quite a bit, and some of the conversations became, well, a bit steamy!
+
+during some of our first communications on hot or not's website, she clearly told me she was 18 years old (i've saved these messages). regrettably, as a result of some independent research i've conducted, i have learned that she is only 17. 
+
+so my question is really two-fold: am i at "fault" here, and what's the best way for me to extricate myself from this situation? she doesn't know that i know, and we're still on friendly terms.
+
+also - and i don't know if this would have any bearing on the situation - but the age of consent in her state is 16.
+ANSWERS: 
+You haven't done anything illegal YET, so your best course of action is to withdraw from further contact with her now. Tell her "I'm sorry, I know you're only 17 so I can't continue talking to you." Whatever you do, DON'T MEET HER!
+***
+INETRSETING WORDS: 
+havent --- 1.0
+anyth --- 1.0
+done --- 1.0
+17 --- 1.0
+cours --- 1.0
+sorri --- 1.0
+onli --- 1.0
+meet --- 1.0
+illeg --- 1.0
+contact --- 1.0
+know --- 1.0
+continu --- 1.0
+withdraw --- 1.0
+action --- 1.0
+best --- 1.0
+tell --- 1.0
+whatev --- 1.0
+talk --- 1.0
 
 *********************
 
@@ -1670,10 +1921,6 @@ QUESTION: how do i get her to do this? my church was watching a movie for a teen
 
 
 how do i get her to grab my hand when she is scared?
-INETRSECTING WORDS: 
-friend --- 1.0
-grab --- 0.6666666666666666
-hand --- 0.8333333333333334
 ANSWERS: 
 Well,you could try sitting inbetween her and her friend. Then maybe they would BOTH grab your hand!!!! Good Luck
 ***
@@ -1697,13 +1944,14 @@ when you go on a date don't bring her friends along.
 ***
 Bro... You've got to take things one step at a time. Allow her to get to know you. Once she is comfortable with your companionship, you will see the difference. But never take advantage of the situation. God bless.
 ***
+INETRSETING WORDS: 
+friend --- 1.0
+grab --- 0.6666666666666666
+hand --- 0.8333333333333334
 
 *********************
 
 QUESTION: who do i contact to complain about our tv cable service? complaining to the cable company hasn't work for us our cable goes off almost everyday...yet we are never reimbursed a red cent. i was thinking fcc but can't locate an address. thanks
-INETRSECTING WORDS: 
-state --- 1.0
-contact --- 1.0
 ANSWERS: 
 contact your city mayors office they will have the info you need or can at least help you . also any consumer affairs division in your city or state. also city or state officials
 ***
@@ -1713,6 +1961,9 @@ contact the public utilities commission for the state you live in.   U can use w
 ***
 complain ur cable TV operator
 ***
+INETRSETING WORDS: 
+state --- 1.0
+contact --- 1.0
 
 *********************
 
@@ -1723,9 +1974,6 @@ everytime you refresh the page there is a new joke
 
 you know
 fun stuff to put on my site
-INETRSECTING WORDS: 
-site --- 0.6666666666666666
-game --- 1.0
 ANSWERS: 
 www.funbumper.com has some cool games for sites.  Check it out, get a game & give me best answer, 
 
@@ -1740,18 +1988,30 @@ http://spogg.com/ will let you put some of their games on your site as well.
 freegames.com
 games.com
 ***
+INETRSETING WORDS: 
+site --- 0.6666666666666666
+game --- 1.0
+
+*********************
+
+QUESTION: goodmans g-shot3027tft digital camera drivers/disc? does anyone have these drivers or a disc they can send me as myne is broken and goodmans dont supply drivers on there site yet . i have searched forever for these but cant find them . any help is much appreciated = }
+ANSWERS: 
+Contact their customer support and they will send you a copy (guaranteed to work and virus free!)...;
+***
+INETRSETING WORDS: 
+work --- 1.0
+free --- 1.0
+support --- 1.0
+send --- 1.0
+guarante --- 1.0
+viru --- 1.0
+contact --- 1.0
+copi --- 1.0
+custom --- 1.0
 
 *********************
 
 QUESTION: 1999 chevy blazer, headlights!!!? on a friends 99 blazer,. his headlight's stopped working? the other day they worked only when it was in drive, but when he put it park they would go ff, now they do not work at all, all new bulbs, all the rear lights work, we hooked a 12v tester to the light sockets and they are getting power,the orange blinker lights work on the front but no headlights...any ideas, oh and we have checked all the fuses......anyone have a problem like this.??
-INETRSECTING WORDS: 
-ground --- 1.0
-switch --- 1.0
-light --- 1.0
-work --- 1.0
-turn --- 1.0
-problem --- 1.0
-bulb --- 1.0
 ANSWERS: 
 Check out the head light relay. Insure you have good clean tight grounds
 ***
@@ -1767,11 +2027,36 @@ did he changed the bulbs on both side? i the same problem with my Chevy  lumina 
 ***
 I have ran into this before and found the multifunction switch to be the problem (turn single/dimmer switch)
 ***
+INETRSETING WORDS: 
+ground --- 1.0
+switch --- 1.0
+light --- 1.0
+work --- 1.0
+turn --- 1.0
+problem --- 1.0
+bulb --- 1.0
 
 *********************
 
 QUESTION: change from 6 volt to 12 volt? to change 6 volt to 12 volt will it make the car run faster or take off faster?what i have to replace when i change from 6-12 volts?what eles i have to do beside replace the battery?
-INETRSECTING WORDS: 
+ANSWERS: 
+Current vehicles use 12 volt systems and it's been a while since I've heard of a 6 volt system. You would need to change the whole electrical system, not just the battery. There would be no real advantage in performance and conversion cost is high.
+***
+It will not run faster ,you could find a higher amp generator, pertronix makes a 6volt pointless ignition system now,and you could find on eBay a variable regulator from the 50's.
+***
+what kinda car are you talking about?
+***
+It will make the engine crank faster but not run any differently. You will need to replace your starter, generator, voltage regulator and lights. You will need to add a resister(s) if you want to use your original gages and radio. If not, these will need to be replaced too. If this is a positive ground system, you will need to do some wiring to make it all work right.
+***
+No real difference in performance - and if it is six volt now, it is an real antique, and changing it to twelve volt will take away from the value of the vehicle.
+
+Six volt simply was not that good, it was not adequate, but it did still work.  I would leave it as it is, original - but that is me - as you seem to think the car will run faster - no, it may start a little easier.  
+
+Oh by the way, your starter, lights, fuses, alternator, winched wiper blade motors, coil, points... anything electrical would probably have to be changed - but you would have to ask a real mechanic anyways before you started, and even then they probably would not be sure.
+
+An old car club would be your best source for information.
+***
+INETRSETING WORDS: 
 vehicl --- 0.6666666666666666
 gener --- 0.6666666666666666
 perform --- 0.6666666666666666
@@ -1790,30 +2075,11 @@ origin --- 0.6666666666666666
 differ --- 0.6666666666666666
 starter --- 0.6666666666666666
 chang --- 0.6666666666666666
-ANSWERS: 
-Current vehicles use 12 volt systems and it's been a while since I've heard of a 6 volt system. You would need to change the whole electrical system, not just the battery. There would be no real advantage in performance and conversion cost is high.
-***
-It will not run faster ,you could find a higher amp generator, pertronix makes a 6volt pointless ignition system now,and you could find on eBay a variable regulator from the 50's.
-***
-what kinda car are you talking about?
-***
-It will make the engine crank faster but not run any differently. You will need to replace your starter, generator, voltage regulator and lights. You will need to add a resister(s) if you want to use your original gages and radio. If not, these will need to be replaced too. If this is a positive ground system, you will need to do some wiring to make it all work right.
-***
-No real difference in performance - and if it is six volt now, it is an real antique, and changing it to twelve volt will take away from the value of the vehicle.
-
-Six volt simply was not that good, it was not adequate, but it did still work.  I would leave it as it is, original - but that is me - as you seem to think the car will run faster - no, it may start a little easier.  
-
-Oh by the way, your starter, lights, fuses, alternator, winched wiper blade motors, coil, points... anything electrical would probably have to be changed - but you would have to ask a real mechanic anyways before you started, and even then they probably would not be sure.
-
-An old car club would be your best source for information.
-***
 
 *********************
 
 QUESTION: which is the best choice? for teenage guys? best choice: a girl asking for your number?  a girl giving you her number?  a girl secretly asking your friend for your number and surprise you by texting you on your cellphone?
    any better suggestions!!!!! i really need an answer.. help!!!!!!!! love you guys
-INETRSECTING WORDS: 
-number --- 1.0
 ANSWERS: 
 just get the number
 ***
@@ -1839,12 +2105,12 @@ What's your number?
 ***
 give out number
 ***
+INETRSETING WORDS: 
+number --- 1.0
 
 *********************
 
 QUESTION: marriage, who should ask? what do you think about a woman asking the man to marry them? is that wrong? i heard a woman can do this on a leap year? lol. i guess you could any year but i want to know if it matters who asks who? what do ya think?
-INETRSECTING WORDS: 
-ask --- 1.0
 ANSWERS: 
 go for it.
 thats a great idea.
@@ -1898,14 +2164,12 @@ Go for it girl, get down on your knee and ask him.  If he says no, you are no wo
 ***
 Parents
 ***
+INETRSETING WORDS: 
+ask --- 1.0
 
 *********************
 
 QUESTION: i had to have an iv put in my hand 2 wks ago & since then i have small, painful lumps in my veins, what is it? after having an iv put in my hand 2 weeks ago i noticed 2 small, very painful lumps in the veins of my hand. yesterday i noiticed i had one in my forearm. this one is tender, but not as painful as the ones in my hand. what could this be and is it related to the iv being put it or is it just coincidence that i noticed them around the time i was in the hospital? the lumps are very hard and i can actually roll them around between my fingers, although, the pain almost takes my breath away when i do so. the lump in my arm is smaller and slightly tender to the touch, but not as painful as the ones in my hand, not even close. i just now found a 2nd small lump in my arm near the other one. what are these things and should i be scared?
-INETRSECTING WORDS: 
-hospit --- 1.0
-doctor --- 1.0
-sinc --- 1.0
 ANSWERS: 
 These are probably just small lumps of scar tissue caused by the needle used for the IV.  Since you were in the hospital 2 weeks ago, I'll assume you are having a follow up visit with your regular doctor soon.  Have him/her check them out, but I wouldn't worry about it to much.
 ***
@@ -1915,17 +2179,14 @@ ITS FREE AND THEY CAN TELL YOU WHAT TO DO!
 
 There could be a serious infection developing if your Doctor hasnt seen it since youve last been there.
 ***
+INETRSETING WORDS: 
+hospit --- 1.0
+doctor --- 1.0
+sinc --- 1.0
 
 *********************
 
 QUESTION: why dose tv go blank w/ like only 2 lines? i have an older well like 5 years or so old sharp 27 in tv but for some reason it keeps messing up and it cuts from full screen to like a tenth of an inch line across the center. so i have to hit it till it stays in full screen. i tried blowing it out and it helped 4 a lil but it came back with a vengence. is it time for a new tv or a lil fix, on unimployment so new wont be comming any time soon... so help me please
-INETRSECTING WORDS: 
-good --- 0.6666666666666666
-did --- 0.6666666666666666
-cheap --- 0.6666666666666666
-new --- 0.6666666666666666
-tv --- 1.0
-bui --- 0.6666666666666666
 ANSWERS: 
 It looks like you're stuck with the issue
 
@@ -1953,14 +2214,17 @@ I think u shud go and buy a new tv.
 there is some that u can buy that is real cheap and lasts longer.
 we bought a cheap tv and we've had it for bout 8 yrs.and it still works like it did when we bought it.
 ***
+INETRSETING WORDS: 
+good --- 0.6666666666666666
+did --- 0.6666666666666666
+cheap --- 0.6666666666666666
+new --- 0.6666666666666666
+tv --- 1.0
+bui --- 0.6666666666666666
 
 *********************
 
 QUESTION: what type of bodies do men prefer (ladies too if that's ur thing)? i always think i am so fat because i am kinda tall and stocky. i am athletic and i am really strong.. i was just wondering if skinny is the only way for a guy to go.
-INETRSECTING WORDS: 
-prefer --- 1.0
-femal --- 0.75
-skinni --- 0.75
 ANSWERS: 
 The general observation about men's taste in the female figure is that the lower your social class, the more flesh you prefer on the woman.  Thus, a poor man would prefer a woman with voluptuous figure, all boobs and butt, while a rich man would prefer a slimmer, more waifish woman.
 ***
@@ -1983,6 +2247,10 @@ Skinny was never what guys wanted. I am an 18 year old female in Australia. My b
 there's nowt wrong with a little extra.
 I don't like skinny women they don't look right.
 ***
+INETRSETING WORDS: 
+prefer --- 1.0
+femal --- 0.75
+skinni --- 0.75
 
 *********************
 
@@ -1991,19 +2259,6 @@ QUESTION: keep being called goofy and it's really hittin me now? i have a brace 
 i'm feelin so annoyed and my self confidence is goin down hill. how do i deal with things like that, i have had it all my life since at school...name callin is for kids...but now im startin work and i get the same critical comments from people i work with....
 
 what should i do , to not let it get to me....
-INETRSECTING WORDS: 
-suggest --- 0.6
-peopl --- 1.0
-try --- 0.6
-make --- 1.0
-name --- 0.6
-sai --- 0.6
-goofi --- 0.6
-becaus --- 0.6
-littl --- 0.6
-realli --- 0.6
-show --- 0.6
-call --- 0.8
 ANSWERS: 
 comic response. Ask them if they are suggesting doggy style if its a girl. People that make comical responses to the flaws that people point out seem to be happier because they eventually learn to enjoy their short-comings instead of feeling embarrassed by them.... sorry, can't come up with a male response... unless that works for both for you.... goofy
 ***
@@ -2025,6 +2280,19 @@ The best way to deal with it is to joke about yourself.  It will show people not
 ***
 I would concur on treating it as a joke (maybe start wearing vests and long-sleeved turtlenecks to work?).  I do not agree with the answerer who suggested the "doggy-style" remark.  That could get you in trouble for verbal sexual harassment.
 ***
+INETRSETING WORDS: 
+suggest --- 0.6
+peopl --- 1.0
+try --- 0.6
+make --- 1.0
+name --- 0.6
+sai --- 0.6
+goofi --- 0.6
+becaus --- 0.6
+littl --- 0.6
+realli --- 0.6
+show --- 0.6
+call --- 0.8
 
 *********************
 
@@ -2060,10 +2328,6 @@ you may say i'm a dreamer
 but i'm not the only one
 i hope some day you'll join us
 and the world will be as one
-INETRSECTING WORDS: 
-imagin --- 1.0
-song --- 0.6
-mean --- 0.8
 ANSWERS: 
 This song brings tears to my eyes every time I hear it.  I think it means that love can transcend all boundaries and if we only looked deep inside ourselves we'd realize we're all the same and we're fighting over stupid things.  In other words we could attain whatever our wildest dreams are.  It's a beautiful song!
 ***
@@ -2086,16 +2350,14 @@ that and many other little details,would be what the world needs to achieve peac
 ***
 Great song... listen to it everyday... its on my running playlist....  You know how great minds produce work that isnt comprehended until years or even decades later well this is one of those pieces of work....
 ***
+INETRSETING WORDS: 
+imagin --- 1.0
+song --- 0.6
+mean --- 0.8
 
 *********************
 
 QUESTION: i was wondering? ok my neice wants me to redo her computer she got from someone and when i hook it up it's got xp and whoever had it had a password at the beginning and i was wondering how to get past that to do something with it
-INETRSECTING WORDS: 
-xp --- 0.8
-onli --- 0.6
-u --- 0.6
-password --- 1.0
-take --- 0.6
 ANSWERS: 
 i had the same problem, only with multiple users and passwords, and i couldnt find which one was logged on as the administrator, so i had to re-install xp from the disc of a relative.
 
@@ -2133,16 +2395,16 @@ I guess the password comes up before the Windows are loaded correct?
 If yes the only thing u can do is to reset the Bios. U can read the owner's manual but in some motherboards u just need to take the battery off.
 If the password comes when the windows are loaded and u are not interested for the data on the disk ... Then why don't u format the disk and re-install Windows XP?
 ***
+INETRSETING WORDS: 
+xp --- 0.8
+onli --- 0.6
+u --- 0.6
+password --- 1.0
+take --- 0.6
 
 *********************
 
 QUESTION: how do i quickly soften brown sugar? i want to make some cookies but my brown sugar is hard, any ideas? also, does anyone have a great chocolate chip cookie recipe? i'd like to learn how to make chewy c.c.cs.
-INETRSECTING WORDS: 
-put --- 0.6666666666666666
-second --- 1.0
-microwav --- 1.0
-brown --- 0.6666666666666666
-sugar --- 0.6666666666666666
 ANSWERS: 
 Use your hands, and some muscle too, to break the brown sugar apart as much as you can. Then for the big chunks, place in a bowl and microwave on high for a few seconds at a time.
 
@@ -2191,21 +2453,16 @@ I do not know how to soften it, but for future reference .... to keep it soft ke
 ***
 Add about 1 teaspoon of water per 1/2 cup and microwave on low for 30 seconds. This should do the trick. If you have time. Put brown sugar in a plastic ziploc bag and add about a tablespoon of water. Seal it and it should be nice and soft a few hours later.
 ***
+INETRSETING WORDS: 
+put --- 0.6666666666666666
+second --- 1.0
+microwav --- 1.0
+brown --- 0.6666666666666666
+sugar --- 0.6666666666666666
 
 *********************
 
 QUESTION: i think i have a problem. i feel shy when i arrive at a gathering and say hello to people or guests.? i also feel the same when i leave. i feel like just leaving without saying goodbye cause i feel timid.? what should i do to overcome this?
-INETRSECTING WORDS: 
-sai --- 0.8
-try --- 0.6
-someth --- 0.6
-goodby --- 0.6
-look --- 0.6
-confid --- 0.8
-make --- 0.6
-talk --- 1.0
-feel --- 0.8
-problem --- 0.8
 ANSWERS: 
 Nothing to be done accept forcing yourself to do it. Say Hello and enquire about their health too or just talk about something. Add appreciation of how nice the party was, how nice the person is looking or how nice it was to be there and meeting everybody with your goodbyes. Chatting more will help you distract your mind from your anxiety. After a few times, it will be easier.
 ***
@@ -2236,16 +2493,22 @@ i think you just need to do it...
 just force yourself to make introductions even tho you feel uncomfortable....with time it will become second nature to you
 good luck!
 ***
+INETRSETING WORDS: 
+sai --- 0.8
+try --- 0.6
+someth --- 0.6
+goodby --- 0.6
+look --- 0.6
+confid --- 0.8
+make --- 0.6
+talk --- 1.0
+feel --- 0.8
+problem --- 0.8
 
 *********************
 
 QUESTION: i hve a lot of split ends.even trimming is of no use.pls advice.i want to have stronger and more b'ful hair.? when i was young i had areally thick and long hair.but the split ends hve ruined them.they have hindred growth of my hair.can any1 help??????
 no stupid advices pls!
-INETRSECTING WORDS: 
-wet --- 0.6666666666666666
-hair --- 1.0
-good --- 0.6666666666666666
-condition --- 0.8333333333333334
 ANSWERS: 
 You need to have all the split ends cut off by a professional.  No more dying or perming hair - If you want color try Henna - it's good stuff and is a great conditioner.  Don't brush your hair when wet - use only a wide toothed comb and use a good conditioner.  Get trims every 6 weeks and continue to be careful to your hair when wet.  Take prenatal vitamins and gelatin (Knox makes gelatin for hair and nails).  In about 3-6 months you will notice a major difference.  Good Luck.
 ***
@@ -2261,22 +2524,15 @@ don't tie it when it's wet and use conditioner and have a haircut instead
 ***
 HOT OIL TREATMENT UNDER THE DRYER .. QUIT USING FLAT IRONS ,, CURLING IRONS , ALWAYS USE A PRODUCT THAT WILL PROTECT YOUR HAIR IF YOU BLOW DRY ,, PAUL MITCHELLS HEAT AND SEAL IS THE BEST ... DON'T BLOW DRY YOUR HAIR UP THE SHAFT , ALWAYS DOWN ,, ROOTS TO ENDS ... I YOU WANT CURL BUY A GOOD SET OF HOT ROLLERS . THIS STYLE IS THE HOTTEST THING THIS YEAR  ..
 ***
+INETRSETING WORDS: 
+wet --- 0.6666666666666666
+hair --- 1.0
+good --- 0.6666666666666666
+condition --- 0.8333333333333334
 
 *********************
 
 QUESTION: what is the best way u can make u'r husband get rid of his anger? my husband and i had a love marraige.though my husband loves me so much he has this short temper which makes him express anger very easily.otherwise he is a very good person
-INETRSECTING WORDS: 
-time --- 1.0
-becaus --- 1.0
-stress --- 1.0
-job --- 1.0
-ha --- 1.0
-anger --- 1.0
-realli --- 1.0
-hi --- 1.0
-husband --- 1.0
-find --- 1.0
-take --- 1.0
 ANSWERS: 
 Loving someone so much is not an excuse for anger.  This is a serious problem and may get worse with time.  The key is find out what is really behind his anger because it can't be his love for you.  He needs to accept responsiblity for his anger and make a choice to control it and do something about for the good of your relationship.  He may be able to do this with your help or he may need profesional help.  Either way change needs to happen because real love has no place for anger.
 ***
@@ -2288,16 +2544,23 @@ Tell him to count to 100 before saying or doing anything-works for me
 ***
 my husband has a stressful job and so has a short temper with all sorts of things at home.  All he does is take a multi vitamin everyday.  And then every day for about 2 weeks at a time and then with a 1 week break he takes a vitamin called St. Johns Wort. It really helps him to do this. Hope it helps you
 ***
+INETRSETING WORDS: 
+time --- 1.0
+becaus --- 1.0
+stress --- 1.0
+job --- 1.0
+ha --- 1.0
+anger --- 1.0
+realli --- 1.0
+hi --- 1.0
+husband --- 1.0
+find --- 1.0
+take --- 1.0
 
 *********************
 
 QUESTION: i need some real help with understanding blogs? hopefully free sites 
 where is the best place to go and learn,and start your own blog. i would like to do this but there are so many that i am just confuddled. i need total help on it....
-INETRSECTING WORDS: 
-free --- 1.0
-write --- 0.6666666666666666
-think --- 0.6666666666666666
-blog --- 1.0
 ANSWERS: 
 Start by first reading taking notes on the blogs that you like. Think about what you like about them, their style, and most importantly, their "voice". Then think about who you are writing for and what your audience would like to hear from you. It might be your family or just like minded people. Or, you may just want to have a place for self-expression. Don't over think it, but have some semblence of a plan before you start. 
 
@@ -2317,27 +2580,17 @@ Myspace is a blog and prolie editor and it free
 ***
 www.blogspot.com is free and I think easy to use!  Just be sure to write down your blog address and login info!
 ***
+INETRSETING WORDS: 
+free --- 1.0
+write --- 0.6666666666666666
+think --- 0.6666666666666666
+blog --- 1.0
 
 *********************
 
 QUESTION: why claim to know what your talking about, when you don't...you know who you are..? i was just reading a question on vampires..in there someone had answered the question...they said they worked for a fictional mag for 10 years or some such...they also stated that witches worship the devil..this is so untrue..witches for your information don't believe in the devil..the devil is a christain thing, not a pagan thing...my question is, why would you state something you obviously know nothing about?...if you'd of said..."in your opinion"...that would be fine...but you lead ppl to believe you know what your talking about...when you don't!!! read this website if you'd like to know what witches believe..
 
 www.witchesway.com
-INETRSECTING WORDS: 
-sai --- 0.8
-right --- 0.6
-worship --- 0.6
-peopl --- 0.6
-realli --- 0.6
-life --- 0.6
-part --- 0.6
-witch --- 0.8
-opinion --- 0.6
-think --- 0.6
-believ --- 0.6
-talk --- 0.6
-pagan --- 0.6
-know --- 1.0
 ANSWERS: 
 Let's see, how many idiots are there on Yahoo Answers answering questions they know nothing about and asking really stupid questions (hmm?)? Do you really care? If it bothers you, you can always add a your own answer or vote or comment on the best answer when voting's over. But if it bothers you enough that you want to essentially spam everyone with it, then Yahoo Answers probably is not the place for you - we don't even get paid, who says they expect fully accurate and thoughtful information?
 
@@ -2383,18 +2636,27 @@ Because everyone is stupid, and think that there opinion is right. Especially th
 This is how the story goes (for those who don't know)
 The Pagan religion was becoming very popular among everyone, is consisted of loving nature, having parties and feasts, pretty much loving every thing and enjoyinh life. They also have several different gods and goddesses. Then there were some people who didn't belive this was right (the christians) so the started telling people the the Pagans worship the devil (whcih they believed since the Pagan god is part goat) and they started converting people, which they  still try to do today. Most christian holidays were Pagan holidays that the christians stole. Christians are the ones that believe and worship satan, no one else.
 ***
+INETRSETING WORDS: 
+sai --- 0.8
+right --- 0.6
+worship --- 0.6
+peopl --- 0.6
+realli --- 0.6
+life --- 0.6
+part --- 0.6
+witch --- 0.8
+opinion --- 0.6
+think --- 0.6
+believ --- 0.6
+talk --- 0.6
+pagan --- 0.6
+know --- 1.0
 
 *********************
 
 QUESTION: what color or texture tie would go well with this suit (picture incl)? i'm trying to buy a tie for a friend that would go well with his pinstripe suit (with vest) [ http://img.photobucket.com/albums/v461/alternativeulster/uglytie.jpg ]. 
 i'm just wondering what kind of color would go well. 
 is it bad to mix textures or other stripes with this? what kind of tie would you recommend for this outfit? any and all input is appreciated (i really don't like that tie)! thanks.
-INETRSECTING WORDS: 
-darker --- 0.6666666666666666
-depend --- 0.6666666666666666
-color --- 1.0
-blue --- 1.0
-suit --- 0.6666666666666666
 ANSWERS: 
 the tie i think goes well with the pin suit. so u dont have to buy another tie.
 ***
@@ -2406,15 +2668,18 @@ try going in for pinks reds or blues
 ***
 IT DEPENDS ON THE COLOR OF THE SHIRT THAT HE IS GOING TO WEAR.HE MAY WEAR A SOLID POWDER BLUE.DARK GREY,OR A SOLID ORANGE SHIRT.WITH THE POWDER BLUE SHIRT I RECOMMEND A LITTLE DARKER SILK BLUE TIE,DARK GREY SHIRT I RECOMMEND A DARK GREY SILK TIE,WITH THE ORANGE SHIRT I RECOMMEND A DARK ORANGE SILK TIE.THE PINSTRIPE SUIT IS BUSY ENOUGH SO I WOULD STAY AWAY FROM PRINTS OR DESIGNS IT MAY CLASH OR MAY LOOK TO BUSY.
 ***
+INETRSETING WORDS: 
+darker --- 0.6666666666666666
+depend --- 0.6666666666666666
+color --- 1.0
+blue --- 1.0
+suit --- 0.6666666666666666
 
 *********************
 
 QUESTION: who's the president on the i want you in the us army posters? i'm not sure who the president on the 'i want you in the us army' posters is, so i'd be really thankful if anyone could help
 
 thanks!
-INETRSECTING WORDS: 
-sam --- 0.9
-uncl --- 1.0
 ANSWERS: 
 That's no president, that's our Uncle Sam!!
 ***
@@ -2438,14 +2703,13 @@ Thats uncle Sam...he was an icon used to get men to sign up for the draft.  If y
 ***
 No one. "Uncle Sam" is a fictional character drawn up for recruitment during the Great War.
 ***
+INETRSETING WORDS: 
+sam --- 0.9
+uncl --- 1.0
 
 *********************
 
 QUESTION: question about downloading a season in itunes? i have purchased the whole second season of lost from itunes.  but, it has taken all day and it is only on episode 5 of 22.  can i stop it, watch the four that are done and download more tomorrow?  this is my first time doing this so i really don't know what i am doing.
-INETRSECTING WORDS: 
-stop --- 0.6
-download --- 1.0
-watch --- 0.6
 ANSWERS: 
 Yes, you can.
 
@@ -2461,22 +2725,14 @@ to watch the ones you have downloaded go to purchases or library  and watch them
 ***
 You don't even have to stop it. Just select one of the 5 you already have from the videos section, and you can watch it while it's downloading the rest of them!  And congratulations on your new purchase, I just netflixed the first season 6 weeks ago, and I can't get enough of it now. Such a great show...
 ***
+INETRSETING WORDS: 
+stop --- 0.6
+download --- 1.0
+watch --- 0.6
 
 *********************
 
 QUESTION: are you or do you know someone who still has their wisdom teeth? what are they for. i didn't start getting mine until i was 21. now i'm 23 and one of them has not even shown signs of coming in. i'm going to the dentist next week. i just wanted to know if any of you know what they are for, and why so many people have them cut out?
-INETRSECTING WORDS: 
-becaus --- 0.8
-teeth --- 0.6
-peopl --- 0.6
-mine --- 1.0
-hard --- 0.6
-think --- 0.8
-brush --- 0.6
-room --- 0.6
-problem --- 0.6
-caus --- 0.6
-grow --- 0.6
 ANSWERS: 
 most people have them cut out due to not having enough room in their mouth and the pain is causes some people. I had all mine in at 14 and they never once gave me a problem ( guess some of us have bigger mouths LOL). They serve the same purpose as all the other teeth. But in reality most have them cut out due to not having enough room for them to grow without pushing the other teeth crooked.
 ***
@@ -2498,6 +2754,18 @@ My wisdom teeth started coming in during my late teens and still hadn't finished
 ***
 I think people get them taken out because they are hard to brush, not sure about that though! I have no idea what they are for either..
 ***
+INETRSETING WORDS: 
+becaus --- 0.8
+teeth --- 0.6
+peopl --- 0.6
+mine --- 1.0
+hard --- 0.6
+think --- 0.8
+brush --- 0.6
+room --- 0.6
+problem --- 0.6
+caus --- 0.6
+grow --- 0.6
 
 *********************
 
@@ -2516,12 +2784,6 @@ http://www1.bloomingdales.com/catalog/product/index.ognc?id=62131&categoryid=153
 
 
 your feedback would be great, thanks!
-INETRSECTING WORDS: 
-second --- 0.6
-think --- 0.6
-dress --- 0.6
-look --- 1.0
-brown --- 0.6
 ANSWERS: 
 the 2nd one looks more elegant though i'd go for the first one, it's fun and flirty. but depends on your mood and how you'd want to do your hair, both dresses would look nice on you.
 ***
@@ -2545,14 +2807,18 @@ the first one is sooo pretty and i think you'd look great in it!!
 ***
 Not to sound gay or anything but you are beautiful. But back to the topic you should chose the second website. The brown dress it would look classy but sassy, and sexy but not trappish.
 ***
+INETRSETING WORDS: 
+second --- 0.6
+think --- 0.6
+dress --- 0.6
+look --- 1.0
+brown --- 0.6
 
 *********************
 
 QUESTION: what can i do..?¿? i'm 17, engaged, have a child, homeschooled, no job, and my fiance starts a new job on monday. i hate living at home, b/c it's not big enough for two families. i feel like a caged animal. does anyone have any advice on what i can do..?¿ i live in ohio if that helps.
 
 !!mature answers only..!!
-INETRSECTING WORDS: 
-job --- 1.0
 ANSWERS: 
 Sorry i just wanted to no how to do the upside down ?
 ***
@@ -2589,28 +2855,23 @@ You could get a job and save up to get a place of your own.  That's about all I 
 
 BTW how fo you make an upside down -?- ?
 ***
+INETRSETING WORDS: 
+job --- 1.0
 
 *********************
 
 QUESTION: do you think gerard way is god??? i do!! but i love the whole band. not just gerard because he is sexy. there is so much more to him than that. the whole band is a huge group of gods!
-INETRSECTING WORDS: 
-god --- 1.0
 ANSWERS: 
 Cassie, u know how I think I have a god and its not Gerard...but i'm not sayin' anything bad...everyone has there own beliefs and your my friend, so I respect yours...
 ***
 Of course not... CLAPTON is GOD!
 ***
+INETRSETING WORDS: 
+god --- 1.0
 
 *********************
 
 QUESTION: should we be friends again? okay, i am a senior at ocean bay high school in california. i have had a best friend for like 15  or 16  years. last year, she started to ignore me. pretty soon i started hanging out with some other people. for about a month we were vicious enemies and she spread like a hundred rumors about me. some time has past where we haven't really talked. (except when she prank calls... i know its so 3rd grade.) she found out that i was having a party at the end of the year and asks if she is invited. part of me wants to invite her and part of me wants to not trust her. what do you think i should do? this sounds a little first grade, but its not and i am so confused. my friend told me that i should post my question on here so i did. help!?
-INETRSECTING WORDS: 
-think --- 0.6
-start --- 0.6
-friend --- 1.0
-parti --- 0.8
-invit --- 0.6
-new --- 0.6
 ANSWERS: 
 You should do what you think is right!!!   IF you two have been best friends for a long time and just recently this started to happen then i would just give it some time.   The party if you know that she or he is that kind of person who would just try to humiliate you in front of alot of peoplet then don't invite her/him.   IF you really would want to be friend again then ive it some time.   If the rumors have gone too far then just forget about this person and continue to hang out with the new friends you got!!!   Just try talking and if that don't work than what else will???
 ***
@@ -2622,19 +2883,19 @@ MAYBE this is ur chance to start being friends again but then maybe she want to 
 ***
 I don't think so.  It's very hard to put all that stuff behind you and from experience I know how hurtful that can be. If you have new friends then you have proved to her that you do not need her, and she has absolutely no right whatsoever to expect an invitation to your party. As cutie pie says, she could end up causing a fight, which would ruin your party and upset you more than you have already been.
 ***
+INETRSETING WORDS: 
+think --- 0.6
+start --- 0.6
+friend --- 1.0
+parti --- 0.8
+invit --- 0.6
+new --- 0.6
 
 *********************
 
 QUESTION: how can i love? i cant help my self to speaking to girlz but i cant find the right one help me
 
 or if u r a girl with the same problem may be u wanna talk
-INETRSECTING WORDS: 
-time --- 0.6666666666666666
-right --- 1.0
-meet --- 0.6666666666666666
-love --- 0.8333333333333334
-youll --- 0.8333333333333334
-girl --- 0.8333333333333334
 ANSWERS: 
 When you meet the right person you'll forget about being nervous. Jus try not to think about what to say to girls, just relax more and be yourself.
 ..
@@ -2668,16 +2929,17 @@ not suprised if you talk in textspeak all of the time
 when you meet her your heart starts beating quicker.  when you feel the happiest person in the world when you kiss her. just look into her eyes and you'll find an answer. i wish you good luck.
 there's one saying: love it is a state when your brain doesn't think. whan your eyes don't see and only heart....it is beating, beating.....
 ***
+INETRSETING WORDS: 
+time --- 0.6666666666666666
+right --- 1.0
+meet --- 0.6666666666666666
+love --- 0.8333333333333334
+youll --- 0.8333333333333334
+girl --- 0.8333333333333334
 
 *********************
 
 QUESTION: my guy tells me he loves me but?!? ok my guy is a bit more than a few years older than me so i dont get too see him as often as i would like and i love him soo much but the problem is is that he tells me he loves me but a "friend" told me that he told her that he told sum girl that he loved her so what the hell is up with that and its like he ignores me when hes home and its very hard to get ahold of him anybody know whats up???
-INETRSECTING WORDS: 
-time --- 0.5714285714285714
-think --- 0.5714285714285714
-love --- 1.0
-girl --- 0.7142857142857143
-find --- 0.5714285714285714
 ANSWERS: 
 he's fooling around.. maybe he has a very big heart 2 accommodate alot of ladies..
 
@@ -2728,16 +2990,16 @@ have faith or just live it but first talk to him
 ***
 THAT GUY OF YOURS IS LIKE A ROLLING STONE.SOMETIMES ROLLING TO YOU AND SOMETIMES TO ANOTHER WOMAN.ITS TIME YOU KICKED HIM OUT OF YOUR LIFE BEFORE HE CRUSHES YOUR HEART.
 ***
+INETRSETING WORDS: 
+time --- 0.5714285714285714
+think --- 0.5714285714285714
+love --- 1.0
+girl --- 0.7142857142857143
+find --- 0.5714285714285714
 
 *********************
 
 QUESTION: please guys please help me  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!? ok so i want  join curves for women and with diet and exercise do you think i can lose 30 pounds. do you really think that there exercise methods actully work
-INETRSECTING WORDS: 
-diet --- 0.6666666666666666
-exercis --- 0.6666666666666666
-work --- 1.0
-lose --- 0.6666666666666666
-pound --- 0.6666666666666666
 ANSWERS: 
 yeah i'm sure it will work if you stick with it, eat a sensible diet, and maintain a positive attitude and those pounds will come off in no time
 ***
@@ -2747,16 +3009,17 @@ It can work, I hope you don't want to lose 30 pounds this week. Give it 6 months
 ***
 YEA! my mom's friend works there and also does the exercise and it REALLY WORKS! go for it!
 ***
+INETRSETING WORDS: 
+diet --- 0.6666666666666666
+exercis --- 0.6666666666666666
+work --- 1.0
+lose --- 0.6666666666666666
+pound --- 0.6666666666666666
 
 *********************
 
 QUESTION: so anybody answer about weight? im 150 pounds and i work out everyday im 5feet 6 inches and im 14 yrs old
 im i good to go or should i lose weight
-INETRSECTING WORDS: 
-weight --- 1.0
-ideal --- 1.0
-base --- 1.0
-eat --- 1.0
 ANSWERS: 
 You're about 5 lbs over your ideal weight based on the assumption that you have a medium frame.
 ***
@@ -2764,19 +3027,14 @@ Just keep working out and eating right and you will be fine - at your age you wi
 ***
 Following a regular exercise program and eating a healthy diet will naturally give you your personal ideal weight. Don't worry about weight on a scale instead find out your body fat % and base your health on that. Weighing more or less than someone else at the same height does not mean that you are more or less healthy. It is the amount of lean muscle mass that distinguishes a healthy physique
 ***
+INETRSETING WORDS: 
+weight --- 1.0
+ideal --- 1.0
+base --- 1.0
+eat --- 1.0
 
 *********************
 
 QUESTION: is it anywhere near safe for a person to sneeze 50-60 times a day? basically, i wake up, i sneeze about 10 times. throughout the day, i will have sneezing spells at about 6 or 7 at a time. it's only really damaged my nose (blood, etc.) once, so i think it may be all right. i know it isn't an alergy, because it happens no matter i am.
-INETRSECTING WORDS: 
-allergi --- 1.0
 ANSWERS: 
-Try an over the counter allergy pill and see if it helps.  Loratadine is the ingredient to look for.  It won't make you sleepy or jumpy.  It should at least reduce your sneezing.
-***
-Sounds like an allergy to me
-Why don't you get a doctors opinion??!!
-***
-
-*********************
-
-QUESTION: hair question? my hair is getting thinner and it's breaking and no matter what i've tried, it's not getting any better. does anybody have any ideas on what i can do to make it better? i don't want to cut it too much and i've been trimming it but it isn't
+Try an over the counter allergy pill and see if it helps.  Loratadine is the ingredient to look

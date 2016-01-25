@@ -192,7 +192,7 @@ public class LuceneHelper {
             // for every document build its own index 
             Index ind = new Index(doc_body);
             Vector<String> parsed_words = Utils.lucene_tokenize(queryString);
-            Vector<String> doc_passages = ind.getPassages(parsed_words, max_passage_length);
+            Vector<String> doc_passages = ind.getPassages(parsed_words, max_passage_length, 250);
             passages.addAll(doc_passages);
         }
         return passages;

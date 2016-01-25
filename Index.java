@@ -186,7 +186,10 @@ public class Index {
         return new LuceneHelper.Range (u, v);
 	}
 
-	public Vector<String> getPassages(Vector<String> tokens, int maxLength) {
+	public Vector<String> getPassages(Vector<String> tokens, int maxLength, int extendToLength) {
+		// extendToLength - given a cover we want to return a passage of length extendToLength, centered around the cover
+		// if extendToLength == 0, return passage that directly corresponds to a found cover
+
 		Vector<String> passages = new Vector<String>();
 		int n = tokens.size();
 		for (int m = n; m >=2; m--) {
@@ -207,7 +210,14 @@ public class Index {
 				if (length > maxLength) {
 					continue;
 				}
+
+				if (extendToLength != 0) {
+					int padding = Math.round((float)((extendToLength - length) / 2));
+					r.left = Math.max(0, r.left - padding);
+					r.right = Math.min(r.right + padding, this.tokens.size() - 1);
+				}
 				passages.add(this.getPassage(r));
+				
 				// System.out.println(this.getPassage(r));
 				// System.out.println("***");
 

@@ -176,6 +176,18 @@ public class Utils {
     return sortedEntries;
   }
 
+  public static <K,V> void printMap(Map<K,V> map) {
+    for (Entry<K,V> e : map.entrySet()) {
+      System.out.println(e.getKey().toString() + " -- " + e.getValue().toString());
+    }
+  }
+
+  public static <T> void printCollection(Collection<T> c) {
+    for (T e : c) {
+      System.out.println(e.toString()); 
+    }
+  }
+
     public static Set <String> create_vocabulary(String text1, String text2) {
       SimpleTokenizer tokenizer = SimpleTokenizer.INSTANCE;
       String[] tokens1 = tokenizer.tokenize(text1);
@@ -513,6 +525,8 @@ public class Utils {
     return dict;
   }
 
+
+
     public static void write_word_distrinbution2json(HashMap<String, HashMap<Double, Integer>> distr, String filename, 
       double max_value, double min_value) throws FileNotFoundException, JSONException {
       PrintWriter writer = new PrintWriter(new FileOutputStream(new File(filename),true));
@@ -589,18 +603,34 @@ public class Utils {
     return result;
   } 
 
-  public static  Vector<Entry<String, Double>> answersIntersection(JSONArray answers) {
+  public static Vector<Entry<String, Double>> answersIntersectionJSON(JSONArray answers, double minRepFraction) {
+    int answersCount = answers.length();
+    Vector<String> answersVect = new Vector<String>();
+    for (int i = 0;  i < answersCount; ++i) {
+      try {
+        String answer = answers.get(i).toString();
+        answersVect.add(answer);
+      } catch (JSONException e) {
+        System.out.println("JSONException in Utils.answersIntersection" + e.getMessage());
+        continue;
+      }
+    }
+
+    return answersIntersection(answersVect, minRepFraction);
+
+  }
+
+  public static  Vector<Entry<String, Double>> answersIntersection(Vector<String> answers, double minRepFraction) {
     /* Given a set of answers find which words (except stop words) are repeated throughout all of them.
     For every repetition (in another answer) give that word +1 point.  
     Sort words by the number of points - high to low.
     Words with high repetition score should be indicative of what the topic of the discussion is. */
     HashMap<String, Integer> wordsRep = new HashMap<String, Integer>();
     HashSet<String> allWords = new HashSet<String>();
-    int answersCount = answers.length();
+    int answersCount = answers.size();
     int maxReps = 1;
       for (int i = 0;  i < answersCount; ++i) {
-        try{
-          String answer = answers.get(i).toString();
+          String answer = answers.get(i); // .toString();
 
           // clean and tokenize with lucene heavy tokenizer
           Vector<String> atokens = Utils.dropStopWords(Utils.lucene_tokenize(Utils.shrinkRepeatedChars(Utils.removePunct(answer))));
@@ -622,21 +652,21 @@ public class Utils {
             }
           }
 
-          System.out.println(atokens);
+          // System.out.println(atokens);
           // input.next();
-        } catch (JSONException e) {
-          System.out.println("JSONException in Utils.answersIntersection" + e.getMessage());
-          continue;
-        }
+        
 
       }
-      System.out.println(answersCount); 
+      // System.out.println(answersCount); 
       // List<Entry<String, Integer>> sorted = entriesSortedByValues(wordsRep);
       Vector<Entry<String, Double>> topRepWords = new Vector<Entry<String, Double>>();
+      DecimalFormat decimalFormat = new DecimalFormat("#.#");
       for (Entry<String, Integer> e : wordsRep.entrySet()) {
         double repFraction = e.getValue().doubleValue() / maxReps;
 
-        if (repFraction > 0.5) {
+        if (repFraction > minRepFraction) {
+          String form = decimalFormat.format(repFraction);
+          repFraction = Double.parseDouble(form);
           Map.Entry<String, Double> newEntry = new AbstractMap.SimpleEntry<String, Double>(e.getKey(), new Double(repFraction));
           topRepWords.add(newEntry);
           // System.out.println(e.getKey() + " -- " + e.getValue() + " -- " + repFraction);
