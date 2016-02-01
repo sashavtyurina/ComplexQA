@@ -196,35 +196,63 @@ static public String FIELD_ID = "id";
 
 
         /// ***** Query composing start
-        // Compose queries
-        // We first pick random queries of different lengths and them combine them all together
-        Date startingTime = Calendar.getInstance().getTime();
-        int maxQueryLength = 5;
-        HashMap<Integer, Vector<String>> all_queries = Utils.composeQueries1(no_dupl, maxQueryLength);
-        Date now = Calendar.getInstance().getTime();
-        long timeElapsed = now.getTime() - startingTime.getTime();
+          // // Compose queries
+          // // We first pick random queries of different lengths and them combine them all together
+          // Date startingTime = Calendar.getInstance().getTime();
+          // int maxQueryLength = 5;
+          // HashMap<Integer, Vector<String>> all_queries = Utils.composeQueries1(no_dupl, maxQueryLength);
+          // Date now = Calendar.getInstance().getTime();
+          // long timeElapsed = now.getTime() - startingTime.getTime();
 
-        // System.out.println("Question length = " + qtokens.size() + "; Queries length = " + all_queries)
-        // System.out.println("Time to compose queries " + timeElapsed);
+          // // System.out.println("Question length = " + qtokens.size() + "; Queries length = " + all_queries)
+          // // System.out.println("Time to compose queries " + timeElapsed);
 
 
-        // fixed number of queries might not be the best strategy, given that the quetstion length varies significantly
-        // will pick 5% of existing queries
-        startingTime = Calendar.getInstance().getTime();
-        int query_num = 100; 
-        Vector<String> queries = new Vector<String>();
-        int low = 3;
-        int high = maxQueryLength;
-        for (int i = low; i <= high; ++i) {
-          // query_num = Math.round((float)(all_queries.get(i).size() * 0.05));
-          query_num = qtokens.size() * Math.round((float)(Math.log((double)(all_queries.get(i).size()))));
-          queries.addAll(Utils.pickRandomSample(all_queries.get(i), query_num));
-          // System.out.println("Out of " + all_queries.get(i).size() + "; pick " + query_num);
-        }
-        now = Calendar.getInstance().getTime();
-        timeElapsed = now.getTime() - startingTime.getTime();
-        // System.out.println("Time to random sample " + timeElapsed);
+          // // fixed number of queries might not be the best strategy, given that the quetstion length varies significantly
+          // // will pick 5% of existing queries
+          // startingTime = Calendar.getInstance().getTime();
+          // int query_num = 100; 
+          // Vector<String> queries = new Vector<String>();
+          // int low = 3;
+          // int high = maxQueryLength;
+          // for (int i = low; i <= high; ++i) {
+          //   // query_num = Math.round((float)(all_queries.get(i).size() * 0.05));
+          //   query_num = qtokens.size() * Math.round((float)(Math.log((double)(all_queries.get(i).size()))));
+          //   queries.addAll(Utils.pickRandomSample(all_queries.get(i), query_num));
+          //   // System.out.println("Out of " + all_queries.get(i).size() + "; pick " + query_num);
+          // }
+          // now = Calendar.getInstance().getTime();
+          // timeElapsed = now.getTime() - startingTime.getTime();
+          // // System.out.println("Time to random sample " + timeElapsed);
         /// ***** Query composing end
+
+
+        /// ***** Query composing with KLD start
+
+          // Calculate pointwise KLdivergence of every word in the question
+          // Take top-20 outstanding words and use them to construcs queries
+
+
+          List<Entry<String, Double>> kldScores = Utils.pointwiseKLD(qtokens, luc);
+          // System.out.println(kldScores);
+          Vector<String> top20 = new Vector<String>(20);
+          int length = Math.min(kldScores.size(), 20);
+
+          for (int i = kldScores.size() - 1; i >= kldScores.size() - length; i --) {
+            top20.add(kldScores.get(i).getKey());
+          }
+
+          // compose all queries of length 3 (1140 for 20 words)  
+          Date startingTime = Calendar.getInstance().getTime();
+          int maxQueryLength = 3;
+          HashMap<Integer, Vector<String>> all_queries = Utils.composeQueries1(top20, maxQueryLength);
+          Date now = Calendar.getInstance().getTime();
+          long timeElapsed = now.getTime() - startingTime.getTime();
+
+          Vector<String> queries = new Vector<String>();
+          queries = all_queries.get(maxQueryLength);
+
+        /// ***** Query composing with KLD end
 
 
 
