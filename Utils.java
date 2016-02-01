@@ -176,6 +176,19 @@ public class Utils {
     return sortedEntries;
   }
 
+  static <K,V extends Comparable<? super V>> Vector<Entry<K, V>> entriesSortedByValues(Vector<Entry<K,V>> entries) {
+    Collections.sort(entries, 
+            new Comparator<Entry<K,V>>() {
+                @Override
+                public int compare(Entry<K,V> e1, Entry<K,V> e2) {
+                    return e1.getValue().compareTo(e2.getValue());
+                }
+            }
+    );
+    return entries;
+  }
+
+
   public static <K,V> void printMap(Map<K,V> map) {
     for (Entry<K,V> e : map.entrySet()) {
       System.out.println(e.getKey().toString() + " -- " + e.getValue().toString());
@@ -440,6 +453,36 @@ public class Utils {
     return randomSample;
   }
 
+  public static List<Entry<String, Double>> pointwiseKLD(Vector<String> foreground, LuceneHelper luc) {
+    // returns KLD value with the background of the entire index
+    HashMap<String, Double> fore_distr = buildDistribution(foreground);
+    HashMap<String, Double> kldValues = new HashMap<String, Double>();
+    double kld_value = 0;
+
+    for (Entry<String, Double> e : fore_distr.entrySet()) {
+      try {
+        double p_i = e.getValue();
+        double q_i = (double)(luc.totalTermFreq(e.getKey())) / (double)(luc.totalTerms());
+        if (q_i == 0) {
+          continue;
+        } 
+
+        double kldScore = p_i * Math.log(p_i / q_i);
+        kldValues.put(e.getKey(), new Double(kldScore));
+      } catch (IOException exc) {
+        System.out.println(exc.getMessage());
+        continue;
+      } catch (ParseException exc) {
+        System.out.println(exc.getMessage());
+        continue;
+      }
+
+    }
+
+    // static <K,V extends Comparable<? super V>> List<Entry<K, V>> entriesSortedByValues(Map<K,V> map) {
+    return entriesSortedByValues(kldValues);
+  }
+
    public static double KLD_JelinekMercerSmoothing(Vector<String> foreground, Vector<String> background, float lambda, LuceneHelper luc) 
   throws IOException, ParseException {
 
@@ -603,7 +646,7 @@ public class Utils {
     return result;
   } 
 
-  public static Vector<Entry<String, Double>> answersIntersectionJSON(JSONArray answers, double minRepFraction) {
+  public static Vector<Entry<String, Double>> answersIntersectionJSON(JSONArray answers, double minRepFraction, LuceneHelper luc) {
     int answersCount = answers.length();
     Vector<String> answersVect = new Vector<String>();
     for (int i = 0;  i < answersCount; ++i) {
@@ -616,15 +659,16 @@ public class Utils {
       }
     }
 
-    return answersIntersection(answersVect, minRepFraction);
+    return answersIntersection(answersVect, minRepFraction, luc);
 
   }
 
-  public static  Vector<Entry<String, Double>> answersIntersection(Vector<String> answers, double minRepFraction) {
+  public static  Vector<Entry<String, Double>> answersIntersection(Vector<String> answers, double minRepFraction, LuceneHelper luc) {
     /* Given a set of answers find which words (except stop words) are repeated throughout all of them.
     For every repetition (in another answer) give that word +1 point.  
     Sort words by the number of points - high to low.
     Words with high repetition score should be indicative of what the topic of the discussion is. */
+
     HashMap<String, Integer> wordsRep = new HashMap<String, Integer>();
     HashSet<String> allWords = new HashSet<String>();
     int answersCount = answers.size();
@@ -657,22 +701,70 @@ public class Utils {
         
 
       }
-      // System.out.println(answersCount); 
-      // List<Entry<String, Integer>> sorted = entriesSortedByValues(wordsRep);
-      Vector<Entry<String, Double>> topRepWords = new Vector<Entry<String, Double>>();
-      DecimalFormat decimalFormat = new DecimalFormat("#.#");
-      for (Entry<String, Integer> e : wordsRep.entrySet()) {
-        double repFraction = e.getValue().doubleValue() / maxReps;
 
-        if (repFraction > minRepFraction) {
-          String form = decimalFormat.format(repFraction);
-          repFraction = Double.parseDouble(form);
-          Map.Entry<String, Double> newEntry = new AbstractMap.SimpleEntry<String, Double>(e.getKey(), new Double(repFraction));
-          topRepWords.add(newEntry);
-          // System.out.println(e.getKey() + " -- " + e.getValue() + " -- " + repFraction);
+      /// Ranking v1. returning terms that are repeated at least 1/2 times that the max repeated word
+      // Vector<Entry<String, Double>> topRepWords = new Vector<Entry<String, Double>>();
+      // DecimalFormat decimalFormat = new DecimalFormat("#.#");
+      // for (Entry<String, Integer> e : wordsRep.entrySet()) {
+      //   double repFraction = e.getValue().doubleValue() / maxReps;
+
+      //   if (repFraction > minRepFraction) {
+      //     String form = decimalFormat.format(repFraction);
+      //     repFraction = Double.parseDouble(form);
+      //     Map.Entry<String, Double> newEntry = new AbstractMap.SimpleEntry<String, Double>(e.getKey(), new Double(repFraction));
+      //     topRepWords.add(newEntry);
+      //     // System.out.println(e.getKey() + " -- " + e.getValue() + " -- " + repFraction);
+      //   }
+      // }
+      /// Ranking v1 end
+
+      /// Ranking v2. Normalization with neg. log of term's probability * their repetition score
+      Vector<Entry<String, Double>> scoredWords = new Vector<Entry<String, Double>>();
+      double maxScore = 0.0;
+        for (Entry<String, Integer> e : wordsRep.entrySet()) {
+          try {
+            double termReps = e.getValue().doubleValue();
+            long termCount = luc.totalTermFreq(e.getKey());
+            long totalTerms = luc.totalTerms();
+            double score = - Math.log((double)termCount / (double)totalTerms) * (termReps / answersCount);
+            if (Double.isInfinite(score)) {
+              continue;
+            }
+            if (score > maxScore) {
+              maxScore = score;
+            }
+
+            Map.Entry<String, Double> newEntry = new AbstractMap.SimpleEntry<String, Double>(e.getKey(), new Double(score));
+            scoredWords.add(newEntry);
+          }
+
+          catch (IOException exc) {
+            System.out.println(exc.getMessage());
+            continue;
+          }
+          catch (ParseException exc) {
+            System.out.println(exc.getMessage());
+            continue;
+          }
         }
-        // 
-      }
+
+        Vector<Entry<String, Double>> topRepWords = new Vector<Entry<String, Double>>();
+        for (Entry<String, Double> e : scoredWords) {
+          double score = e.getValue().doubleValue();
+          if (score > (maxScore / 2.0) ) {
+            topRepWords.add(e);
+          }
+        }
+
+
+
+      // sort entries by value
+      // topRepWords = entriesSortedByValues(topRepWords);
+      // for (int i = 0; i < (int)(topRepWords.size()/2); i++) {
+      //   topRepWords.removeElementAt(i);  
+      // }
+
+      /// Ranking v2 end
       return topRepWords;
   }
 

@@ -152,13 +152,15 @@ static public String FIELD_ID = "id";
         /// ***** Answer intersection start
         // writer.println("<b>QUESTION:</b><br> " + question + "<br>");
 
-        Vector<Entry<String, Double>> answersIntersection = Utils.answersIntersectionJSON(jsonObj.getJSONArray("answers"), 0.4);
+        Vector<Entry<String, Double>> answersIntersection = Utils.answersIntersectionJSON(jsonObj.getJSONArray("answers"), 0.4, luc);
         HashSet<String> answersIntersectionWords = new HashSet<String>();
         // writer.println("\n<b>INETERSECTING WORDS:</b><br> ");
         for (Entry<String, Double> e : answersIntersection) {
           // System.out.println (e.getKey() + " --- " + e.getValue());
           answersIntersectionWords.add(e.getKey());
         }
+
+        // input.next();
 
         // writer.println("<b>ANSWERS: </b><br>");
         // for (int i = 0;  i < answers.length(); ++i) {
@@ -174,8 +176,16 @@ static public String FIELD_ID = "id";
        Vector<String> qtokens = Utils.lucene_tokenize(Utils.tokenizeAndClean(question, true, true, true, true, false));
         Vector<String> atokens = Utils.lucene_tokenize(Utils.tokenizeAndClean(long_answer, true, true, true, true, false));
 
-        System.out.println("QUESTION");
-        System.out.println(qtokens);
+        // System.out.println("QUESTION");
+        // System.out.println(question);
+        // System.out.println(qtokens);
+
+        // System.out.println(Utils.pointwiseKLD(qtokens, luc));
+
+        // int str = input.nextInt();
+        // if (str == 1) {
+        //   continue;
+        // }
 
         // we want to compare to both question text and answer text
         atokens.addAll(qtokens);
@@ -229,33 +239,45 @@ static public String FIELD_ID = "id";
         HashMap<String, Double> queryRanking = new HashMap<String, Double>();
         double maxScore = -1;
 
+        
         for (int i = queries.size() - 1 ; i >= 0; --i) {
           String current_query = queries.get(i);
+          // System.out.println("QUERY:" + current_query);
           Vector<String> passages = luc.performPassageSearch(current_query, 10, 250);
-          Vector<Entry<String, Double>> passagesIntersection = Utils.answersIntersection(passages, 0.5);
 
-          // get high repetition words
-          Vector<String> passagesIntersectionWords = new Vector<String>();
-          for (Entry<String, Double> e : passagesIntersection) {
-            // System.out.println (e.getKey() + " --- " + e.getValue());
-            passagesIntersectionWords.add(e.getKey());
-          }
+          // Vector<Entry<String, Double>> passagesIntersection = Utils.answersIntersection(passages, 0.5, luc);
 
-          // find how many of them were in the answers
-          passagesIntersectionWords.retainAll(answersIntersectionWords);
+          // // get high repetition words
+          // Vector<String> passagesIntersectionWords = new Vector<String>();
+          // for (Entry<String, Double> e : passagesIntersection) {
+          //   // System.out.println (e.getKey() + " --- " + e.getValue());
+          //   passagesIntersectionWords.add(e.getKey());
+          // }
 
-          System.out.println(i + ". " + current_query);
-          System.out.println(passagesIntersectionWords);
-          System.out.println(answersIntersectionWords);
-          double score = (double)((double)passagesIntersectionWords.size() / (double)answersIntersectionWords.size());
+          // // find how many of them were in the answers
+          // passagesIntersectionWords.retainAll(answersIntersectionWords);
 
-          if (score > maxScore) {
-            maxScore = score;
-          }
+          // System.out.println(i + ". " + current_query);
+          // System.out.println("Frequent words in passages");
+          // for (Entry<String, Double> e : passagesIntersection) {
+          //   System.out.println (e.getKey() + " --- " + e.getValue());
+          // }
 
-          System.out.println(score);
-          queryRanking.put(current_query, new Double(score));
-          // input.next();
+          // System.out.println("Frequent words in answers");
+          // System.out.println(answersIntersectionWords);
+
+          // System.out.println("These words intersect");
+          // System.out.println(passagesIntersectionWords);
+          
+          // double score = (double)((double)passagesIntersectionWords.size() / (double)answersIntersectionWords.size());
+
+          // if (score > maxScore) {
+          //   maxScore = score;
+          // }
+
+          // System.out.println(score);
+          // queryRanking.put(current_query, new Double(score));
+          // // input.next();
         }
         
         /// ***** Passage selection end

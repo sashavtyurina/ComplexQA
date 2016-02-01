@@ -176,7 +176,7 @@ public class LuceneHelper {
 
         // System.out.println(query.toString(FIELD_BODY));
 
-        // Scanner input = new Scanner(System.in);
+        Scanner input = new Scanner(System.in);
 
         ScoreDoc[] scoreDocs = this.searcher.search(query, max_docs).scoreDocs;
         
@@ -184,17 +184,41 @@ public class LuceneHelper {
 
         Vector<String> passages = new Vector<String>();
 
+        Vector<String> documents = new Vector<String>();
+        int rep_docs = 0;
+        int rep_passages = 0;
+
         for (int i = 0; i < scoreDocs.length; ++i) {
             int docID = scoreDocs[i].doc;    
             Document d = reader.document(docID);
             String doc_body = d.get(FIELD_BODY);
+            
+            if (documents.contains(doc_body)) {
+                rep_docs += 1;
+                continue;
+            }
+            documents.add(doc_body);
 
             // for every document build its own index 
             Index ind = new Index(doc_body);
             Vector<String> parsed_words = Utils.lucene_tokenize(queryString);
             Vector<String> doc_passages = ind.getPassages(parsed_words, max_passage_length, 250);
-            passages.addAll(doc_passages);
+
+            for (String s : doc_passages) {
+                if (passages.contains(s)) {
+                    // System.out.println("\n***\n" + s + "\n***\n");
+                    rep_passages += 1;
+                    continue;
+                } else {
+                    passages.add(s);
+                }
+            }
+            // passages.addAll(doc_passages);
         }
+
+        // System.out.println(rep_docs + " of the same document");
+        // System.out.println(rep_passages + " of the same passage");
+        // input.next();
         return passages;
     }
 
