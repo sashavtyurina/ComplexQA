@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.Map;
 import java.util.Map.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.*;
 import java.lang.Math.*;
 import java.util.regex.Pattern;
@@ -30,7 +31,10 @@ import java.io.FileOutputStream;
 
 import java.text.DecimalFormat;
 
+import java.sql.*;
+
 import org.apache.lucene.document.Document;
+import java.util.logging.*;
 
 
 
@@ -39,6 +43,14 @@ public class KeywordRanking {
   // private static Vector<String> stopwords;
   private static LuceneHelper luc; 
   private static int max_query_length = 5;
+  private static Connection dbConnection = null;
+  private static final Logger logger = Logger.getLogger(KeywordRanking.class.getName());
+  private static Scanner input = new Scanner(System.in);
+  private static String index_path = "";
+  private static String query = "";
+  private static DecimalFormat decimalFormat = null;
+  private static FileInputStream fstream = null;
+  private static BufferedReader br = null;
 
   public static class WordRanking {
     // a class to track and afterwards rank query words based on how often they appear in good queries
@@ -91,404 +103,306 @@ public class KeywordRanking {
 static public String FIELD_BODY = "contents"; // primary field name where all the text is stored
 static public String FIELD_ID = "id";
 
-  public static void main(String[] args) throws IOException, ParseException, JSONException, FileNotFoundException, ParseException {
-      if (args.length < 2) {
+/// Different methods of ranking queries 
+/// #1 - baseline. Just using KLD. 
+public static Vector<String> baselineKLD(Vector<String> qtokens, LuceneHelper luc, int depth) {
+
+  /// takes as input all question tokens and returns them in order of decreasing pointwise KLD score
+  List<Entry<String, Double>> scoredWords = Utils.pointwiseKLD(qtokens, luc);
+
+  Vector<String> topWords = new Vector<String>();
+  int l = Math.min(depth, scoredWords.size());
+  for (int i = 0;  i < l; ++i) {
+    topWords.add(scoredWords.get(i).getKey());
+  }
+  return topWords;
+}
+
+public static Vector<String> composeQueries(Vector<String> qtokens, LuceneHelper luc) {
+  // Calculate pointwise KLdivergence of every word in the question
+  // Take top-20 outstanding words and use them to construcs queries
+  List<Entry<String, Double>> kldScores = Utils.pointwiseKLD(qtokens, luc);
+  Vector<String> top20 = new Vector<String>(20);
+  int length = Math.min(kldScores.size(), 20);
+
+  for (int i = kldScores.size() - 1; i >= kldScores.size() - length; i --) {
+    top20.add(kldScores.get(i).getKey());
+  }
+
+  // compose all queries of length 3 (1140 for 20 words)  
+  Date startingTime = Calendar.getInstance().getTime();
+  int maxQueryLength = 3;
+  HashMap<Integer, Vector<String>> all_queries = Utils.composeQueries1(top20, maxQueryLength);
+  Date now = Calendar.getInstance().getTime();
+  long timeElapsed = now.getTime() - startingTime.getTime();
+
+  Vector<String> queries = new Vector<String>();
+  queries = all_queries.get(maxQueryLength);
+
+  return queries;
+}
+
+public static double comparePassagesKDL(Vector<String> passages, Vector<String> atokens, Vector<String> qtokens) 
+throws FileNotFoundException, IOException, ParseException {
+
+  for (String p : passages){
+    Vector<String> ptokens = Utils.lucene_tokenize(Utils.tokenizeAndClean(p, true, true, true, true, false));
+    double pscore_answer = Utils.KLD_JelinekMercerSmoothing(ptokens, atokens, (float)0.9, luc);  
+    double pscore_question = Utils.KLD_JelinekMercerSmoothing(ptokens, atokens, (float)0.9, luc);  
+  }
+  return 0.0;
+  
+}
+
+public static Vector<String> getTopWords(List<Entry<String, Double>> scoredQueries, int depth) {
+	// take top "depth" queries and return a vector of words in those queries. Sorted from the most frequent to the least frequent.
+	List<Entry<String, Double>> slice = Utils.sliceCollection(scoredQueries, 0, depth);
+	Vector<String> words = new Vector<String>();
+	for (Entry<String, Double> e : slice) {
+		words.addAll(Arrays.asList(e.getKey().split("\\s")));
+	}
+
+	HashMap<String, Double> scoredWords = Utils.buildDistribution(words);
+	List<Entry<String, Double>> sortedWords = Utils.entriesSortedByValues(scoredWords, "dec");
+
+	words.clear();
+	for (Entry<String, Double> e : sortedWords) {
+		words.add(e.getKey());
+	}
+	return words;
+}
+
+
+
+
+public static void setupDBConnection() {
+
+    try {
+      Class.forName("org.sqlite.JDBC");
+      dbConnection = DriverManager.getConnection("jdbc:sqlite:KeywordRankingDB.db");
+      dbConnection.setAutoCommit(false);
+      System.out.println("Opened database successfully");
+
+
+    } catch ( Exception e ) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }    
+}
+
+public static Vector<String> passagesForQuestion(int questID) {
+	if (dbConnection == null) {
+		System.out.println("Setup db connection properly. Exiting...");
+		return null;
+	}
+	return null;
+}
+
+public static void loggerSetup() {
+  try {
+    FileHandler fileHandler = new FileHandler("ComparingPassagesLog.%u.%g.txt");
+    fileHandler.setFormatter(new SimpleFormatter());
+    ConsoleHandler consoleHandler = new ConsoleHandler();
+    logger.addHandler(fileHandler);
+    logger.addHandler(consoleHandler);
+    logger.setLevel(Level.INFO);
+    logger.setUseParentHandlers(false);
+  } catch (IOException e) {
+    System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    System.exit(0);
+  }
+}
+
+public static void setThingsUp(String[] args) {
+  this.index_path = args[0].toString();
+  luc = new LuceneHelper(index_path); 
+  loggerSetup();
+  this.query = args[1].toString();
+  this.decimalFormat = new DecimalFormat("#.#");
+  setupDBConnection();
+  this.fstream = new FileInputStream("gtQuestions.txt");
+  this.br = new BufferedReader(new InputStreamReader(fstream));
+}
+
+  public static void testThings(){/// Test RBO
+
           // Vector<String> a = new Vector<String> ();
           // a.add("a");
           // a.add("b");
           // a.add("c");
+          // a.add("d");
+          // a.add("e");
+          // a.add("f");
+
+          // System.out.println(Utils.sliceCollection(a, 2, 5));
           // Vector<String> b = new Vector<String>();
-          // b.add("d");
           // b.add("b");
           // b.add("c");
+          // b.add("a");
+
+          // System.out.println(Utils.RBO(a, b, 0.0, 3));
+          // System.out.println(Utils.RBO(a, b, 0.3, 3));
+          // System.out.println(Utils.RBO(a, b, 0.5, 3));
+          // System.out.println(Utils.RBO(a, b, 0.7, 3));
+          // System.out.println(Utils.RBO(a, b, 0.99, 3));
+
+          // System.out.println(Utils.RBO(a, b, 2));
+          // System.out.println(Utils.RBO(a, b, 3));
 
           // Vector<Vector<String>> ang = Utils.createNGrams(a, 1);
           // Vector<Vector<String>> bng = Utils.createNGrams(b, 1);
           // System.out.println(Utils.ngramIntersection(ang, bng));
+}
 
+public static void checkIfAnswersWereAddedToIndex() {
+      Vector<String> yahooDocs = luc.searchYahooDocs("clueweb09-en0005-53-00116", 30); // "Answer.0.14.yahoo.txt"
 
+      for (String s : yahooDocs) {
+        System.out.println(s);
+        input.next();
+      }
 
+      System.out.println("Done");
+      input.next();
+
+}
+
+  public static void main(String[] args) throws IOException, ParseException, JSONException, FileNotFoundException, ParseException {
+      if (args.length < 2) {
           System.out.println("Input arguments: index_path, query string");
           return;
       }
 
-      DecimalFormat decimalFormat = new DecimalFormat("#.#");
-      String filename = "query_ranking.txt";
-      String index_path = args[0].toString();
-      String query = args[1].toString();
-
-      // Utils.loadStopWords();
-      luc = new LuceneHelper(index_path);
-      FileInputStream fstream = new FileInputStream("lq.txt");
-      BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-      Scanner input = new Scanner(System.in);
+      String sql = "";
+      Statement stmt = null;
+      try {
+      	stmt = dbConnection.createStatement();
+      } catch (SQLException e) {
+      	System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+  	  	System.exit(0);
+      }
+      
       String strLine;
 
-      // luc.testStuff();
-      // input.next();
-      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("test.html"), true));
+      // PrintWriter writer = new PrintWriter(new FileOutputStream(new File("compareSimMeasures.txt"), true));
+      // writer.print("questID\tatokenssim\tqtokenssim\talltokenssim\tadomsim\tqdomsim\tequalweightsim\n");
 
+      // int[] questionIDs = {1,4,5,6,14,15,16,17,18,19,20,21,22,23,24};
+      // Integer[] questionIDs = {2,3,7,8,9,10,11,12,13,25,26,27,28,29,30};
+      /* for (int questIDCounter : questionIDs) {
+           strLine = br.readLine(); 
+           questID = questIDCounter; */
+
+      /// working with questions 1-30
+      int minQID = 1;
+      int maxQID = 30;
       while ((strLine = br.readLine()) != null)   {
+        // System.out.println(strLine);
 
-        // Read next question in JSON format
-        JSONObject jsonObj = new JSONObject(strLine);
-        String title = jsonObj.get("title").toString();
-        String body = jsonObj.get("body").toString();
-        String best = jsonObj.get("best").toString().toLowerCase();
-        String question = (title + " " + body).toLowerCase();
+        /// Read next question in JSON format and initialize. Start.
+          JSONObject jsonObj = new JSONObject(strLine);
+          int questID = jsonObj.getInt("id");
 
-
-        JSONArray answers = jsonObj.getJSONArray("answers");
-        String long_answer = "";
-        for (int i = 0;  i < answers.length(); ++i) {
-          String answer = answers.get(i).toString();
-          long_answer += answer + " ";
-        }
-
-        if (answers.length() == 1) {
-          continue;
-        }
-
-        /// ***** Answer intersection start
-        // writer.println("<b>QUESTION:</b><br> " + question + "<br>");
-
-        Vector<Entry<String, Double>> answersIntersection = Utils.answersIntersectionJSON(jsonObj.getJSONArray("answers"), 0.4, luc);
-        HashSet<String> answersIntersectionWords = new HashSet<String>();
-        // writer.println("\n<b>INETERSECTING WORDS:</b><br> ");
-        for (Entry<String, Double> e : answersIntersection) {
-          // System.out.println (e.getKey() + " --- " + e.getValue());
-          answersIntersectionWords.add(e.getKey());
-        }
-
-        // input.next();
-
-        // writer.println("<b>ANSWERS: </b><br>");
-        // for (int i = 0;  i < answers.length(); ++i) {
-          // String answer = answers.get(i).toString();
-          // writer.println(answer + "<br>\n***<br>");
-        // }
-
-        // writer.println("<br>\n*********************\n<br>");
-        /// ***** Answer intersection end
-
-
-        /// ***** Cleaning and tokenizing start
-       Vector<String> qtokens = Utils.lucene_tokenize(Utils.tokenizeAndClean(question, true, true, true, true, false));
-        Vector<String> atokens = Utils.lucene_tokenize(Utils.tokenizeAndClean(long_answer, true, true, true, true, false));
-
-        // System.out.println("QUESTION");
-        // System.out.println(question);
-        // System.out.println(qtokens);
-
-        // System.out.println(Utils.pointwiseKLD(qtokens, luc));
-
-        // int str = input.nextInt();
-        // if (str == 1) {
-        //   continue;
-        // }
-
-        // we want to compare to both question text and answer text
-        atokens.addAll(qtokens);
-
-        // Drop duplicate tokens while preserving the order of words
-        Vector<String> no_dupl = Utils.removeDuplicateTokens(qtokens);
-        /// ***** Cleaning and tokenizing end
-
-
-        /// ***** Query composing start
-          // // Compose queries
-          // // We first pick random queries of different lengths and them combine them all together
-          // Date startingTime = Calendar.getInstance().getTime();
-          // int maxQueryLength = 5;
-          // HashMap<Integer, Vector<String>> all_queries = Utils.composeQueries1(no_dupl, maxQueryLength);
-          // Date now = Calendar.getInstance().getTime();
-          // long timeElapsed = now.getTime() - startingTime.getTime();
-
-          // // System.out.println("Question length = " + qtokens.size() + "; Queries length = " + all_queries)
-          // // System.out.println("Time to compose queries " + timeElapsed);
-
-
-          // // fixed number of queries might not be the best strategy, given that the quetstion length varies significantly
-          // // will pick 5% of existing queries
-          // startingTime = Calendar.getInstance().getTime();
-          // int query_num = 100; 
-          // Vector<String> queries = new Vector<String>();
-          // int low = 3;
-          // int high = maxQueryLength;
-          // for (int i = low; i <= high; ++i) {
-          //   // query_num = Math.round((float)(all_queries.get(i).size() * 0.05));
-          //   query_num = qtokens.size() * Math.round((float)(Math.log((double)(all_queries.get(i).size()))));
-          //   queries.addAll(Utils.pickRandomSample(all_queries.get(i), query_num));
-          //   // System.out.println("Out of " + all_queries.get(i).size() + "; pick " + query_num);
-          // }
-          // now = Calendar.getInstance().getTime();
-          // timeElapsed = now.getTime() - startingTime.getTime();
-          // // System.out.println("Time to random sample " + timeElapsed);
-        /// ***** Query composing end
-
-
-        /// ***** Query composing with KLD start
-
-          // Calculate pointwise KLdivergence of every word in the question
-          // Take top-20 outstanding words and use them to construcs queries
-
-
-          List<Entry<String, Double>> kldScores = Utils.pointwiseKLD(qtokens, luc);
-          // System.out.println(kldScores);
-          Vector<String> top20 = new Vector<String>(20);
-          int length = Math.min(kldScores.size(), 20);
-
-          for (int i = kldScores.size() - 1; i >= kldScores.size() - length; i --) {
-            top20.add(kldScores.get(i).getKey());
+          if (! (questID > minQID) && (questID < maxQID) ) {
+            continue;
           }
+          logger.log(Level.INFO, "Working with question " + questID + "...");
 
-          // compose all queries of length 3 (1140 for 20 words)  
-          Date startingTime = Calendar.getInstance().getTime();
-          int maxQueryLength = 3;
-          HashMap<Integer, Vector<String>> all_queries = Utils.composeQueries1(top20, maxQueryLength);
-          Date now = Calendar.getInstance().getTime();
-          long timeElapsed = now.getTime() - startingTime.getTime();
-
-          Vector<String> queries = new Vector<String>();
-          queries = all_queries.get(maxQueryLength);
-
-        /// ***** Query composing with KLD end
-
-
-
-
-        /// ***** Passage selection start
-        // Now query ClueWeb
-
-        System.out.println("\n *** \n Start searching");
-        int max_doc = 5;
-
-        // we want to rank queries according to their "passage intersection" score.
-        HashMap<String, Double> queryRanking = new HashMap<String, Double>();
-        double maxScore = -1;
-
-        
-        for (int i = queries.size() - 1 ; i >= 0; --i) {
-          String current_query = queries.get(i);
-          // System.out.println("QUERY:" + current_query);
-          Vector<String> passages = luc.performPassageSearch(current_query, 10, 250);
-
-          // Vector<Entry<String, Double>> passagesIntersection = Utils.answersIntersection(passages, 0.5, luc);
-
-          // // get high repetition words
-          // Vector<String> passagesIntersectionWords = new Vector<String>();
-          // for (Entry<String, Double> e : passagesIntersection) {
-          //   // System.out.println (e.getKey() + " --- " + e.getValue());
-          //   passagesIntersectionWords.add(e.getKey());
-          // }
-
-          // // find how many of them were in the answers
-          // passagesIntersectionWords.retainAll(answersIntersectionWords);
-
-          // System.out.println(i + ". " + current_query);
-          // System.out.println("Frequent words in passages");
-          // for (Entry<String, Double> e : passagesIntersection) {
-          //   System.out.println (e.getKey() + " --- " + e.getValue());
-          // }
-
-          // System.out.println("Frequent words in answers");
-          // System.out.println(answersIntersectionWords);
-
-          // System.out.println("These words intersect");
-          // System.out.println(passagesIntersectionWords);
           
-          // double score = (double)((double)passagesIntersectionWords.size() / (double)answersIntersectionWords.size());
+/// Calculating similarity and writing to the db
+          try {
+          	sql = "select atokens, qtokens from questions where qid=" + questID + ";";
 
-          // if (score > maxScore) {
-          //   maxScore = score;
-          // }
+          	ResultSet qaTokens = stmt.executeQuery(sql);
+          	Vector<String> qtokens = Utils.str2vect(qaTokens.getString("qtokens"));
+          	Vector<String> atokens = Utils.str2vect(qaTokens.getString("atokens"));
+          	Vector<String> allTokens = new Vector<String>(qtokens);
+          	allTokens.addAll(atokens);
 
-          // System.out.println(score);
-          // queryRanking.put(current_query, new Double(score));
-          // // input.next();
-        }
-        
-        /// ***** Passage selection end
+          	sql = "select pid from qqp where questid=" + questID + ";";
+          	ResultSet pids = stmt.executeQuery(sql);	
+          	Statement passageStmt = dbConnection.createStatement();
 
-        /// **** Printing out results
-        List<Entry<String, Double>> sortedQueries = Utils.entriesSortedByValues(queryRanking);
-        Vector<String> highlyRankedWords = new Vector<String>();
+          	Statement addScoreStmt = dbConnection.createStatement();
 
-        for (Entry<String, Double> e : sortedQueries) {
-          System.out.println(e.getKey() + " -- " + e.getValue());
+          	while (pids.next()) {
+          		int pid = pids.getInt("pid");
+          		sql = "select passage from passages where pid=" + pid + ";";
+          		ResultSet curPassageResultSet = passageStmt.executeQuery(sql);
+          		String curPassage = curPassageResultSet.getString("passage");
 
-          if (e.getValue() > maxScore / 2.0) {
-            highlyRankedWords.addAll(Arrays.asList(e.getKey().split("\\s")));
+          		Vector<String> curPassageTokens = Utils.str2vect(curPassage);
+
+          		// /// SIMILARITY TIME BABY!
+          		double aSim = Utils.KLD_JelinekMercerSmoothing(atokens, curPassageTokens, 0.9, luc);
+          		double qSim = Utils.KLD_JelinekMercerSmoothing(qtokens, curPassageTokens, 0.9, luc);
+          		double allSim = Utils.KLD_JelinekMercerSmoothing(allTokens, curPassageTokens, 0.9, luc);
+          		sql = "insert into KLDSim (pid, questid, atokensSim, qtokensSim, alltokensSim) values (" + pid + 
+          		", " + questID + ", " + aSim + ", " + qSim + ", " + allSim + ");";
+          		addScoreStmt.executeUpdate(sql);
+              curPassageResultSet.close();
+          	}
+            passageStmt.close();
+            addScoreStmt.close();
+            
+            pids.close();
+
+          } catch (SQLException e) {
+          	System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+          	continue;
           }
-        }
-        HashMap<String, Double> distr = Utils.buildDistribution(highlyRankedWords);
-        // Utils.printMap(distr);
-        Utils.printCollection(Utils.entriesSortedByValues(distr));
 
 
-        /// **** Printing out results end
+//           /// ***** Compare passage and answers using repeated words start 
 
+//           // Vector<Entry<String, Double>> passagesIntersection = Utils.answersIntersection(passages, 0.5, luc);
 
-        //  System.out.println("QUESTION");
-        // System.out.println(question);
+//           // // get high repetition words
+//           // Vector<String> passagesIntersectionWords = new Vector<String>();
+//           // for (Entry<String, Double> e : passagesIntersection) {
+//           //   // System.out.println (e.getKey() + " --- " + e.getValue());
+//           //   passagesIntersectionWords.add(e.getKey());
+//           // }
 
-        // System.out.println("COLLABORATIVE ANSWER");
-        // System.out.println(long_answer);        
+//           // // find how many of them were in the answers
+//           // passagesIntersectionWords.retainAll(answersIntersectionWords);
 
-// make queries
-// clean and tokenize question text
-        
+//           // System.out.println(i + ". " + current_query);
+//           // System.out.println("Frequent words in passages");
+//           // for (Entry<String, Double> e : passagesIntersection) {
+//           //   System.out.println (e.getKey() + " --- " + e.getValue());
+//           // }
 
+//           // System.out.println("Frequent words in answers");
+//           // System.out.println(answersIntersectionWords);
 
-         
-        
+//           // System.out.println("These words intersect");
+//           // System.out.println(passagesIntersectionWords);
+          
+//           // double score = (double)((double)passagesIntersectionWords.size() / (double)answersIntersectionWords.size());
 
-        
+//           // if (score > maxScore) {
+//           //   maxScore = score;
+//           // }
 
+//           // System.out.println(score);
+//           // queryRanking.put(current_query, new Double(score));
+//           // // input.next();
 
-        
+//           /// ***** Compare passage and answers using repeated words end        
+    }
+    try {
+	    stmt.close();
 
-        
-
-
-        
-        
-
-        // HashMap<String, Double> query_ranking = new HashMap<String, Double>();
-        // HashMap<String, HashMap<Double, Integer>> word_distribution = new HashMap<String, HashMap<Double, Integer>>();
-
-//         // HashMap<String, WordRanking> wordRanks = new HashMap<String, WordRanking>();
-
-//         double min_kld = Double.POSITIVE_INFINITY;
-//         double max_kld = Double.NEGATIVE_INFINITY;
-
-        // for (int i = queries.size() - 1 ; i >= 0; --i) {
-            // int q_length = queries.get(i).split("\\s").length;
-//             Vector<String> c_query = new Vector<String>(Arrays.asList(queries.get(i).split("\\s")));
-
-//             double ave_kld = 0;
-            
-
-            // String current_query = queries.get(i);
-
-
-//             // search and calc similarity
-
-//             int passage_count = 0;
-//             Vector<String> docs = luc.performSearch(current_query, max_doc);
-//             for (int ii = 0; ii < docs.size(); ++ii) {
-//               String doc = docs.get(ii);
-
-//               // System.out.println("Doc #" + ii);
-//               // input.next();
-
-//               // select passages from the documents found
-              // Vector<String> passages = luc.performPassageSearch(current_query, 10, 250);
-              // for (String p : passages) {
-                // passage_count ++;
-                // Vector<String> ptokens = Utils.lucene_tokenize(Utils.tokenizeAndClean(p, true, true, true, true, false));
-                // double kld = Utils.KLD_JelinekMercerSmoothing(ptokens, atokens, 0.9f, luc);
-                // System.out.println("***");
-//                 // System.out.println(kld);
-                // System.out.println(p);
-//                 ave_kld += kld;
-                
-              // }
-//               // input.next();
-              
-//               // Vector<String> dtokens = tokenizeAndClean(doc, true, true, true, true, true);
-//             // Vector<String> dtokens = Utils.lucene_tokenize(Utils.tokenizeAndClean(doc, true, true, true, true, false));
-
-
-              
-//               // double kld = Utils.KLD_JelinekMercerSmoothing(dtokens, atokens, 0.9f, luc);
-//               // ave_kld += kld;
-            // }
-            // input.next();
-//             ave_kld /= passage_count;
-//             System.out.println(i + ". " + queries.get(i) + " -- " + ave_kld);
-//             // ave_kld /= docs.size();
-//             // ave_kld = Double.parseDouble(decimalFormat.format(ave_kld));
-//             // System.out.println(i + ". " + current_query + " - " + ave_kld);
-
-//             // if (ave_kld < min_kld) {
-//             //   min_kld = ave_kld;
-//             // }
-//             // if (ave_kld > max_kld) {
-//             //   max_kld = ave_kld;
-//             // }
-            
-            
-            
-
-
-//             // Vector<String> words = new Vector<String>(Arrays.asList(queries.get(i).split("\\s")));
-//             // for (String w : words) {
-//             //   if (! word_distribution.containsKey(w)) {
-//             //     word_distribution.put(w, new HashMap<Double, Integer>());
-//             //   }
-//             //   HashMap<Double, Integer> bins = word_distribution.get(w);
-//             //   Double kld_key = new Double(ave_kld);
-
-//             //   if (! bins.containsKey(kld_key)) {
-//             //     bins.put(kld_key, new Integer(1));
-//             //   } else {
-//             //     Integer count = bins.get(kld_key);
-//             //     bins.put(kld_key, new Integer(count + 1));
-//             //   }
-
-//             //   word_distribution.put(w, bins);
-
-//             // }
-
-            
-
-//             query_ranking.put(queries.get(i), ave_kld);
-//         }
-
-//         List<Entry<String, Double>> sorted = Utils.entriesSortedByValues(query_ranking);
-//         for (Entry<String, Double> e : sorted) {
-//           System.out.println(e.getKey() + " -- " + e.getValue());
-//         }
-        // System.out.println("\n***\n");
-
-//         // wordFreqInTopNQueries(sorted, 20);
-//         // input.next();
-
-//         // Utils.write_word_distrinbution2json(word_distribution, "word_distribution.txt", max_kld, min_kld);
-//         // System.out.println(word_distribution);
-//         // System.out.println("Min KLD = " + min_kld);
-//         // System.out.println("Max KLD = " + max_kld);
-//         // input.next();
-
-//         // ave_kld_for_question /= queries.size();
-
-//         // double mid_kld = min_kld + (max_kld - min_kld) / 2;
-
-//         // List<Entry<String, Double>> sorted = Utils.entriesSortedByValues(query_ranking);
-//         // int queries_length = Math.round((int)(sorted.size() * 0.2));
-//         // Vector<String> all_words = new Vector<String> ();
-
-//         // for ( int i = 0; i < queries_length; ++i) {
-//         //   String qqq = sorted.get(i).getKey();
-//         //   all_words.addAll(Arrays.asList(queries.get(i).split("\\s")));
-//         // }
-
-//         // System.out.println(all_words);
-//         // System.out.println(Utils.buildDistribution(all_words));
-
-//         // PrintWriter writer = new PrintWriter(new FileOutputStream(new File(filename),true));
-//         // writer.println("\nDistribution of words in first 40 queries");
-//         // writer.println(Utils.entriesSortedByValues(Utils.buildDistribution(all_words)).toString());
-//         // writer.close();
-
-//         // min_kld = Double.POSITIVE_INFINITY;
-//         // max_kld = Double.NEGATIVE_INFINITY;
-//         // ave_kld_for_question = 0;
-        
+	    dbConnection.commit();
+	    dbConnection.close();
+	} catch (SQLException e) {
+	  	System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	  	System.exit(0);
     }
 
     br.close();
+    // writer.close();
   }
 }
 

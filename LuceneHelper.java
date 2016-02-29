@@ -91,6 +91,18 @@ import java.io.StringReader;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.util.AttributeSource;
 
+import org.apache.lucene.analysis.standard.StandardTokenizer;
+import org.apache.lucene.util.Version;
+import org.apache.lucene.analysis.standard.StandardFilter;
+import org.apache.lucene.analysis.shingle.ShingleFilter;
+import org.apache.lucene.analysis.shingle.ShingleAnalyzerWrapper;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.ngram.NGramTokenFilter;
+import java.io.Reader;
+import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.custom.CustomAnalyzer;
+// import org.apache.lucene.analysis.tokenattributes;
+import org.apache.lucene.search.PhraseQuery;
 
 
 public class LuceneHelper {
@@ -111,6 +123,31 @@ public class LuceneHelper {
     public String dictIndexPath = "/home/avtyurin/ComplexQA/LuceneSpell/";
     public String FIELD_BODY = "contents"; // primary field name where all the text is stored
     public String FIELD_ID = "id";
+
+    public int numDocs() {
+        return this.reader.numDocs();
+    }
+
+    public Document docByID(int id) throws IOException {
+        return this.reader.document(id);
+    } 
+
+    public Vector<String> searchYahooDocs(String docIDPhrase, int numDocs) throws IOException {
+        PhraseQuery pq = new PhraseQuery(FIELD_ID, docIDPhrase); //"clueweb09-en0005-53-00116");
+        ScoreDoc[] scoreDocs = this.searcher.search(pq, numDocs).scoreDocs;
+
+
+
+        Vector<String> docs = new Vector<String>();
+        for (int i = 0; i < scoreDocs.length; ++i) {
+            int docID = scoreDocs[i].doc;
+            Document d = reader.document(docID);
+            docs.add(d.get(FIELD_BODY));
+
+            System.out.println(d.toString());
+        }
+        return docs;
+    }
 
 
 	public LuceneHelper(String index_path) throws IOException, ParseException {
@@ -140,12 +177,14 @@ public class LuceneHelper {
         Vector<String> docs = new Vector<String>();
         for (int i = 0; i < scoreDocs.length; ++i) {
         	int docID = scoreDocs[i].doc;
+            System.out.println(docID);
             Document d = reader.document(docID);
             docs.add(d.get(FIELD_BODY));
             // System.out.println(d.get("contents"));
         }
         return docs;
     }
+
 
 
     // public Vector<Integer> createPostingList(String term, int docID) throws IOException {
@@ -317,18 +356,25 @@ public class LuceneHelper {
 
     public void testStuff() throws IOException, ParseException {
         Scanner input = new Scanner(System.in);
-        System.out.println(this.reader.document(1));
+
+        // Analyzer theAnalyzer = new Analyzer() {
+        //     Override 
+        //     protected TokenStreamComponents createComponents(String fieldName) {
+
+        //     }
+        // };
+        // System.out.println(this.reader.document(1));
 
 
         // System.out.println(this.reader.getTermVector(1, FIELD_BODY).hasPositions());
         // System.out.println(this.reader.getTermVector(1, FIELD_BODY).hasOffsets());
         // System.out.println(this.reader.getTermVector(1, FIELD_BODY).size());
 
-        TermsEnum it = this.reader.getTermVector(1, FIELD_BODY).iterator();
-        it.seekExact(new BytesRef("name".getBytes()));
-        PostingsEnum postings = it.postings(null, PostingsEnum.POSITIONS);
-        System.out.println(postings);
-        input.next();
+        // TermsEnum it = this.reader.getTermVector(1, FIELD_BODY).iterator();
+        // it.seekExact(new BytesRef("name".getBytes()));
+        // PostingsEnum postings = it.postings(null, PostingsEnum.POSITIONS);
+        // System.out.println(postings);
+        // input.next();
 
         // Term t = new Term(FIELD_BODY, new String("test"));
         // PostingsEnum docEnum = MultiFields.getTermPositionsEnum(this.reader, FIELD_BODY, t.bytes());
@@ -355,34 +401,116 @@ public class LuceneHelper {
         // // IndexWriterConfig conf = new IndexWriterConfig(new EnglishAnalyzer());
         // // spellchecker.indexDictionary(new PlainTextDictionary(dictPath), conf, false);
 ///Spell checker ///
-        DirectSpellChecker checker = new DirectSpellChecker();
+        // DirectSpellChecker checker = new DirectSpellChecker();
 
-        Vector<String> words = new Vector<String>();
-        words.add("misspelt");
-        words.add("peple");
-        words.add("syphoms");
-        words.add("wabbit");
-        words.add("oftened");
-        words.add("good");
-        words.add("these");
-        words.add("are");
-        words.add("correct");
-        words.add("words");
+        // Vector<String> words = new Vector<String>();
+        // words.add("misspelt");
+        // words.add("peple");
+        // words.add("people");
+        // words.add("symphoms");
+        // words.add("wabbit");
+        // words.add("oftened");
+        // words.add("good");
+        // words.add("these");
+        // words.add("are");
+        // words.add("correct");
+        // words.add("words");
 
-        for (String w : words) {
-            Term t = new Term(FIELD_BODY, w);
-            SuggestWord[] suggestions = checker.suggestSimilar(t, 10, this.dictReader, SuggestMode.valueOf("SUGGEST_MORE_POPULAR")); //, "contents", , 0.0f);
-            System.out.println("WORD: " + w);
-            if ((suggestions != null) && (suggestions.length != 0)) {
-                for (int i = 0; i < suggestions.length; ++i) {
-                    System.out.println(suggestions[i].string + " " + suggestions[i].score);
-                }
-                // System.out.println(Arrays.toString(suggestions));
-            } else {
-                System.out.println("No suggestions");
-            }
-        }
+        // for (String w : words) {
+        //     Term t = new Term(FIELD_BODY, w);
+        //     SuggestWord[] suggestions = checker.suggestSimilar(t, 10, this.dictReader, SuggestMode.valueOf("SUGGEST_MORE_POPULAR")); //, "contents", , 0.0f);
+        //     System.out.println("WORD: " + w);
+        //     if ((suggestions != null) && (suggestions.length != 0)) {
+        //         for (int i = 0; i < suggestions.length; ++i) {
+        //             System.out.println(suggestions[i].string + " " + suggestions[i].score);
+        //         }
+        //         // System.out.println(Arrays.toString(suggestions));
+        //     } else {
+        //         System.out.println("No suggestions");
+        //     }
+        // }
 ///Spell checker ///     
+
+/// test bigram token stream
+// StringReader emptyStopwords = new StringReader("");
+Analyzer theAnalyzer = new Analyzer(){
+  @Override
+   // protected TokenStreamComponents createComponents(String fieldName, Reader theReader) {
+  protected TokenStreamComponents createComponents(String fieldName) {
+     Tokenizer source = new StandardTokenizer();
+     // source.setReader(theReader);
+
+     ShingleFilter filter = new ShingleFilter(source, 3);
+     filter.setOutputUnigrams(true);
+     // filter = new BarFilter(filter);
+     return new TokenStreamComponents(source, filter);
+   }
+ };
+
+ Reader daReader = new StringReader("these are some important meaningful words");
+ TokenStream tokenStream = theAnalyzer.tokenStream("contents", daReader);
+ CharTermAttribute term = tokenStream.addAttribute(CharTermAttribute.class);
+ tokenStream.reset();
+ while(tokenStream.incrementToken()) {
+         System.out.print("[" + term.toString() + "] ");
+      }
+
+
+// // String theSentence = "these are some important meaningful words";
+// // StringReader reader = new StringReader(theSentence);
+// // TokenStream tokenStream = analyzer.tokenStream("content", reader);
+// // ShingleFilter theFilter = new ShingleFilter(tokenStream, 3);
+// // theFilter.setOutputUnigrams(true);
+
+// // CharTermAttribute charTermAttribute = theFilter.addAttribute(CharTermAttribute.class);
+// // theFilter.reset();
+
+// // while (theFilter.incrementToken()) {
+// //     System.out.println(charTermAttribute.toString());
+// // }
+
+// // theFilter.end();
+// // theFilter.close();
+
+// // Analyzer analyzer = new StandardAnalyzer();
+// // ShingleAnalyzerWrapper shingleAnalyzer = new ShingleAnalyzerWrapper(analyzer,2,4);
+
+// // String theSentence = "some important meaningful words";
+// // StringReader reader = new StringReader(theSentence);
+// // TokenStream tokenStream = shingleAnalyzer.tokenStream("content", reader);
+// // ShingleFilter theFilter = new ShingleFilter(tokenStream);
+// // theFilter.setOutputUnigrams(false);
+
+// // CharTermAttribute charTermAttribute = theFilter.addAttribute(CharTermAttribute.class);                                                                                   
+// // theFilter.reset();
+
+// //  while (theFilter.incrementToken()) {                                                 
+// //             System.out.println(charTermAttribute.toString());                                  
+// //  }
+
+// //  theFilter.end();
+// //  theFilter.close();
+
+//  /*        int min =1;
+//         int max =3;
+//         WhitespaceAnalyzer analyzer = new WhitespaceAnalyzer();
+//         String text ="hello my world";
+//         TokenStream tokenStream = analyzer.tokenStream("Data", new StringReader(text));
+
+
+//         NGramTokenFilter myfilter = new NGramTokenFilter(tokenStream,min,max);
+//         OffsetAttribute offsetAttribute2 = myfilter.addAttribute(OffsetAttribute.class);
+//         CharTermAttribute charTermAttribute2 = myfilter.addAttribute(CharTermAttribute.class);
+//         while (myfilter.incrementToken()) {
+//             int startOffset = offsetAttribute2.startOffset();
+//             int endOffset = offsetAttribute2.endOffset();
+//             String term = charTermAttribute2.toString();
+//             System.out.println(term);
+//         };*/
+
+// Analyzer ana = CustomAnalyzer.builder().withTokenizer("standard").
+// /// test bigram token stream
+
 
     }
 

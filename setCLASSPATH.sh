@@ -12,4 +12,5 @@ export CLASSPATH="/home/avtyurin/Lucene/lucene-backward-codecs-5.4.0.jar:$CLASSP
 export CLASSPATH="/home/avtyurin/OpenNLP/apache-opennlp-1.6.0/lib/opennlp-tools-1.6.0.jar:$CLASSPATH"
 export CLASSPATH="/home/avtyurin/OpenNLP/apache-opennlp-1.6.0/lib/opennlp-uima-1.6.0.jar:$CLASSPATH"
 export CLASSPATH="/home/avtyurin/JavaJson/java-json.jar:$CLASSPATH"
+export CLASSPATH="/home/avtyurin/ComplexQA/lib/sqlite-jdbc-3.8.11.2.jar:$CLASSPATH"
 export CLASSPATH=".:$CLASSPATH"

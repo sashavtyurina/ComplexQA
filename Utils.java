@@ -44,6 +44,174 @@ public class Utils {
   private static Vector<String> stopwords;
   private static Scanner input = new Scanner(System.in);
 
+  public static Vector<String> str2vect(String str) {
+    // given a space separated string, convert it to vector<String>
+    return new Vector<String>(Arrays.asList(str.split("\\s")));
+  }
+
+public static Vector<QueryScoring> sortByFiledName(final String fieldName, Vector<QueryScoring> queryScoringList) {
+  Collections.sort(queryScoringList, new Comparator<QueryScoring>() {
+        @Override
+        public int compare(QueryScoring q1, QueryScoring q2) {
+          if (fieldName.equals("atokensSim")) {
+            return q1.atokensSim >= q2.atokensSim ? 1 : 0;
+          } else if (fieldName.equals("qtokensSim")) {
+            return q1.qtokensSim >= q2.qtokensSim ? 1 : 0;
+          } else if (fieldName.equals("alltokensSim")) {  
+            return q1.alltokensSim >= q2.alltokensSim ? 1 : 0;  
+          } else if (fieldName.equals("aSimDom")) {
+            return q1.aSimDom >= q2.aSimDom ? 1 : 0;  
+          } else if (fieldName.equals("qSimDom")) {
+            return q1.qSimDom >= q2.qSimDom ? 1 : 0;
+          } else {
+            return q1.equalWeightSim >= q2.equalWeightSim ? 1 : 0;
+          }
+        }
+      });
+  return queryScoringList;
+}
+
+public static String fromJSONGet(String jsonStr, String fieldName) {
+  try {
+    JSONObject jsonObj = new JSONObject(jsonStr);
+    return jsonObj.get(fieldName).toString();  
+  } catch (JSONException e) {
+    System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    System.exit(0);
+    return null;
+  }
+  
+}
+
+public static void addtoDB () {
+            ////**** Adding the question to SQLite db
+        //   title = title.replaceAll("\n", "").replaceAll("'", "''");
+        //   body = body.replaceAll("\n", "").replaceAll("'", "''");
+        //   String sqlAnswers = answers.toString().replaceAll("\n", "").replaceAll("'", "''");
+
+        //     sql = "INSERT INTO QUESTIONS (QID, QTOKENS, ATOKENS, GTQUERY, QTITLE, QBODY, ANSWERS) VALUES (" //1, 'test''s', 'test', 'test', 'test', 'test', 'test');";
+        //      + questID + ", '" + Utils.vector2String(qtokens) + "', '" + Utils.vector2String(atokens) + "', '" + Utils.vector2String(gt_query) + "', '" + title + "', '" +
+        //     body + "', '" + sqlAnswers + "');";
+        //     System.out.println(sql);
+        //     try {
+        //       stmt.executeUpdate(sql);
+        //     } catch (SQLException e) {
+        //   System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        //   System.exit(0);
+        // }
+          ////**** Adding the question to SQLite db. End.
+}
+
+  public static void answerINtersection () {
+    // /// ***** Answer intersection start
+        // // writer.println("<b>QUESTION:</b><br> " + question + "<br>");
+
+        // Vector<Entry<String, Double>> answersIntersection = Utils.answersIntersectionJSON(jsonObj.getJSONArray("answers"), 0.4, luc);
+        // HashSet<String> answersIntersectionWords = new HashSet<String>();
+        // // writer.println("\n<b>INETERSECTING WORDS:</b><br> ");
+        // for (Entry<String, Double> e : answersIntersection) {
+        //   // System.out.println (e.getKey() + " --- " + e.getValue());
+        //   answersIntersectionWords.add(e.getKey());
+        // }
+
+        // // input.next();
+
+        // // writer.println("<b>ANSWERS: </b><br>");
+        // // for (int i = 0;  i < answers.length(); ++i) {
+        //   // String answer = answers.get(i).toString();
+        //   // writer.println(answer + "<br>\n***<br>");
+        // // }
+
+        // // writer.println("<br>\n*********************\n<br>");
+        // /// ***** Answer intersection end
+
+  }
+
+  public static String vector2String(Vector<String> vector) {
+    StringBuilder sb = new StringBuilder();
+    for (String s : vector) {
+      sb.append(s + " ");
+    }
+    return sb.toString();
+  }
+
+  public static <T> List<T> sliceCollection(List<T> collection, int from, int to) {
+    
+    if (!((from >= 0) && (to <= collection.size()))) {
+      System.out.println("Slice vector. Bad indicies. Returning null. ");
+      return null;
+    } 
+
+    List<T> result = new ArrayList<T>();
+
+    for (int i = from; i < to; ++i) {
+      result.add(collection.get(i));
+    }
+    return result;
+  }
+ 
+  public static <T> double RBO(Vector<T> a, Vector<T> b, double p, int evalDepth) {
+    /// calculates Rank Biased Overlap with parameter 0 < p < 1
+
+    double rbo = 0.0;
+    for (int d = 1; d <= evalDepth; ++d) {
+      rbo += Math.pow(p, d-1) * Utils.agreementAtD(a, b, d);
+    }
+
+    rbo *= (1 - p);
+    return rbo;
+
+  }
+
+  // public static <T> double averageOverlap(Vector<T> a, Vector<T> b, int k) {
+  //   /// caluculates an average overlap at depth k
+  //   if ((a.size() < k) || (b.size() < k)) {
+  //     System.out.println("The list are shorter than the depth. Returning 0.0 and exiting.");
+  //     return 0.0;
+  //   }    
+
+  //   double accOverlap = 0.0;
+  //   for (int d = 1; d <= k; ++d) {
+  //     accOverlap += agreementAtD(a, b, d);
+  //   }
+
+  //   return accOverlap / k;
+  // }
+
+  public static <T> double agreementAtD(Vector<T> a, Vector<T> b, int depth) {
+    /// calculates the agreement between two ranked lists at depth
+
+    if ((a.size() < depth) || (b.size() < depth)) {
+      System.out.println("The list are shorter than the depth. Returning 0.0 and exiting.");
+      return 0.0;
+    }
+
+    // intersection
+    Vector<T> bSlice = new Vector<T>();
+    for (int i = 0; i < depth; ++i) {
+      bSlice.add(b.get(i));
+    }
+
+    Vector<T> intersection = new Vector<T>();
+    for (int i = 0; i < depth; ++i) {
+      T el = a.get(i);
+      if (bSlice.contains(el)) {
+        intersection.add(el);
+      }
+    }
+
+    // overlap
+    int X = intersection.size();
+
+    // agreement
+    double agreement = (double)X / (double) depth; 
+    
+    // System.out.println("Agreement at " + depth + " is " + agreement);
+    return agreement;
+  }
+
+
+
   public static Vector<String> tokenizeAndClean(String text, boolean lower, boolean nopunct, boolean shrink_rep, 
     boolean drop_stop, boolean stem) throws FileNotFoundException {
     if (lower) {
@@ -160,10 +328,12 @@ public class Utils {
     return result;
   }
 
-  static <K,V extends Comparable<? super V>> List<Entry<K, V>> entriesSortedByValues(Map<K,V> map) {
+  static <K,V extends Comparable<? super V>> List<Entry<K, V>> entriesSortedByValues(Map<K,V> map, String direction) {
 
+    /// direction can be either "inc" or "dec"
     List<Entry<K,V>> sortedEntries = new ArrayList<Entry<K,V>>(map.entrySet());
 
+    if (direction == "inc") {
     Collections.sort(sortedEntries, 
             new Comparator<Entry<K,V>>() {
                 @Override
@@ -172,6 +342,16 @@ public class Utils {
                 }
             }
     );
+  } else {
+    Collections.sort(sortedEntries, 
+            new Comparator<Entry<K,V>>() {
+                @Override
+                public int compare(Entry<K,V> e1, Entry<K,V> e2) {
+                    return e2.getValue().compareTo(e1.getValue());
+                }
+            }
+    );
+  }
 
     return sortedEntries;
   }
@@ -337,7 +517,7 @@ public class Utils {
   }
 
   public static void write_query_ranking(HashMap<String, Double> queries, boolean toFile, String filename) throws FileNotFoundException{
-    List<Entry<String, Double>> sorted = Utils.entriesSortedByValues(queries);
+    List<Entry<String, Double>> sorted = Utils.entriesSortedByValues(queries, "inc");
 
     if (toFile) {
       // PrintWriter writer = new PrintWriter(filename);
@@ -480,10 +660,10 @@ public class Utils {
     }
 
     // static <K,V extends Comparable<? super V>> List<Entry<K, V>> entriesSortedByValues(Map<K,V> map) {
-    return entriesSortedByValues(kldValues);
+    return entriesSortedByValues(kldValues, "dec");
   }
 
-   public static double KLD_JelinekMercerSmoothing(Vector<String> foreground, Vector<String> background, float lambda, LuceneHelper luc) 
+   public static double KLD_JelinekMercerSmoothing(Vector<String> foreground, Vector<String> background, double lambda, LuceneHelper luc) 
   throws IOException, ParseException {
 
     HashMap<String, Double> fore_distr = buildDistribution(foreground);
@@ -630,7 +810,7 @@ public class Utils {
         topTokens.addAll(Arrays.asList(sortedQueries.get(i).getKey().split("\\s")));
       }
 
-      List<Entry<String, Double>> sortedWords = Utils.entriesSortedByValues(Utils.buildDistribution(topTokens));
+      List<Entry<String, Double>> sortedWords = Utils.entriesSortedByValues(Utils.buildDistribution(topTokens), "inc");
       for (Entry<String, Double> w : sortedWords) {
         System.out.println(w.getKey() + " - " + w.getValue());
       }
