@@ -49,6 +49,17 @@ public class Utils {
     return new Vector<String>(Arrays.asList(str.split("\\s")));
   }
 
+public static Vector<String> JSONArrayToVect(JSONArray jarr) throws JSONException {
+  Vector<String> resVect = new Vector<String>();
+  if (jarr != null) { 
+    int len = jarr.length();
+    for (int i = 0; i < len; i++) { 
+      resVect.add(jarr.get(i).toString());
+    } 
+  } 
+  return resVect;
+}
+
 public static Vector<QueryScoring> sortByFiledName(final String fieldName, Vector<QueryScoring> queryScoringList) {
   Collections.sort(queryScoringList, new Comparator<QueryScoring>() {
         @Override

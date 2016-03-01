@@ -174,7 +174,6 @@ public static Vector<String> getTopWords(List<Entry<String, Double>> scoredQueri
 
 
 
-
 public static void setupDBConnection() {
 
     try {
@@ -213,18 +212,18 @@ public static void loggerSetup() {
   }
 }
 
-public static void setThingsUp(String[] args) {
-  this.index_path = args[0].toString();
+public static void setThingsUp(String[] args) throws IOException, FileNotFoundException, ParseException {
+  index_path = args[0].toString();
   luc = new LuceneHelper(index_path); 
   loggerSetup();
-  this.query = args[1].toString();
-  this.decimalFormat = new DecimalFormat("#.#");
+  query = args[1].toString();
+  decimalFormat = new DecimalFormat("#.#");
   setupDBConnection();
-  this.fstream = new FileInputStream("gtQuestions.txt");
-  this.br = new BufferedReader(new InputStreamReader(fstream));
+  fstream = new FileInputStream("gtQuestions.txt");
+  br = new BufferedReader(new InputStreamReader(fstream));
 }
 
-  public static void testThings(){/// Test RBO
+  public static void testThings()  {/// Test RBO
 
           // Vector<String> a = new Vector<String> ();
           // a.add("a");
@@ -254,7 +253,7 @@ public static void setThingsUp(String[] args) {
           // System.out.println(Utils.ngramIntersection(ang, bng));
 }
 
-public static void checkIfAnswersWereAddedToIndex() {
+public static void checkIfAnswersWereAddedToIndex() throws IOException {
       Vector<String> yahooDocs = luc.searchYahooDocs("clueweb09-en0005-53-00116", 30); // "Answer.0.14.yahoo.txt"
 
       for (String s : yahooDocs) {
@@ -264,6 +263,130 @@ public static void checkIfAnswersWereAddedToIndex() {
 
       System.out.println("Done");
       input.next();
+}
+
+public static Vector<String> getTopWordsFromQueries(Vector<String> queries, int depth) {
+  Vector<String> words = new Vector<String> ();
+
+  for (String query : queries) {
+    words.addAll(Arrays.asList(query.split("\\s"))); 
+  }
+
+  HashMap<String, Double> wordsDistribution = Utils.buildDistribution(words);
+  logger.log(Level.INFO, "word distribution is" + wordsDistribution.toString());
+  List<Entry<String, Double>> sortedWordsDistribution = Utils.entriesSortedByValues(wordsDistribution, "dec");
+
+  logger.log(Level.INFO, "sorted word distribution is" + sortedWordsDistribution.toString());
+  List<Entry<String, Double>> topWords = Utils.sliceCollection(sortedWordsDistribution, 0, depth);
+  logger.log(Level.INFO, "top words are" + topWords.toString());
+
+  words.clear();
+  for (int i = 0; i < topWords.size(); ++i) {
+    words.add(topWords.get(i).getKey());
+  }
+
+  logger.log(Level.INFO, "the final result is" + words.toString());
+  return words;
+}
+
+public static Vector<String> getQueriesTextByIDs(Vector<Integer> queryIDs) {
+  Vector<String> queriesText = new Vector<String>();
+
+  for (Integer qid : queryIDs) {
+    try {
+      String sql = "select query from queries where qid=" + qid + ";";
+      Statement queryTextStmt = dbConnection.createStatement(); 
+
+      ResultSet queryText = queryTextStmt.executeQuery(sql);
+      queriesText.add(queryText.getString("query"));
+
+    } catch (SQLException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      continue;
+    }
+  }
+
+  return queriesText;
+}
+
+
+public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter writer) {
+
+  double rboCoefficient = 0.5;
+  int topQueriesCount = 4;
+/// given question ID we should 
+  //// 1. Find all the corresponding queries.
+  //// 2. For each query find its average similarity score. 
+  //// 3. write it down in a dictionary
+  HashMap<Integer, Double> queryAveScoreAtokens = new HashMap<Integer, Double>();
+  int testCounter = 10;
+  
+  try {
+
+    String sql = "select distinct queryID as qid from qqp where questID=" + questID + ";";
+    Statement queryIDsstmt = dbConnection.createStatement(); 
+    ResultSet queryIDs = queryIDsstmt.executeQuery(sql);
+
+
+
+    while(queryIDs.next()) {
+          testCounter --;
+          if (testCounter == 0) {break;}
+
+      int queryID = queryIDs.getInt("qid");
+      logger.log(Level.INFO, "Working with query " + queryID + "...");
+
+      //// find average sim scores for every queryID
+      sql = "select avg(atokensSim) as atokensSimAve, avg(qtokensSim) as qtokensSimAve, avg(alltokensSim) as allTokensSimAve " + 
+                  "from KLDSim where pid in (select pid from qqp where queryid=" + queryID + ");";
+
+      Statement aveScoresStmt = dbConnection.createStatement(); 
+      ResultSet aveScoresResults = aveScoresStmt.executeQuery(sql);
+
+      queryAveScoreAtokens.put(new Integer(queryID), new Double(aveScoresResults.getDouble("atokensSimAve")));
+      logger.log(Level.INFO, "ATokens ave similarity is " + aveScoresResults.getDouble("atokensSimAve"));
+
+      aveScoresStmt.close();
+      aveScoresResults.close();
+    }
+    queryIDs.close();
+    queryIDsstmt.close();
+
+  } catch (SQLException e) {
+    System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    System.exit(0);
+  }
+
+  //// at this point we have a hashmap query - score
+  // we want to sort the queries according to the score
+
+  /// will be sorting in increasing order, as low KLD values are good and we want to see them first
+  List<Entry<Integer, Double>> sortedQueryIDs = Utils.entriesSortedByValues(queryAveScoreAtokens, "inc"); 
+  logger.log(Level.INFO, "query sim scores are " + queryAveScoreAtokens.toString());
+  logger.log(Level.INFO, "sorted query sim scores are " + sortedQueryIDs.toString());
+
+  List<Entry<Integer, Double>> topQueryScores = Utils.sliceCollection(sortedQueryIDs, 0, topQueriesCount);
+  logger.log(Level.INFO, "top20 sim scores and queries are " + topQueryScores.toString());
+
+  Vector<Integer> topQueryIDs = new Vector<Integer>();
+  for (int i = 0; i < topQueryScores.size(); ++i) {
+    topQueryIDs.add(topQueryScores.get(i).getKey());
+  }
+
+  logger.log(Level.INFO, "top query ids are " + topQueryIDs.toString());  
+
+  Vector<String> queriesText = getQueriesTextByIDs(topQueryIDs);
+  logger.log(Level.INFO, "queries text is " + queriesText.toString());  
+
+  Vector<String> words = getTopWordsFromQueries(queriesText, gtQuery.size());
+  logger.log(Level.INFO, "the result query is " + words.toString());  
+  logger.log(Level.INFO, "the ground truth query is " + gtQuery.toString());  
+
+
+  //// now we want to compare ground truth query with the one we think is the best and find its RBO score
+  double rboScore = Utils.RBO(words, gtQuery, rboCoefficient, gtQuery.size());
+  logger.log(Level.INFO, "the RBO score is " + rboScore);  
+
 
 }
 
@@ -272,6 +395,7 @@ public static void checkIfAnswersWereAddedToIndex() {
           System.out.println("Input arguments: index_path, query string");
           return;
       }
+      setThingsUp(args);
 
       String sql = "";
       Statement stmt = null;
@@ -303,10 +427,15 @@ public static void checkIfAnswersWereAddedToIndex() {
           JSONObject jsonObj = new JSONObject(strLine);
           int questID = jsonObj.getInt("id");
 
-          if (! (questID > minQID) && (questID < maxQID) ) {
+          Vector<String> gtQuery = Utils.JSONArrayToVect(jsonObj.getJSONArray("gt_query"));
+
+          if (! (questID >= minQID) && (questID <= maxQID) ) {
             continue;
           }
           logger.log(Level.INFO, "Working with question " + questID + "...");
+          input.next();
+          sortQueriesByAveragePassageScore(1, gtQuery);
+          input.next();
 
           
 /// Calculating similarity and writing to the db
