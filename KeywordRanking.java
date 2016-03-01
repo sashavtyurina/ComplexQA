@@ -313,13 +313,19 @@ public static Vector<String> getQueriesTextByIDs(Vector<Integer> queryIDs) {
 public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter writer) {
 
   double rboCoefficient = 0.5;
-  int topQueriesCount = 4;
+  int topQueriesCount = 20;
 /// given question ID we should 
   //// 1. Find all the corresponding queries.
   //// 2. For each query find its average similarity score. 
   //// 3. write it down in a dictionary
   HashMap<Integer, Double> queryAveScoreAtokens = new HashMap<Integer, Double>();
-  int testCounter = 10;
+  HashMap<Integer, Double> queryAveScoreQtokens = new HashMap<Integer, Double>();
+  HashMap<Integer, Double> queryAveScoreAlltokens = new HashMap<Integer, Double>();
+
+  HashMap<Integer, Double> queryAveScoreADomtokens = new HashMap<Integer, Double>();  // 0.7*answer_sim + 0.3*question_sim
+  HashMap<Integer, Double> queryAveScoreQDomtokens = new HashMap<Integer, Double>();  // 0.3*answer_sim + 0.7*question_sim
+  HashMap<Integer, Double> queryAveScoreEqualWeighttokens = new HashMap<Integer, Double>();  // 0.5*answer_sim + 0.5*question_sim
+  // int testCounter = 10;
   
   try {
 
@@ -330,8 +336,8 @@ public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter w
 
 
     while(queryIDs.next()) {
-          testCounter --;
-          if (testCounter == 0) {break;}
+      // testCounter --;
+      // if (testCounter == 0) {break;}
 
       int queryID = queryIDs.getInt("qid");
       logger.log(Level.INFO, "Working with query " + queryID + "...");
@@ -343,8 +349,28 @@ public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter w
       Statement aveScoresStmt = dbConnection.createStatement(); 
       ResultSet aveScoresResults = aveScoresStmt.executeQuery(sql);
 
-      queryAveScoreAtokens.put(new Integer(queryID), new Double(aveScoresResults.getDouble("atokensSimAve")));
-      logger.log(Level.INFO, "ATokens ave similarity is " + aveScoresResults.getDouble("atokensSimAve"));
+      double atokensAveSim = aveScoresResults.getDouble("atokensSimAve");
+      double qtokensAveSim = aveScoresResults.getDouble("qtokensSimAve");
+      double alltokensAveSim = aveScoresResults.getDouble("allTokensSimAve");
+
+      queryAveScoreAtokens.put(new Integer(queryID), new Double(atokensAveSim));
+      logger.log(Level.INFO, "ATokens ave similarity is " + atokensAveSim);
+
+      queryAveScoreQtokens.put(new Integer(queryID), new Double(qtokensAveSim));
+      logger.log(Level.INFO, "QTokens ave similarity is " + qtokensAveSim);
+
+      queryAveScoreAlltokens.put(new Integer(queryID), new Double(alltokensAveSim));
+      logger.log(Level.INFO, "AllTokens ave similarity is " + alltokensAveSim);
+
+
+      queryAveScoreADomtokens.put(new Integer(queryID), new Double(0.7*atokensAveSim + 0.3*qtokensAveSim));
+      logger.log(Level.INFO, "ADomTokens ave similarity is " + (0.7*atokensAveSim + 0.3*qtokensAveSim));
+
+      queryAveScoreQDomtokens.put(new Integer(queryID), new Double(0.3*atokensAveSim + 0.7*qtokensAveSim));
+      logger.log(Level.INFO, "QDomTokens ave similarity is " + (0.3*atokensAveSim + 0.7*qtokensAveSim));
+
+      queryAveScoreEqualWeighttokens.put(new Integer(queryID), new Double(0.5*atokensAveSim + 0.5*qtokensAveSim));
+      logger.log(Level.INFO, "EqualWeightTokens ave similarity is " + (0.5*atokensAveSim + 0.5*qtokensAveSim));
 
       aveScoresStmt.close();
       aveScoresResults.close();
@@ -358,35 +384,125 @@ public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter w
   }
 
   //// at this point we have a hashmap query - score
-  // we want to sort the queries according to the score
+  //// we want to sort the queries according to the score
+  //// will be sorting in increasing order, as low KLD values are good and we want to see them first
+  List<Entry<Integer, Double>> sortedQueryIDsAtokens = Utils.entriesSortedByValues(queryAveScoreAtokens, "inc"); 
+  List<Entry<Integer, Double>> sortedQueryIDsQtokens = Utils.entriesSortedByValues(queryAveScoreQtokens, "inc"); 
+  List<Entry<Integer, Double>> sortedQueryIDsAlltokens = Utils.entriesSortedByValues(queryAveScoreAlltokens, "inc"); 
 
-  /// will be sorting in increasing order, as low KLD values are good and we want to see them first
-  List<Entry<Integer, Double>> sortedQueryIDs = Utils.entriesSortedByValues(queryAveScoreAtokens, "inc"); 
-  logger.log(Level.INFO, "query sim scores are " + queryAveScoreAtokens.toString());
-  logger.log(Level.INFO, "sorted query sim scores are " + sortedQueryIDs.toString());
+  List<Entry<Integer, Double>> sortedQueryIDsADomtokens = Utils.entriesSortedByValues(queryAveScoreADomtokens, "inc"); 
+  List<Entry<Integer, Double>> sortedQueryIDsQDomtokens = Utils.entriesSortedByValues(queryAveScoreQDomtokens, "inc"); 
+  List<Entry<Integer, Double>> sortedQueryIDsEqualWeighttokens = Utils.entriesSortedByValues(queryAveScoreEqualWeighttokens, "inc"); 
 
-  List<Entry<Integer, Double>> topQueryScores = Utils.sliceCollection(sortedQueryIDs, 0, topQueriesCount);
-  logger.log(Level.INFO, "top20 sim scores and queries are " + topQueryScores.toString());
 
-  Vector<Integer> topQueryIDs = new Vector<Integer>();
-  for (int i = 0; i < topQueryScores.size(); ++i) {
-    topQueryIDs.add(topQueryScores.get(i).getKey());
+  // logger.log(Level.INFO, "query sim scores are " + queryAveScoreAtokens.toString());
+  // logger.log(Level.INFO, "sorted query sim scores are " + sortedQueryIDsAtokens.toString());
+
+
+  //// take top 20 (topQueriesCount) queries
+  List<Entry<Integer, Double>> topQueryScoresAtokens = Utils.sliceCollection(sortedQueryIDsAtokens, 0, topQueriesCount);
+  List<Entry<Integer, Double>> topQueryScoresQtokens = Utils.sliceCollection(sortedQueryIDsQtokens, 0, topQueriesCount);
+  List<Entry<Integer, Double>> topQueryScoresAlltokens = Utils.sliceCollection(sortedQueryIDsAlltokens, 0, topQueriesCount);
+
+  List<Entry<Integer, Double>> topQueryScoresADomtokens = Utils.sliceCollection(sortedQueryIDsADomtokens, 0, topQueriesCount);
+  List<Entry<Integer, Double>> topQueryScoresQDomtokens = Utils.sliceCollection(sortedQueryIDsQDomtokens, 0, topQueriesCount);
+  List<Entry<Integer, Double>> topQueryScoresEqualWeighttokens = Utils.sliceCollection(sortedQueryIDsEqualWeighttokens, 0, topQueriesCount);
+
+  // logger.log(Level.INFO, "top " + topQueriesCount + " sim scores and queries are " + topQueryScoresAtokens.toString());
+
+
+  //// from the top 20 queries only take out their ids
+  Vector<Integer> topQueryIDsAtokens = new Vector<Integer>();
+  for (int i = 0; i < topQueryScoresAtokens.size(); ++i) {
+    topQueryIDsAtokens.add(topQueryScoresAtokens.get(i).getKey());
   }
 
-  logger.log(Level.INFO, "top query ids are " + topQueryIDs.toString());  
+  Vector<Integer> topQueryIDsQtokens = new Vector<Integer>();
+  for (int i = 0; i < topQueryScoresQtokens.size(); ++i) {
+    topQueryIDsQtokens.add(topQueryScoresQtokens.get(i).getKey());
+  }
 
-  Vector<String> queriesText = getQueriesTextByIDs(topQueryIDs);
-  logger.log(Level.INFO, "queries text is " + queriesText.toString());  
+  Vector<Integer> topQueryIDsAlltokens = new Vector<Integer>();
+  for (int i = 0; i < topQueryScoresAlltokens.size(); ++i) {
+    topQueryIDsAlltokens.add(topQueryScoresAlltokens.get(i).getKey());
+  }
 
-  Vector<String> words = getTopWordsFromQueries(queriesText, gtQuery.size());
-  logger.log(Level.INFO, "the result query is " + words.toString());  
-  logger.log(Level.INFO, "the ground truth query is " + gtQuery.toString());  
+
+
+  Vector<Integer> topQueryIDsADomtokens = new Vector<Integer>();
+  for (int i = 0; i < topQueryScoresADomtokens.size(); ++i) {
+    topQueryIDsADomtokens.add(topQueryScoresADomtokens.get(i).getKey());
+  }
+
+  Vector<Integer> topQueryIDsQDomtokens = new Vector<Integer>();
+  for (int i = 0; i < topQueryScoresQDomtokens.size(); ++i) {
+    topQueryIDsQDomtokens.add(topQueryScoresQDomtokens.get(i).getKey());
+  }
+
+  Vector<Integer> topQueryIDsEqualWeighttokens = new Vector<Integer>();
+  for (int i = 0; i < topQueryScoresEqualWeighttokens.size(); ++i) {
+    topQueryIDsEqualWeighttokens.add(topQueryScoresEqualWeighttokens.get(i).getKey());
+  }
+
+  // logger.log(Level.INFO, "top query ids are " + topQueryIDsAtokens.toString());  
+
+  //// get queries text based on their IDs 
+  Vector<String> queriesTextAtokens = getQueriesTextByIDs(topQueryIDsAtokens);
+  Vector<String> queriesTextQtokens = getQueriesTextByIDs(topQueryIDsQtokens);
+  Vector<String> queriesTextAlltokens = getQueriesTextByIDs(topQueryIDsAlltokens);
+
+  Vector<String> queriesTextADomtokens = getQueriesTextByIDs(topQueryIDsADomtokens);
+  Vector<String> queriesTextQDomtokens = getQueriesTextByIDs(topQueryIDsQDomtokens);
+  Vector<String> queriesTextEqualWeighttokens = getQueriesTextByIDs(topQueryIDsEqualWeighttokens);
+
+  // logger.log(Level.INFO, "queries text is " + queriesTextAtokens.toString());  
+
+  //// from the top 20 queries get top 4(gtQuery.size()) based on their frequency
+  Vector<String> wordsAtokens = getTopWordsFromQueries(queriesTextAtokens, gtQuery.size());
+  logger.log(Level.INFO, "Atokens result query is " + wordsAtokens.toString());  
+
+  Vector<String> wordsQtokens = getTopWordsFromQueries(queriesTextQtokens, gtQuery.size());
+  logger.log(Level.INFO, "Qtokens result query is " + wordsQtokens.toString());  
+
+  Vector<String> wordsAlltokens = getTopWordsFromQueries(queriesTextAlltokens, gtQuery.size());
+  logger.log(Level.INFO, "Alltokens result query is " + wordsAlltokens.toString());  
+
+  Vector<String> wordsADomtokens = getTopWordsFromQueries(queriesTextADomtokens, gtQuery.size());
+  logger.log(Level.INFO, "ADom result query is " + wordsADomtokens.toString());  
+
+  Vector<String> wordsQDomtokens = getTopWordsFromQueries(queriesTextQDomtokens, gtQuery.size());
+  logger.log(Level.INFO, "QDom result query is " + wordsQDomtokens.toString());
+
+  Vector<String> wordsEqualWeighttokens= getTopWordsFromQueries(queriesTextEqualWeighttokens, gtQuery.size());
+  logger.log(Level.INFO, "EqualWeight result query is " + wordsEqualWeighttokens.toString());
+
+
+  logger.log(Level.INFO, "The ground truth query is " + gtQuery.toString());  
 
 
   //// now we want to compare ground truth query with the one we think is the best and find its RBO score
-  double rboScore = Utils.RBO(words, gtQuery, rboCoefficient, gtQuery.size());
-  logger.log(Level.INFO, "the RBO score is " + rboScore);  
+  double rboScoreAtokens = Utils.RBO(wordsAtokens, gtQuery, rboCoefficient, gtQuery.size());
+  double rboScoreQtokens = Utils.RBO(wordsQtokens, gtQuery, rboCoefficient, gtQuery.size());
+  double rboScoreAlltokens = Utils.RBO(wordsAlltokens, gtQuery, rboCoefficient, gtQuery.size());
 
+  double rboScoreADomtokens = Utils.RBO(wordsADomtokens, gtQuery, rboCoefficient, gtQuery.size());
+  double rboScoreQDomtokens = Utils.RBO(wordsQDomtokens, gtQuery, rboCoefficient, gtQuery.size());
+  double rboScoreEqualWeighttokens = Utils.RBO(wordsEqualWeighttokens, gtQuery, rboCoefficient, gtQuery.size());
+
+  logger.log(Level.INFO, "Atokens RBO score is " + rboScoreAtokens);
+  logger.log(Level.INFO, "Qtokens RBO score is " + rboScoreQtokens);
+  logger.log(Level.INFO, "Alltokens RBO score is " + rboScoreAlltokens);
+
+  logger.log(Level.INFO, "ADom RBO score is " + rboScoreADomtokens);
+  logger.log(Level.INFO, "QDom RBO score is " + rboScoreQDomtokens);
+  logger.log(Level.INFO, "EqualWeight RBO score is " + rboScoreEqualWeighttokens);
+
+  writer.println(questID + "\t" + gtQuery.toString() + "\t" + rboScoreAtokens   + "\t" + wordsAtokens.toString()   + "\t" +
+                                                              rboScoreQtokens   + "\t" + wordsQtokens.toString()   + "\t" + 
+                                                              rboScoreAlltokens + "\t" + wordsAlltokens.toString() + "\t" + 
+                                                              rboScoreADomtokens + "\t" + wordsADomtokens.toString() + "\t" + 
+                                                              rboScoreQDomtokens + "\t" + wordsQDomtokens.toString() + "\t" +
+                                                              rboScoreEqualWeighttokens + "\t" + wordsEqualWeighttokens.toString()); 
 
 }
 
@@ -408,20 +524,12 @@ public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter w
       
       String strLine;
 
-      // PrintWriter writer = new PrintWriter(new FileOutputStream(new File("compareSimMeasures.txt"), true));
-      // writer.print("questID\tatokenssim\tqtokenssim\talltokenssim\tadomsim\tqdomsim\tequalweightsim\n");
-
-      // int[] questionIDs = {1,4,5,6,14,15,16,17,18,19,20,21,22,23,24};
-      // Integer[] questionIDs = {2,3,7,8,9,10,11,12,13,25,26,27,28,29,30};
-      /* for (int questIDCounter : questionIDs) {
-           strLine = br.readLine(); 
-           questID = questIDCounter; */
+      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("AveSimMeasures.txt"), true));
 
       /// working with questions 1-30
       int minQID = 1;
       int maxQID = 30;
       while ((strLine = br.readLine()) != null)   {
-        // System.out.println(strLine);
 
         /// Read next question in JSON format and initialize. Start.
           JSONObject jsonObj = new JSONObject(strLine);
@@ -433,13 +541,13 @@ public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter w
             continue;
           }
           logger.log(Level.INFO, "Working with question " + questID + "...");
-          input.next();
-          sortQueriesByAveragePassageScore(1, gtQuery);
-          input.next();
+          averageSim(questID, gtQuery, writer);
+          writer.flush();
+          
 
           
 /// Calculating similarity and writing to the db
-          try {
+/*          try {
           	sql = "select atokens, qtokens from questions where qid=" + questID + ";";
 
           	ResultSet qaTokens = stmt.executeQuery(sql);
@@ -479,7 +587,7 @@ public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter w
           } catch (SQLException e) {
           	System.err.println( e.getClass().getName() + ": " + e.getMessage() );
           	continue;
-          }
+          }*/
 
 
 //           /// ***** Compare passage and answers using repeated words start 
@@ -520,18 +628,18 @@ public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter w
 
 //           /// ***** Compare passage and answers using repeated words end        
     }
-    try {
-	    stmt.close();
 
+    try {
+      
+	    stmt.close();
 	    dbConnection.commit();
 	    dbConnection.close();
-	} catch (SQLException e) {
+    } catch (SQLException e) {
 	  	System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 	  	System.exit(0);
     }
-
+    writer.close();
     br.close();
-    // writer.close();
   }
 }
 
