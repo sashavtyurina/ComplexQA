@@ -231,37 +231,36 @@ public class LuceneHelper {
             int docID = scoreDocs[i].doc;    
             Document d = reader.document(docID);
             String doc_body = d.get(FIELD_BODY);
-            
-            if (documents.contains(doc_body)) {
+
+            passages.add(d.get(FIELD_ID) + " :::: " + doc_body);
+
+            // System.out.println(d.get(FIELD_ID));
+            // System.out.println(d.get(FIELD_BODY));
+
+
+/*            if (documents.contains(doc_body)) {
                 rep_docs += 1;
                 continue;
             }
             documents.add(doc_body);
-
             // for every document build its own index 
             Index ind = new Index(doc_body);
-            Vector<String> parsed_words = Utils.lucene_tokenize(queryString);
+            Vector<String> parsed_words = new Vector<String>(Arrays.asList(queryString.split("\\s"))); ///Utils.lucene_tokenize(queryString);
             Vector<String> doc_passages = ind.getPassages(parsed_words, max_passage_length, 250);
 
             for (String s : doc_passages) {
                 if (passages.contains(s)) {
-                    // System.out.println("\n***\n" + s + "\n***\n");
                     rep_passages += 1;
                     continue;
                 } else {
                     passages.add(s);
                 }
-            }
-            // passages.addAll(doc_passages);
+            }*/
         }
-
-        // System.out.println(rep_docs + " of the same document");
-        // System.out.println(rep_passages + " of the same passage");
-        // input.next();
         return passages;
     }
 
-    private List<String> lucene_tokenize(Analyzer analyzer, String text) {
+    public List<String> lucene_tokenize(Analyzer analyzer, String text) {
         List<String> result = new ArrayList<String>();
         try {
           TokenStream stream  = analyzer.tokenStream(null, new StringReader(text));
@@ -433,7 +432,7 @@ public class LuceneHelper {
 
 /// test bigram token stream
 // StringReader emptyStopwords = new StringReader("");
-Analyzer theAnalyzer = new Analyzer(){
+    Analyzer theAnalyzer = new Analyzer(){
   @Override
    // protected TokenStreamComponents createComponents(String fieldName, Reader theReader) {
   protected TokenStreamComponents createComponents(String fieldName) {

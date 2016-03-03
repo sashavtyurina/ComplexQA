@@ -35,6 +35,7 @@ import java.sql.*;
 
 import org.apache.lucene.document.Document;
 import java.util.logging.*;
+import com.google.common.base.Joiner;
 
 
 
@@ -199,7 +200,7 @@ public static Vector<String> passagesForQuestion(int questID) {
 
 public static void loggerSetup() {
   try {
-    FileHandler fileHandler = new FileHandler("ComparingPassagesLog.%u.%g.txt");
+    FileHandler fileHandler = new FileHandler("PassageWiseComparingPassagesLog.%u.%g.txt");
     fileHandler.setFormatter(new SimpleFormatter());
     ConsoleHandler consoleHandler = new ConsoleHandler();
     logger.addHandler(fileHandler);
@@ -251,18 +252,110 @@ public static void setThingsUp(String[] args) throws IOException, FileNotFoundEx
           // Vector<Vector<String>> ang = Utils.createNGrams(a, 1);
           // Vector<Vector<String>> bng = Utils.createNGrams(b, 1);
           // System.out.println(Utils.ngramIntersection(ang, bng));
+
+
+
 }
 
 public static void checkIfAnswersWereAddedToIndex() throws IOException {
-      Vector<String> yahooDocs = luc.searchYahooDocs("clueweb09-en0005-53-00116", 30); // "Answer.0.14.yahoo.txt"
+      Vector<String> yahooDocs = luc.searchYahooDocs("Answer.0.14.yahoo.txt", 30); // "clueweb09-en0005-53-00116" 
 
       for (String s : yahooDocs) {
         System.out.println(s);
-        input.next();
       }
 
       System.out.println("Done");
       input.next();
+}
+
+public static void addGTQueriesToDB() throws IOException, ParseException {
+  //// For every question we have a manuallyconstructed (ideal / ground truth) query.
+  //// We want to add every such query in the table queries. 
+  try {
+    String sql = "select max(qid) as max_qid from queries;";
+    Statement maxQueryIDStmt = dbConnection.createStatement();
+    int maxQueryID = maxQueryIDStmt.executeQuery(sql).getInt("max_qid");
+    maxQueryIDStmt.close();
+
+    sql = "select max(pid) as max_pid from passages;";
+    Statement maxPIDStmt = dbConnection.createStatement();
+    int maxPID = maxPIDStmt.executeQuery(sql).getInt("max_pid");
+    maxPIDStmt.close();
+
+
+    sql = "select qid, gtquery from questions;";
+    Statement questIDstmt = dbConnection.createStatement();
+    ResultSet questIDs = questIDstmt.executeQuery(sql);
+
+
+    while (questIDs.next()) {
+      try {
+        int curQuestID = questIDs.getInt("qid");
+        String curGTQuery = questIDs.getString("gtquery");
+
+        System.out.println(curQuestID);
+        System.out.println(curGTQuery);
+
+        PrintWriter writer = new PrintWriter(new FileOutputStream(new File("checkRetrievedDocuments/DocumentsRetrivedFroQuestion" + curQuestID + ".txt"), false));
+
+        //// insert a row into table queries
+        /*maxQueryID += 1;
+        sql = "insert into queries (qid, query) values (" + maxQueryID + ", " + curGTQuery + ");";
+        Statement insertQueryStmt = dbConnection.createStatement();
+        insertQueryStmt.executeUpdate(sql);
+        insertQueryStmt.close();
+
+        sql = "update questions set gtqueryID=" + maxQueryID + " where qid=" + curQuestID + ";";
+        Statement updateQuestionsStmt = dbConnection.createStatement();
+        updateQuestionsStmt.executeUpdate(sql);
+        updateQuestionsStmt.close();*/
+
+        //// now we want to perform search using this query and memorize all the passages retrieved with it
+        Vector<String> passages = luc.performPassageSearch(curGTQuery, 30, 250);
+        writer.println("For query [" + curGTQuery.toString() + "] could retrieve " + passages.size() + " documents.\n\n");
+
+        for (String p : passages) {
+          /*Vector<String> words = new Vector<String> (Arrays.asList(curGTQuery.split("\\s")));
+          for (String w : words) {
+            if (! p.toLowerCase().contains(w)) {
+              System.out.println("No word " + w + " in document \n" + p);
+            }
+          }*/
+          writer.println(p);
+          writer.println("\n\n\n***\n\n\n");
+         /* System.out.println(p);
+          input.next();
+          maxPID += 1;*/
+          /*sql = "insert into passages (pid, passage) values (maxPID, p);";
+          Statement insertPassageStmt = dbConnection.createStatement();
+          insertPassageStmt.executeUpdate(sql);
+          insertPassageStmt.close();
+
+
+          //// finally we update qqp table
+          sql = "insert into qqp (questid, queryid, pid) values (" + curQuestID + ", " + maxQueryID + ", " + maxPID + ");";
+          Statement updateQQPStmt = dbConnection.createStatement();
+          updateQQPStmt.executeUpdate(sql);
+          updateQQPStmt.close();*/
+        }
+
+        writer.close();
+      } catch (Exception e) {
+        System.out.println("everything went wrong");
+        continue;
+      }
+    }
+
+    
+
+    questIDs.close();
+    questIDstmt.close();
+
+  } catch (SQLException e) {
+    System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    System.exit(0);
+  }
+
 }
 
 public static Vector<String> getTopWordsFromQueries(Vector<String> queries, int depth) {
@@ -314,7 +407,7 @@ public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter w
 
   double rboCoefficient = 0.5;
   int topQueriesCount = 20;
-/// given question ID we should 
+  /// given question ID we should 
   //// 1. Find all the corresponding queries.
   //// 2. For each query find its average similarity score. 
   //// 3. write it down in a dictionary
@@ -427,8 +520,6 @@ public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter w
     topQueryIDsAlltokens.add(topQueryScoresAlltokens.get(i).getKey());
   }
 
-
-
   Vector<Integer> topQueryIDsADomtokens = new Vector<Integer>();
   for (int i = 0; i < topQueryScoresADomtokens.size(); ++i) {
     topQueryIDsADomtokens.add(topQueryScoresADomtokens.get(i).getKey());
@@ -473,7 +564,7 @@ public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter w
   Vector<String> wordsQDomtokens = getTopWordsFromQueries(queriesTextQDomtokens, gtQuery.size());
   logger.log(Level.INFO, "QDom result query is " + wordsQDomtokens.toString());
 
-  Vector<String> wordsEqualWeighttokens= getTopWordsFromQueries(queriesTextEqualWeighttokens, gtQuery.size());
+  Vector<String> wordsEqualWeighttokens = getTopWordsFromQueries(queriesTextEqualWeighttokens, gtQuery.size());
   logger.log(Level.INFO, "EqualWeight result query is " + wordsEqualWeighttokens.toString());
 
 
@@ -506,12 +597,225 @@ public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter w
 
 }
 
+
+public static Vector<String> getQueriesByPids(Vector<Integer> pids) {
+  Vector<String> queries = new Vector<String>();
+  Joiner joiner = Joiner.on(",");
+  String pidsStr = joiner.join(pids);
+
+  String sql = "select query from queries where qid in (select queryid from qqp where pid in (" + pidsStr + "));";
+
+  try {
+    Statement queriesStmt = dbConnection.createStatement();
+    ResultSet queryText = queriesStmt.executeQuery(sql);
+
+    while (queryText.next()) {
+      queries.add(queryText.getString("query"));
+    }
+  } catch (SQLException e) {
+    System.err.println( e.getClass().getName() + ": " + e.getMessage());
+    System.exit(0);
+  }
+
+  return queries;
+}
+
+public static void passageWiseSim (int questID, Vector<String> gtQuery, PrintWriter writer) {
+  //// Take all the passages corresponding to questID and their scores
+  //// Sort them by their score in increasing order, since lower KLD score is better for us
+  //// Take top 20 of such passages and find their corresponding queries
+  //// Build words distribution from the 20 queries
+  //// Take the top 4-5 words from the distribution and use them to compute RBO score (against ground truth query)
+  //// Write results to the writer
+
+  double rboCoefficient = 0.5;
+  int topPassagesCount = 20;
+
+  HashMap<Integer, Double> aTokensSim = new HashMap<Integer, Double>();
+  HashMap<Integer, Double> qTokensSim = new HashMap<Integer, Double>();
+  HashMap<Integer, Double> allTokensSim = new HashMap<Integer, Double>();
+  HashMap<Integer, Double> aDomTokensSim = new HashMap<Integer, Double>();
+  HashMap<Integer, Double> qDomTokensSim = new HashMap<Integer, Double>();
+  HashMap<Integer, Double> equalWeightTokensSim = new HashMap<Integer, Double>();
+
+  try {
+    String sql = "select pid, atokensSim, qtokensSim, alltokensSim from KLDSim where questid=" + questID + ";";
+    Statement pidsStmt = dbConnection.createStatement(); 
+    ResultSet pids = pidsStmt.executeQuery(sql);
+
+
+    //// construct 6 vectors with different similarities
+    while(pids.next()) {
+      int pid = pids.getInt("pid");
+      double aTokensScore = pids.getDouble("atokensSim");
+      double qTokensScore = pids.getDouble("qtokensSim");
+      double allTokensScore = pids.getDouble("alltokensSim");
+
+      double aDomScore = 0.7*aTokensScore + 0.3*qTokensScore;
+      double qDomScore = 0.3*aTokensScore + 0.7*qTokensScore;
+      double equalWeightScore = 0.5*aTokensScore + 0.5*qTokensScore;
+
+      aTokensSim.put(new Integer(pid), new Double(aTokensScore));
+      qTokensSim.put(new Integer(pid), new Double(qTokensScore));
+      allTokensSim.put(new Integer(pid), new Double(allTokensScore));
+      aDomTokensSim.put(new Integer(pid), new Double(aDomScore));
+      qDomTokensSim.put(new Integer(pid), new Double(qDomScore));
+      equalWeightTokensSim.put(new Integer(pid), new Double(equalWeightScore));
+    }
+    pidsStmt.close();
+    pids.close();
+
+    //// now we have all kinds of similarities in these 6 hashmaps. Time to sort them.
+    List<Entry<Integer, Double>> sortedATokensSim = Utils.entriesSortedByValues(aTokensSim, "inc");
+    List<Entry<Integer, Double>> sortedQTokensSim = Utils.entriesSortedByValues(qTokensSim, "inc");
+    List<Entry<Integer, Double>> sortedAllTokensSim = Utils.entriesSortedByValues(allTokensSim, "inc");
+    List<Entry<Integer, Double>> sortedADomSim = Utils.entriesSortedByValues(aDomTokensSim, "inc");
+    List<Entry<Integer, Double>> sortedQDomSim = Utils.entriesSortedByValues(qDomTokensSim, "inc");
+    List<Entry<Integer, Double>> sortedEqualWeightSim = Utils.entriesSortedByValues(equalWeightTokensSim, "inc");
+
+    //// take only top 20 passages into consideration and discard the rest
+    List<Entry<Integer, Double>> topPsgScoresAtokens = Utils.sliceCollection(sortedATokensSim, 0, topPassagesCount);
+    List<Entry<Integer, Double>> topPsgScoresQtokens = Utils.sliceCollection(sortedQTokensSim, 0, topPassagesCount);
+    List<Entry<Integer, Double>> topPsgScoresAlltokens = Utils.sliceCollection(sortedAllTokensSim, 0, topPassagesCount);
+    List<Entry<Integer, Double>> topPsgScoresADom = Utils.sliceCollection(sortedADomSim, 0, topPassagesCount);
+    List<Entry<Integer, Double>> topPsgScoresQDom = Utils.sliceCollection(sortedQDomSim, 0, topPassagesCount);
+    List<Entry<Integer, Double>> topPsgScoresEqualWeight = Utils.sliceCollection(sortedEqualWeightSim, 0, topPassagesCount);
+
+    //// now only leave pids without the scores
+
+    Vector<Integer> pidsAtokens = new Vector<Integer>();
+    Vector<Integer> pidsQtokens = new Vector<Integer>(); 
+    Vector<Integer> pidsAlltokens = new Vector<Integer>();
+    Vector<Integer> pidsADom = new Vector<Integer>();
+    Vector<Integer> pidsQDom = new Vector<Integer>();
+    Vector<Integer> pidsEqualWeights = new Vector<Integer>();
+
+    for (int i = 0; i < topPassagesCount; ++i) {
+      pidsAtokens.add(topPsgScoresAtokens.get(i).getKey());
+      pidsQtokens.add(topPsgScoresQtokens.get(i).getKey());
+      pidsAlltokens.add(topPsgScoresAlltokens.get(i).getKey());
+      pidsADom.add(topPsgScoresADom.get(i).getKey());
+      pidsQDom.add(topPsgScoresQDom.get(i).getKey());
+      pidsEqualWeights.add(topPsgScoresEqualWeight.get(i).getKey());
+    }
+
+    logger.log(Level.INFO, "ATokens pids are " + pidsAtokens.toString());
+    logger.log(Level.INFO, "QTokens pids are " + pidsQtokens.toString());
+    logger.log(Level.INFO, "AllTokens pids are " + pidsAlltokens.toString());
+    logger.log(Level.INFO, "ADom pids are " + pidsADom.toString());
+    logger.log(Level.INFO, "QDom pids are " + pidsQDom.toString());
+    logger.log(Level.INFO, "EqualWeight pids are " + pidsEqualWeights.toString());
+
+    Vector<String> atokensQueries = getQueriesByPids(pidsAtokens);
+    Vector<String> qtokensQueries = getQueriesByPids(pidsQtokens);
+    Vector<String> alltokensQueries = getQueriesByPids(pidsAlltokens);
+    Vector<String> aDomQueries = getQueriesByPids(pidsADom);
+    Vector<String> qDomQueries = getQueriesByPids(pidsQDom);
+    Vector<String> equalWeightQueries = getQueriesByPids(pidsEqualWeights);
+
+    Vector<String> wordsATokens = getTopWordsFromQueries(atokensQueries, gtQuery.size());
+    logger.log(Level.INFO, "Atokens result query is " + wordsATokens.toString()); 
+
+    Vector<String> wordsQTokens = getTopWordsFromQueries(qtokensQueries, gtQuery.size());
+    logger.log(Level.INFO, "Qtokens result query is " + wordsQTokens.toString()); 
+
+    Vector<String> wordsAllTokens = getTopWordsFromQueries(alltokensQueries, gtQuery.size());
+    logger.log(Level.INFO, "Alltokens result query is " + wordsAllTokens.toString()); 
+
+    Vector<String> wordsADom = getTopWordsFromQueries(aDomQueries, gtQuery.size());
+    logger.log(Level.INFO, "ADom result query is " + wordsADom.toString()); 
+
+    Vector<String> wordsQDom = getTopWordsFromQueries(qDomQueries, gtQuery.size());
+    logger.log(Level.INFO, "QDom result query is " + wordsQDom.toString()); 
+
+    Vector<String> wordsEqualWeight = getTopWordsFromQueries(equalWeightQueries, gtQuery.size());
+    logger.log(Level.INFO, "EqualWeight result query is " + wordsEqualWeight.toString()); 
+
+    double rboScoreAtokens = Utils.RBO(wordsATokens, gtQuery, rboCoefficient, gtQuery.size());
+    double rboScoreQtokens = Utils.RBO(wordsQTokens, gtQuery, rboCoefficient, gtQuery.size());
+    double rboScoreAlltokens = Utils.RBO(wordsAllTokens, gtQuery, rboCoefficient, gtQuery.size());
+    double rboScoreADom = Utils.RBO(wordsADom, gtQuery, rboCoefficient, gtQuery.size());
+    double rboScoreQDom = Utils.RBO(wordsQDom, gtQuery, rboCoefficient, gtQuery.size());
+    double rboScoreEqualWeight = Utils.RBO(wordsEqualWeight, gtQuery, rboCoefficient, gtQuery.size());
+
+    logger.log(Level.INFO, "Atokens RBO score is " + rboScoreAtokens);
+    logger.log(Level.INFO, "Qtokens RBO score is " + rboScoreQtokens);
+    logger.log(Level.INFO, "Alltokens RBO score is " + rboScoreAlltokens);
+
+    logger.log(Level.INFO, "ADom RBO score is " + rboScoreADom);
+    logger.log(Level.INFO, "QDom RBO score is " + rboScoreQDom);
+    logger.log(Level.INFO, "EqualWeight RBO score is " + rboScoreEqualWeight);
+
+    writer.println(questID + "\t" + gtQuery.toString() + "\t" + rboScoreAtokens     + "\t" + wordsATokens.toString()   + "\t" +
+                                                                rboScoreQtokens     + "\t" + wordsQTokens.toString()   + "\t" + 
+                                                                rboScoreAlltokens   + "\t" + wordsAllTokens.toString() + "\t" + 
+                                                                rboScoreADom        + "\t" + wordsADom.toString()      + "\t" + 
+                                                                rboScoreQDom        + "\t" + wordsQDom.toString()      + "\t" +
+                                                                rboScoreEqualWeight + "\t" + wordsEqualWeight.toString());
+
+  } catch (SQLException e) {
+    System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    System.exit(0);
+  }
+
+}
+
+
+  public static void recalculateRBO() throws IOException, FileNotFoundException, ParseException {
+    // setThingsUp();
+    // luc = new LuceneHelper(index_path); 
+    FileInputStream gt = new FileInputStream("gtQueries.txt");
+    BufferedReader gt_br = new BufferedReader(new InputStreamReader(gt));
+
+    FileInputStream eval = new FileInputStream("CalculatedQueries.txt");
+    BufferedReader eval_br = new BufferedReader(new InputStreamReader(eval));
+
+    PrintWriter writer = new PrintWriter(new FileOutputStream(new File("RBOScoresRevisited.txt"), true));
+
+
+
+    String gtLine;
+    String evalLine;
+
+    while ((evalLine = eval_br.readLine()) != null)   {
+      evalLine = evalLine.replace("[", "");
+      evalLine = evalLine.replace("]", "");
+      evalLine = evalLine.replace(",", "");
+      Vector<String> evalQuery = new Vector<String>(Arrays.asList(evalLine.split("\\s")));
+
+      gtLine = gt_br.readLine();
+      gtLine = gtLine.replace("[", "");
+      gtLine = gtLine.replace("]", "");
+      gtLine = gtLine.replace(",", "");
+      Vector<String> gtQuery = new Vector<String>(luc.lucene_tokenize(new EnglishAnalyzer(), gtLine));
+      // Vector<String> gtQuery = new Vector<String>(Arrays.asList(gtLine.split(",\\s")));
+
+      System.out.println(evalQuery);
+      System.out.println(gtQuery);
+
+      double rboScore = Utils.RBO(evalQuery, gtQuery, 0.5, gtQuery.size());
+      System.out.println(rboScore);  
+      writer.println(rboScore);    
+    }
+
+    writer.close();
+
+  }
   public static void main(String[] args) throws IOException, ParseException, JSONException, FileNotFoundException, ParseException {
       if (args.length < 2) {
           System.out.println("Input arguments: index_path, query string");
           return;
       }
+
       setThingsUp(args);
+      GoogleSearch.searchTerms();
+      // addGTQueriesToDB();
+      // checkIfAnswersWereAddedToIndex();
+
+      // recalculateRBO();
+      System.out.println("DONE");
+      input.next();
+      
 
       String sql = "";
       Statement stmt = null;
@@ -524,7 +828,7 @@ public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter w
       
       String strLine;
 
-      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("AveSimMeasures.txt"), true));
+      // PrintWriter writer = new PrintWriter(new FileOutputStream(new File("PassageWiseSimMeasures.txt"), true));
 
       /// working with questions 1-30
       int minQID = 1;
@@ -536,13 +840,18 @@ public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter w
           int questID = jsonObj.getInt("id");
 
           Vector<String> gtQuery = Utils.JSONArrayToVect(jsonObj.getJSONArray("gt_query"));
+          Joiner joiner = Joiner.on(" ");
+          Vector<String> analyzedGtQuery = new Vector<String>(luc.lucene_tokenize(new EnglishAnalyzer(), joiner.join(gtQuery)));
+          System.out.println(analyzedGtQuery.toString());
 
           if (! (questID >= minQID) && (questID <= maxQID) ) {
             continue;
           }
-          logger.log(Level.INFO, "Working with question " + questID + "...");
-          averageSim(questID, gtQuery, writer);
-          writer.flush();
+          // logger.log(Level.INFO, "Working with question " + questID + "...");
+          // averageSim(questID, analyzedGtQuery, writer);
+          // passageWiseSim(questID, analyzedGtQuery, writer);
+
+          // writer.flush();
           
 
           
@@ -587,7 +896,7 @@ public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter w
           } catch (SQLException e) {
           	System.err.println( e.getClass().getName() + ": " + e.getMessage() );
           	continue;
-          }*/
+          } */
 
 
 //           /// ***** Compare passage and answers using repeated words start 
@@ -638,7 +947,7 @@ public static void averageSim(int questID, Vector<String> gtQuery, PrintWriter w
 	  	System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 	  	System.exit(0);
     }
-    writer.close();
+    // writer.close();
     br.close();
   }
 }
