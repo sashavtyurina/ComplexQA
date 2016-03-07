@@ -801,6 +801,80 @@ public static void passageWiseSim (int questID, Vector<String> gtQuery, PrintWri
     writer.close();
 
   }
+
+  public static void addGoogleSearchDocs() {
+    int numDocs = 20;
+    int docIDCount = 1;
+
+    try {
+      Statement qidsStmt = dbConnection.createStatement();
+      String sql = "select qid, gtqueryID, gtquery from questions";
+      ResultSet qids = qidsStmt.executeQuery(sql);
+      int testCounter = 40;
+
+      while (qids.next()) {
+
+        int questID = qids.getInt("qid");
+        int gtqueryID = qids.getInt("gtqueryID");
+        String gtQuery = qids.getString("gtquery");
+
+        System.out.println("Working with question " + questID + "...");
+        System.out.println("The gt_query is " + gtQuery + "..." + "#" + gtqueryID);
+
+
+
+        HashMap<String, String> googleSearchResults = GoogleSearch.searchTerms(gtQuery, numDocs);
+
+        Vector<String> urls = new Vector<String>();
+        Vector<String> rawHTMLs = new Vector<String>();
+        urls.addAll(googleSearchResults.keySet());
+        rawHTMLs.addAll(googleSearchResults.values());
+
+        for (int i = 0; i < urls.size(); ++i) {
+          String curURL = urls.get(i);
+          System.out.println(i + ":::" + curURL);
+          String curHTML = rawHTMLs.get(i);
+          sql = "insert into GoogleSearchDocs (queryID, docID, rawHTML, url, questID, queryText) " + 
+                "values (" + gtqueryID + ", " + docIDCount + ", ?, ?, ?, ?);";
+          docIDCount++;
+
+          PreparedStatement addToGoogleSearchStmt = dbConnection.prepareStatement(sql);
+          addToGoogleSearchStmt.setString(1, curHTML);
+          addToGoogleSearchStmt.setString(2, curURL);
+          addToGoogleSearchStmt.setString(3, "" + questID);
+          addToGoogleSearchStmt.setString(4, gtQuery);
+
+          // System.out.println(addToGoogleSearchStmt);
+          addToGoogleSearchStmt.executeUpdate();
+          addToGoogleSearchStmt.close();
+          dbConnection.commit();
+
+        } 
+        System.out.println("Waiting for 5 seconds...");
+        Thread.sleep(5000);
+
+        testCounter -= 1;
+        if (testCounter == 0) {
+          break;
+        }
+      }
+      qidsStmt.close();
+      qids.close();
+      dbConnection.commit();
+      dbConnection.close();
+    } 
+
+    catch (SQLException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    } catch (IOException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    } catch (InterruptedException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }
+}
   public static void main(String[] args) throws IOException, ParseException, JSONException, FileNotFoundException, ParseException {
       if (args.length < 2) {
           System.out.println("Input arguments: index_path, query string");
@@ -808,7 +882,8 @@ public static void passageWiseSim (int questID, Vector<String> gtQuery, PrintWri
       }
 
       setThingsUp(args);
-      GoogleSearch.searchTerms();
+      addGoogleSearchDocs();
+      // GoogleSearch.searchTerms("dogs eat rocks", 16);
       // addGTQueriesToDB();
       // checkIfAnswersWereAddedToIndex();
 
