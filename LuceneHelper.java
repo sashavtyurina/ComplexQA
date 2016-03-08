@@ -104,6 +104,8 @@ import org.apache.lucene.analysis.custom.CustomAnalyzer;
 // import org.apache.lucene.analysis.tokenattributes;
 import org.apache.lucene.search.PhraseQuery;
 
+import com.google.common.base.Joiner;
+
 
 public class LuceneHelper {
     public static class Range {
@@ -209,7 +211,7 @@ public class LuceneHelper {
     // }
 
     public Vector<String> performPassageSearch(String queryString, int max_docs, int max_passage_length) throws IOException, ParseException {
-        QueryParser queryParser = new QueryParser(FIELD_BODY, new EnglishAnalyzer());
+        QueryParser queryParser = new QueryParser("", new EnglishAnalyzer());
         queryParser.setDefaultOperator(QueryParser.Operator.AND);
         Query query = queryParser.parse(queryString);
 
@@ -237,7 +239,6 @@ public class LuceneHelper {
             // System.out.println(d.get(FIELD_ID));
             // System.out.println(d.get(FIELD_BODY));
 
-
 /*            if (documents.contains(doc_body)) {
                 rep_docs += 1;
                 continue;
@@ -250,13 +251,32 @@ public class LuceneHelper {
 
             for (String s : doc_passages) {
                 if (passages.contains(s)) {
-                    rep_passages += 1;
+                    rep_passages += 1;passageSearchFromDocument
                     continue;
                 } else {
                     passages.add(s);
                 }
             }*/
         }
+        return passages;
+    }
+
+    public Vector<String> passageSearchFromDocument(String queryString, String textDocument, int maxPassageLength) throws IOException, ParseException {
+        Vector<String> query = new Vector<String>(lucene_tokenize(new EnglishAnalyzer(), queryString));
+        Vector<String> doc = new Vector<String>(lucene_tokenize(new EnglishAnalyzer(), textDocument));
+
+        Joiner joiner = Joiner.on(" ");
+        String docBody = joiner.join(doc);
+
+
+        Index ind = new Index(docBody);
+        Vector<String> passages = ind.getPassages(query, 10, maxPassageLength);
+
+        // System.out.println(query.toString());
+
+        // for (String p : passages) {
+        //     System.out.println(p + "\n\n*********\n\n");
+        // }
         return passages;
     }
 

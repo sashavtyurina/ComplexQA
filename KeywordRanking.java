@@ -36,6 +36,7 @@ import java.sql.*;
 import org.apache.lucene.document.Document;
 import java.util.logging.*;
 import com.google.common.base.Joiner;
+import org.jsoup.Jsoup; 
 
 
 
@@ -875,6 +876,114 @@ public static void passageWiseSim (int questID, Vector<String> gtQuery, PrintWri
       System.exit(0);
     }
 }
+
+  public static void TestSimMeasures () {
+    try {
+      Statement qidsStmt = dbConnection.createStatement();
+      String sql = "select qid, gtquery, qtokens, atokens from questions;";
+      ResultSet qids = qidsStmt.executeQuery(sql);
+
+      while (qids.next()) {
+        try {
+
+          int curQuestID = qids.getInt("qid");
+          String curGTQuery = qids.getString("gtquery");
+          String qtokens = qids.getString("qtokens");
+          String atokens = qids.getString("atokens");
+
+          System.out.println("Working with question " + curQuestID + "...");
+
+          // System.out.println(qtokens);
+          // System.out.println("\n\n***\n\n");
+          // System.out.println(atokens);
+
+
+          Statement googleDocsStmt = dbConnection.createStatement();
+          sql = "select rawHTML from GoogleSearchDocs where questID=" + curQuestID + ";";
+          ResultSet googleDocs = googleDocsStmt.executeQuery(sql);
+
+          Vector<String> allPassages = new Vector<String>();
+
+          while(googleDocs.next()) {
+            String curDoc = googleDocs.getString("rawHTML");
+            curDoc = Jsoup.parse(curDoc).text();
+            Vector<String> passages = luc.passageSearchFromDocument(curGTQuery, curDoc, 50);
+            // passageRanking(passages, qtokens, atokens);
+            allPassages.addAll(passages);
+          }
+
+          passageRanking(allPassages, qtokens, atokens);
+
+          googleDocsStmt.close();
+          googleDocs.close();
+
+        } catch (SQLException e) {
+          System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+          continue;
+        } catch (IOException e) {
+          System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+          continue;
+        } catch (ParseException e) {
+          System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+          continue;
+        }
+        input.next();
+      }
+      qidsStmt.close();
+      qids.close();
+
+    } catch (SQLException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }
+  }
+
+  public static void passageRanking(Vector<String> passages, String question, String answer) {
+    //// rank passages based on the number of words intersecting with the question text and the answer text.
+    HashMap<String, Integer> pRanking = new HashMap<String, Integer> ();
+
+    for (String p : passages) {
+      Set<String> pWordsSet = new HashSet<String>(Arrays.asList(p.split("\\s")));
+      Set<String> qWordsSet = new HashSet<String>(Arrays.asList(question.split("\\s")));
+      Set<String> aWordsSet = new HashSet<String>(Arrays.asList(answer.split("\\s")));
+      
+      /*s1.retainAll(s2) — transforms s1 into the intersection of s1 and s2. 
+      (The intersection of two sets is the set containing only the elements common to both sets.)*/
+
+      Set<String> aIntersection = new HashSet<String>(pWordsSet);
+      Set<String> qIntersection = new HashSet<String>(pWordsSet);
+
+      aIntersection.retainAll(pWordsSet);
+      qIntersection.retainAll(pWordsSet);
+
+      int answerIntersectionScore = aIntersection.size();
+      int questionIntersectionScore = qIntersection.size();
+      
+      pRanking.put(p, new Integer(answerIntersectionScore + questionIntersectionScore));
+    }
+
+    List<Entry<String, Integer>> rankedP = Utils.entriesSortedByValues(pRanking, "dec");
+    System.out.println("Passages size = " + passages.size());
+    System.out.println("RankedP size = " + rankedP.size());
+
+    int topN = 10;
+    int pCounter = 0;
+    // // for (int i = 0; i < topN; ++i) {
+    // //   System.out.println(rankedP.get(i).getValue() + ":::" + rankedP.get(i).getKey() + "\n\n******\n");
+    // // }
+    for (Entry<String, Integer> e : rankedP) {
+      System.out.println(e.getValue() + ":::" + e.getKey() + "\n******\n");
+
+      pCounter ++;
+      if (pCounter == topN) {
+        break;
+      }
+    }
+
+  }
+
+
+
   public static void main(String[] args) throws IOException, ParseException, JSONException, FileNotFoundException, ParseException {
       if (args.length < 2) {
           System.out.println("Input arguments: index_path, query string");
@@ -882,12 +991,15 @@ public static void passageWiseSim (int questID, Vector<String> gtQuery, PrintWri
       }
 
       setThingsUp(args);
-      addGoogleSearchDocs();
+      TestSimMeasures();
+
+      // addGoogleSearchDocs();
       // GoogleSearch.searchTerms("dogs eat rocks", 16);
       // addGTQueriesToDB();
       // checkIfAnswersWereAddedToIndex();
-
       // recalculateRBO();
+
+
       System.out.println("DONE");
       input.next();
       
