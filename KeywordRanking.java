@@ -140,7 +140,7 @@ public class KeywordRanking {
       luc = new LuceneHelper(index_path); 
       loggerSetup();
       query = args[1].toString();
-      decimalFormat = new DecimalFormat("#.#");
+      decimalFormat = new DecimalFormat("#.###");
       setupDBConnection();
       fstream = new FileInputStream("gtQuestions.txt");
       br = new BufferedReader(new InputStreamReader(fstream));
@@ -879,7 +879,7 @@ public static void addGoogleSearchDocs() {
           writer.println(curQuery);
 
           //// for the time being
-            /*boolean fetchSucceeded = false;
+            boolean fetchSucceeded = false;
             HashMap<String, String> googleSearchResults = new HashMap<String, String>();
             while (!fetchSucceeded) {
               try {
@@ -890,7 +890,7 @@ public static void addGoogleSearchDocs() {
                 /// if something went wrong, wait for 5 minutes and try again
                 logger.log(Level.INFO, "Something went wrong with fetching snippets. Wait for 5 mins and try again");
                 logger.log(Level.INFO, e.getClass().getName() + ": " + e.getMessage() );
-                Thread.sleep(1000*60*5);
+                // Thread.sleep(1000*60*5);
               }
             }
 
@@ -918,7 +918,7 @@ public static void addGoogleSearchDocs() {
               addToGoogleSearchStmt.close();
               dbConnection.commit();
 
-          } */
+          } 
         
           // logger.log(Level.INFO, "Inserted snippet #" + snippetID);
           
@@ -958,6 +958,73 @@ public static void addGoogleSearchDocs() {
     //   System.err.println( e.getClass().getName() + ": " + e.getMessage() );
     //   System.exit(0);
     // }
+}
+
+public static void addBingSearchResultsFromFile() {  
+  try {
+    int snippetID = 1;
+    BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("BingSearchResults.txt")));
+    String strLine;
+    while ((strLine = reader.readLine()) != null) {
+
+    /// Read next question in JSON format and initialize. Start.
+      try {
+        JSONObject jsonObj = new JSONObject(strLine);
+        String curQuery = jsonObj.getString("query");
+        System.out.println(curQuery);
+        JSONArray snippets = jsonObj.getJSONArray("snippets");
+        Vector<String> snippetsStr = Utils.JSONArrayToVect(snippets);
+        for (String s : snippetsStr) {
+          JSONObject snippetJSON = new JSONObject(s);
+          String curSnippet = snippetJSON.getString("snippet");
+          String curURL = snippetJSON.getString("url");
+          // System.out.println(snippet);
+          // System.out.println(url);
+
+          String sql = "select queryID, questID from newqueries where queryText=?;";
+          PreparedStatement queryIDStmt = dbConnection.prepareStatement(sql);
+          queryIDStmt.setString(1, curQuery);
+          ResultSet queryIDRS = queryIDStmt.executeQuery();
+          int queryID = queryIDRS.getInt("queryID");
+          int questID = queryIDRS.getInt("questID");
+          queryIDRS.close();
+          queryIDStmt.close();
+          // System.out.println("Query = " + curQuery + "; queryID = " + queryID + "; questID = " + questID);
+          // if (input.next().equals(".")){
+          //   continue;
+          // }
+
+
+
+          sql = "insert into NewSnippets (snippetID, snippet, docURL, queryID, questID, queryText)" +
+                  " values (" + snippetID + ", ?, ?, " + queryID + ", " + questID + ", ?);";
+          snippetID ++;
+
+          PreparedStatement addToGoogleSearchStmt = dbConnection.prepareStatement(sql);
+          addToGoogleSearchStmt.setString(1, curSnippet);
+          addToGoogleSearchStmt.setString(2, curURL);
+          addToGoogleSearchStmt.setString(3, curQuery);
+
+          addToGoogleSearchStmt.executeUpdate();
+          addToGoogleSearchStmt.close();
+          dbConnection.commit();
+        }
+      } catch (JSONException e) {
+        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        continue;
+      }
+
+    }
+  } catch (FileNotFoundException e) {
+    System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    System.exit(0);
+  } catch (IOException e) {
+    System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    System.exit(0);
+  } catch (SQLException e) {
+    System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    System.exit(0);
+  }
 }
 
 
@@ -1167,12 +1234,17 @@ public static void populateDBWithRawQA() {
       Statement qidsStmt = dbConnection.createStatement();
       String sql = "select qid, rawQuestion, gtquery from questions;";
       ResultSet qids = qidsStmt.executeQuery(sql);
+      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("SimpleIntersection.txt"), true));
+
 
       while (qids.next()) {
 
           int curQuestID = qids.getInt("qid");
           String rawQuestion = qids.getString("rawQuestion");
           String gtQuery = qids.getString("gtquery");
+
+          writer.println("QUESTION :: " + rawQuestion);
+          writer.println("TRUE QUERY :: " + gtQuery);
 
           // for this question get all its answers 
             sql = "select answerText from answers where questID=" + curQuestID + ";";
@@ -1183,60 +1255,88 @@ public static void populateDBWithRawQA() {
             answersRS.close();
 
           // for this question get all its snippets 
-            sql = "select snippet from GoogleSearchDocs where questID=" + curQuestID + ";";
+            sql = "select snippetID, queryID, questID, queryText, snippet from NewSnippets where questID=" + curQuestID + ";";
             Statement snippetsStmt = dbConnection.createStatement();
             ResultSet snippetsRS = snippetsStmt.executeQuery(sql);
-            Vector<String> snippets = Utils.resultSet2Vect(snippetsRS, "snippet");
+            Vector<Snippet> snippets = Snippet.rsToSnippetList(snippetsRS);
+
+
+            // HashMap<String, String> snippets = new HashMap<String, String>();
+            // try {
+            //   while(rs.next()) {
+            //     snippets.put(snippetsRS.getString("queryText"), snippetsRS.getString("snippet"));
+            //   }
+            // } catch (SQLException e) {
+            //   System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            //   System.exit(0);
+            // }
+
             snippetsStmt.close();
             snippetsRS.close();
 
           // apply different similarities here
-            HashMap<String, Double> scoredSnippets = simpleIntersection(rawQuestion, answers, snippets);
-            // HashMap<String, Double> scoredSnippets = simpleIntersectionNoQuery(rawQuestion, answers, snippets, gtQuery);
-            
-            List<Entry<String, Double>> rankedSnippets = Utils.entriesSortedByValues(scoredSnippets, "dec");
-            for (Entry<String, Double> e : rankedSnippets) {
-              System.out.println(e.getValue() + "::" + e.getKey());
+            Vector<Snippet> scoredSnippets = simpleIntersection(rawQuestion, answers, snippets);
+            List<Snippet> rankedSnippets = Utils.sliceCollection(Snippet.sortSnippetsByScore(scoredSnippets, "dec"), 0, 20);
+
+            Vector<String> topQueryWords = new Vector<String>();
+            writer.println("::SNIPPETS::");
+            for (Snippet s : rankedSnippets) {
+              topQueryWords.addAll(Arrays.asList(s.queryText.split("\\s")));
+              writer.println(s.queryText + " :: " + s.original + "\n---");
             }
 
-          input.next();
+            List<Entry<String, Double>> rankedWords = Utils.entriesSortedByValues(Utils.buildDistribution(topQueryWords), "dec");
+            for (Entry<String, Double> e : rankedWords) {
+              System.out.println(e.getValue() + "::" + e.getKey());
+              writer.println(decimalFormat.format(e.getValue()) + " :: " + e.getKey());
+            }
+
+            // HashMap<String, Double> scoredSnippets = simpleIntersectionNoQuery(rawQuestion, answers, snippets, gtQuery);
+            
+            // List<Entry<String, Double>> rankedSnippets = Utils.sliceCollection(Utils.entriesSortedByValues(scoredSnippets, "dec"), 0, 20);
+            // for (Entry<String, Double> e : rankedSnippets) {
+            //   System.out.println(e.getValue() + "::" + e.getKey());
+            // }
+
 
       }
       qidsStmt.close();
       qids.close();
+      writer.close();
 
     } catch (SQLException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    } catch (FileNotFoundException e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage() );
       System.exit(0);
     }
   }
 
-  public static HashMap<String, Double> simpleIntersection (String question, Vector<String> answers, Vector<String> snippets) {
+  public static Vector<Snippet> simpleIntersection (String question, Vector<String> answers, Vector<Snippet> snippets) {
   /// only do slight preprocessing - remove punctuation (no stopping or stemming)
   /// compare words intersection - (question + collective answer) and (snippet)
 
-    question = Utils.shrinkRepeatedChars(Utils.removePunct(question));
-    answers = Utils.removePunctVect(answers);
-    snippets = Utils.removePunctVect(snippets);
-
-
-    HashMap<String, Double> scoredSnippets = new HashMap<String, Double>();
+    String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
+    Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
 
     Joiner joiner = Joiner.on(" ");
     String collectiveAnswer = Utils.shrinkRepeatedChars(joiner.join(answers));
+    collectiveAnswer = Utils.shrinkRepeatedChars(Utils.removePunct(collectiveAnswer.toLowerCase()));
+    Vector<String> aTokens = new Vector<String>(Arrays.asList(collectiveAnswer.split("\\s")));
 
-    HashSet<String> qaWords = new HashSet<String>(Arrays.asList(question.split("\\s")));
-    qaWords.addAll(Arrays.asList(collectiveAnswer.split("\\s")));
+    HashSet<String> qaWords = new HashSet<String>(qTokens);
+    qaWords.addAll(aTokens);
 
-    for (String snippet : snippets) {
-      HashSet<String> sWords = new HashSet<String>(Arrays.asList(snippet.split("\\s")));
+
+    for (Snippet snippet : snippets) {
+      HashSet<String> sWords = new HashSet<String>(snippet.tokens());
       double sLength = 1.0 * sWords.size();
       sWords.retainAll(qaWords);
       double score = sWords.size() / sLength;
-
-      scoredSnippets.put(snippet, new Double(score));
+      snippet.setSimScore(score);
     }
-    return scoredSnippets;
+    return snippets;
   }
   
   public static HashMap<String, Double> simpleIntersectionNoQuery (String question, Vector<String> answers, Vector<String> snippets, String query) {
@@ -1312,7 +1412,9 @@ public static void populateDBWithRawQA() {
         return;
     }
     setThingsUp(args);
-    addGoogleSearchDocs();
+    // addGoogleSearchDocs();
+    // addBingSearchResultsFromFile();
+    testSimilarityMeasures1();
   }
 }
 
