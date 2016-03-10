@@ -53,6 +53,7 @@ public class KeywordRanking {
   private static DecimalFormat decimalFormat = null;
   private static FileInputStream fstream = null;
   private static BufferedReader br = null;
+  private static Random rand = null;
 
   public static class WordRanking {
     // a class to track and afterwards rank query words based on how often they appear in good queries
@@ -102,8 +103,51 @@ public class KeywordRanking {
   } 
 
 
-static public String FIELD_BODY = "contents"; // primary field name where all the text is stored
-static public String FIELD_ID = "id";
+  static public String FIELD_BODY = "contents"; // primary field name where all the text is stored
+  static public String FIELD_ID = "id";
+
+  //// SETUP METHODS
+    public static void setupDBConnection() {
+
+      try {
+        Class.forName("org.sqlite.JDBC");
+        dbConnection = DriverManager.getConnection("jdbc:sqlite:KeywordRankingDB.db");
+        dbConnection.setAutoCommit(false);
+        System.out.println("Opened database successfully");
+      } catch ( Exception e ) {
+        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        System.exit(0);
+      }    
+    }
+
+    public static void loggerSetup() {
+      try {
+        FileHandler fileHandler = new FileHandler("StealingSnippetsFromGoogle.%u.%g.txt");
+        fileHandler.setFormatter(new SimpleFormatter());
+        ConsoleHandler consoleHandler = new ConsoleHandler();
+        logger.addHandler(fileHandler);
+        logger.addHandler(consoleHandler);
+        logger.setLevel(Level.INFO);
+        logger.setUseParentHandlers(false);
+      } catch (IOException e) {
+        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        System.exit(0);
+      }
+    }
+
+    public static void setThingsUp(String[] args) throws IOException, FileNotFoundException, ParseException {
+      index_path = args[0].toString();
+      luc = new LuceneHelper(index_path); 
+      loggerSetup();
+      query = args[1].toString();
+      decimalFormat = new DecimalFormat("#.#");
+      setupDBConnection();
+      fstream = new FileInputStream("gtQuestions.txt");
+      br = new BufferedReader(new InputStreamReader(fstream));
+      rand = new Random();
+    }
+
+
 
 /// Different methods of ranking queries 
 /// #1 - baseline. Just using KLD. 
@@ -173,57 +217,16 @@ public static Vector<String> getTopWords(List<Entry<String, Double>> scoredQueri
 	}
 	return words;
 }
-
-
-
-public static void setupDBConnection() {
-
-    try {
-      Class.forName("org.sqlite.JDBC");
-      dbConnection = DriverManager.getConnection("jdbc:sqlite:KeywordRankingDB.db");
-      dbConnection.setAutoCommit(false);
-      System.out.println("Opened database successfully");
-
-
-    } catch ( Exception e ) {
-      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-      System.exit(0);
-    }    
-}
-
 public static Vector<String> passagesForQuestion(int questID) {
-	if (dbConnection == null) {
-		System.out.println("Setup db connection properly. Exiting...");
-		return null;
-	}
-	return null;
-}
-
-public static void loggerSetup() {
-  try {
-    FileHandler fileHandler = new FileHandler("PassageWiseComparingPassagesLog.%u.%g.txt");
-    fileHandler.setFormatter(new SimpleFormatter());
-    ConsoleHandler consoleHandler = new ConsoleHandler();
-    logger.addHandler(fileHandler);
-    logger.addHandler(consoleHandler);
-    logger.setLevel(Level.INFO);
-    logger.setUseParentHandlers(false);
-  } catch (IOException e) {
-    System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-    System.exit(0);
+  if (dbConnection == null) {
+    System.out.println("Setup db connection properly. Exiting...");
+    return null;
   }
+  return null;
 }
 
-public static void setThingsUp(String[] args) throws IOException, FileNotFoundException, ParseException {
-  index_path = args[0].toString();
-  luc = new LuceneHelper(index_path); 
-  loggerSetup();
-  query = args[1].toString();
-  decimalFormat = new DecimalFormat("#.#");
-  setupDBConnection();
-  fstream = new FileInputStream("gtQuestions.txt");
-  br = new BufferedReader(new InputStreamReader(fstream));
-}
+
+
 
   public static void testThings()  {/// Test RBO
 
@@ -253,9 +256,6 @@ public static void setThingsUp(String[] args) throws IOException, FileNotFoundEx
           // Vector<Vector<String>> ang = Utils.createNGrams(a, 1);
           // Vector<Vector<String>> bng = Utils.createNGrams(b, 1);
           // System.out.println(Utils.ngramIntersection(ang, bng));
-
-
-
 }
 
 public static void checkIfAnswersWereAddedToIndex() throws IOException {
@@ -383,16 +383,29 @@ public static Vector<String> getTopWordsFromQueries(Vector<String> queries, int 
   return words;
 }
 
+public static String getQueryByID(int qid) {
+  String queryText = "";
+  try {
+      String sql = "select queryText from NewQueries where queryID=" + qid + ";";
+      Statement queryTextStmt = dbConnection.createStatement(); 
+      ResultSet queryTextRS = queryTextStmt.executeQuery(sql);
+      queryText = queryTextRS.getString("queryText");
+    } catch (SQLException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    }
+  return queryText;
+}
+
 public static Vector<String> getQueriesTextByIDs(Vector<Integer> queryIDs) {
   Vector<String> queriesText = new Vector<String>();
 
   for (Integer qid : queryIDs) {
     try {
-      String sql = "select query from queries where qid=" + qid + ";";
+      String sql = "select queryText from NewQueries where queryID=" + qid + ";";
       Statement queryTextStmt = dbConnection.createStatement(); 
 
       ResultSet queryText = queryTextStmt.executeQuery(sql);
-      queriesText.add(queryText.getString("query"));
+      queriesText.add(queryText.getString("queryText"));
 
     } catch (SQLException e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -758,11 +771,9 @@ public static void passageWiseSim (int questID, Vector<String> gtQuery, PrintWri
     System.err.println( e.getClass().getName() + ": " + e.getMessage() );
     System.exit(0);
   }
-
 }
 
-
-  public static void recalculateRBO() throws IOException, FileNotFoundException, ParseException {
+public static void recalculateRBO() throws IOException, FileNotFoundException, ParseException {
     // setThingsUp();
     // luc = new LuceneHelper(index_path); 
     FileInputStream gt = new FileInputStream("gtQueries.txt");
@@ -800,16 +811,18 @@ public static void passageWiseSim (int questID, Vector<String> gtQuery, PrintWri
     }
 
     writer.close();
+}
 
-  }
-
-  public static void addGoogleSearchDocs() {
+public static void addGoogleSearchDocs() {
     int numDocs = 20;
     int docIDCount = 1;
+    int queryID = 1;
+    int snippetID = 1;
+
 
     try {
       Statement qidsStmt = dbConnection.createStatement();
-      String sql = "select qid, gtqueryID, gtquery from questions";
+      String sql = "select qid, gtqueryID, gtquery, rawQuestion from questions";
       ResultSet qids = qidsStmt.executeQuery(sql);
       int testCounter = 40;
 
@@ -818,46 +831,115 @@ public static void passageWiseSim (int questID, Vector<String> gtQuery, PrintWri
         int questID = qids.getInt("qid");
         int gtqueryID = qids.getInt("gtqueryID");
         String gtQuery = qids.getString("gtquery");
+        String rawQuestion = qids.getString("rawQuestion");
 
-        System.out.println("Working with question " + questID + "...");
-        System.out.println("The gt_query is " + gtQuery + "..." + "#" + gtqueryID);
+        logger.log(Level.INFO, "Working with question " + questID + "...");
 
+        rawQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(rawQuestion.toLowerCase()));
+        Vector<String> questTokens = Utils.str2vect(rawQuestion);
+        questTokens = Utils.removeShortTokens(Utils.dropStopWords(questTokens), 2);
+        HashSet<String> distinctTokens = new HashSet<String>(questTokens);
+        logger.log(Level.INFO, "Question tokens: " + distinctTokens);
 
+        Vector<String> allQueries = Utils.composeQueries1(new Vector<String>(distinctTokens), 3).get(3);
+        logger.log(Level.INFO, "all queries constructed are " + allQueries.size());
+        logger.log(Level.INFO, "Start inserting all queries in the database...");
 
-        HashMap<String, String> googleSearchResults = GoogleSearch.searchTerms(gtQuery, numDocs);
+        for (String q : allQueries) {
+          
+          // sql = "insert into newqueries (queryID, queryText, questID) values (" + queryID + ", ?, " + questID + ");";
 
-        Vector<String> urls = new Vector<String>();
-        Vector<String> rawHTMLs = new Vector<String>();
-        urls.addAll(googleSearchResults.keySet());
-        rawHTMLs.addAll(googleSearchResults.values());
-
-        for (int i = 0; i < urls.size(); ++i) {
-          String curURL = urls.get(i);
-          System.out.println(i + ":::" + curURL);
-          String curHTML = rawHTMLs.get(i);
-          sql = "insert into GoogleSearchDocs (queryID, docID, rawHTML, url, questID, queryText) " + 
-                "values (" + gtqueryID + ", " + docIDCount + ", ?, ?, ?, ?);";
-          docIDCount++;
-
-          PreparedStatement addToGoogleSearchStmt = dbConnection.prepareStatement(sql);
-          addToGoogleSearchStmt.setString(1, curHTML);
-          addToGoogleSearchStmt.setString(2, curURL);
-          addToGoogleSearchStmt.setString(3, "" + questID);
-          addToGoogleSearchStmt.setString(4, gtQuery);
-
-          // System.out.println(addToGoogleSearchStmt);
-          addToGoogleSearchStmt.executeUpdate();
-          addToGoogleSearchStmt.close();
-          dbConnection.commit();
-
-        } 
-        System.out.println("Waiting for 5 seconds...");
-        Thread.sleep(5000);
-
-        testCounter -= 1;
-        if (testCounter == 0) {
-          break;
+          // PreparedStatement insertQueryStmt = dbConnection.prepareStatement(sql);
+          // insertQueryStmt.setString(1, q);
+          // insertQueryStmt.executeUpdate();
+          queryID ++;
+          // insertQueryStmt.close();
+          // dbConnection.commit();
         }
+        logger.log(Level.INFO, "Inserted query #" + queryID + "...");
+
+        Vector<String> randomQueries = Utils.pickRandomSample(allQueries, 150);
+
+        //// build word distribution to make sure all words are equally represented
+          /*Vector<String> words = new Vector<String>();
+          for (String q : randomQueries) {
+            words.addAll(Utils.str2vect(q));
+          }
+
+          HashMap<String, Double> distr = Utils.buildDistribution(words);
+          for (Entry<String, Double> e : distr.entrySet()) {
+            System.out.println(e.getValue() + ":::" + e.getKey());
+          }*/
+
+
+        logger.log(Level.INFO, "Sart stealing from Google...");
+        PrintWriter writer = new PrintWriter(new FileOutputStream(new File("QueriesToGoogle.txt"), true));
+        for (String curQuery : randomQueries) {
+
+          writer.println(curQuery);
+
+          //// for the time being
+            /*boolean fetchSucceeded = false;
+            HashMap<String, String> googleSearchResults = new HashMap<String, String>();
+            while (!fetchSucceeded) {
+              try {
+                googleSearchResults = GoogleSearch.searchTermsSnippets(curQuery, numDocs);
+                fetchSucceeded = true;
+              }
+              catch (Exception e) {
+                /// if something went wrong, wait for 5 minutes and try again
+                logger.log(Level.INFO, "Something went wrong with fetching snippets. Wait for 5 mins and try again");
+                logger.log(Level.INFO, e.getClass().getName() + ": " + e.getMessage() );
+                Thread.sleep(1000*60*5);
+              }
+            }
+
+            Vector<String> urls = new Vector<String>();
+            Vector<String> snippets = new Vector<String>();
+
+            urls.addAll(googleSearchResults.keySet());
+            snippets.addAll(googleSearchResults.values());
+
+            logger.log(Level.INFO, "Start inserting stolen snippets in the database...");
+            for (int i = 0; i < urls.size(); ++i) {
+              String curURL = urls.get(i);
+              String curSnippet = snippets.get(i);
+
+              sql = "insert into NewSnippets (snippetID, snippet, docURL, questID, queryText)" +
+                      " values (" + snippetID + ", ?, ?, " + questID + ", ?);";
+              snippetID ++;
+
+              PreparedStatement addToGoogleSearchStmt = dbConnection.prepareStatement(sql);
+              addToGoogleSearchStmt.setString(1, curSnippet);
+              addToGoogleSearchStmt.setString(2, curURL);
+              addToGoogleSearchStmt.setString(3, curQuery);
+
+              addToGoogleSearchStmt.executeUpdate();
+              addToGoogleSearchStmt.close();
+              dbConnection.commit();
+
+          } */
+        
+          // logger.log(Level.INFO, "Inserted snippet #" + snippetID);
+          
+
+// also for the time being
+  /*          int min = 7000;
+            int max = 10000;
+            int randomWaitPeriod = rand.nextInt((max - min) + 1) + min;
+            logger.log(Level.INFO, "Waiting for " + randomWaitPeriod + " m seconds...");
+            Thread.sleep(randomWaitPeriod);
+  */
+
+
+          // testCounter -= 1;
+          // if (testCounter == 0) {
+          //   break;
+          // }
+        }
+        writer.println("\n");
+        writer.close();
+        
       }
       qidsStmt.close();
       qids.close();
@@ -868,16 +950,18 @@ public static void passageWiseSim (int questID, Vector<String> gtQuery, PrintWri
     catch (SQLException e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage() );
       System.exit(0);
-    } catch (IOException e) {
-      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-      System.exit(0);
-    } catch (InterruptedException e) {
+    } catch (FileNotFoundException e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage() );
       System.exit(0);
     }
+    // catch (InterruptedException e) {
+    //   System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    //   System.exit(0);
+    // }
 }
 
-  public static void TestSimMeasures () {
+
+public static void TestSimMeasures () {
     try {
       Statement qidsStmt = dbConnection.createStatement();
       String sql = "select qid, gtquery, qtokens, atokens from questions;";
@@ -936,9 +1020,9 @@ public static void passageWiseSim (int questID, Vector<String> gtQuery, PrintWri
       System.err.println( e.getClass().getName() + ": " + e.getMessage() );
       System.exit(0);
     }
-  }
+}
 
-  public static void passageRanking(Vector<String> passages, String question, String answer) {
+public static void passageRanking(Vector<String> passages, String question, String answer) {
     //// rank passages based on the number of words intersecting with the question text and the answer text.
     HashMap<String, Integer> pRanking = new HashMap<String, Integer> ();
 
@@ -979,164 +1063,484 @@ public static void passageWiseSim (int questID, Vector<String> gtQuery, PrintWri
         break;
       }
     }
+}
 
+
+public static void populateDBWithRawQA() {
+  Vector<Integer> validQids = new Vector<Integer>();
+  String sql = "";
+
+  /// get all the qids for questions existing in the database
+    try {
+      Statement qidsStmt = dbConnection.createStatement();
+      sql = "select qid from questions";
+      ResultSet qidsRS = qidsStmt.executeQuery(sql);
+
+      while (qidsRS.next()) {
+        validQids.add(new Integer(qidsRS.getInt("qid")));
+      }
+
+      qidsRS.close();
+      qidsStmt.close();
+    } catch (SQLException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }
+
+  /// get raw text from json file
+  /// and insert all answers into our database
+
+    String strLine;
+    int answerID = 1;
+    try {
+      while ((strLine = br.readLine()) != null)   {
+        /// Read next question in JSON format and initialize. Start.
+        JSONObject jsonObj = new JSONObject(strLine);
+        int questID = jsonObj.getInt("id");
+        if (!(validQids.contains(questID))) {
+
+          continue;
+        }
+
+
+
+        Vector<String> answers = Utils.JSONArrayToVect(jsonObj.getJSONArray("answers"));
+        String bestAnswer = "";
+        String qtitle = "";
+        String qbody = "";
+        try {
+          bestAnswer = jsonObj.getString("best");
+          qtitle = jsonObj.getString("title");
+          qbody = jsonObj.getString("body");
+
+        } catch (JSONException e) {
+          System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        }
+
+        String rawQuestion = qtitle + " " + qbody;
+
+        /// now insert raw question text to Questions table
+
+          sql = "update questions set rawQuestion=? where qid=" + questID + ";";
+
+          PreparedStatement addRawQTextStmt = dbConnection.prepareStatement(sql);
+          addRawQTextStmt.setString(1, rawQuestion);
+          addRawQTextStmt.executeUpdate();
+          addRawQTextStmt.close();
+
+          
+          int isBestAnswer = 0;
+          for (String a : answers) {
+            if (a.equals(bestAnswer)) {
+              isBestAnswer = 1;
+            }
+
+            sql = "insert into answers (answerID, questID, answerText, isBest) values (" + 
+                   answerID + ", " + questID + ", ?, " + isBestAnswer + ");";
+            PreparedStatement insertAnswerStmt = dbConnection.prepareStatement(sql);
+            insertAnswerStmt.setString(1, a);
+            insertAnswerStmt.executeUpdate();
+            insertAnswerStmt.close();
+
+            answerID += 1;
+            isBestAnswer = 0;
+          }
+          dbConnection.commit();
+
+      }
+    } catch (IOException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    } catch (JSONException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    } catch (SQLException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }
+}
+
+/*MARCH 9TH*/
+  public static void testSimilarityMeasures1() {
+  /// for each question compare its answers with google snippets and rank passages accordingly
+    try {
+      Statement qidsStmt = dbConnection.createStatement();
+      String sql = "select qid, rawQuestion, gtquery from questions;";
+      ResultSet qids = qidsStmt.executeQuery(sql);
+
+      while (qids.next()) {
+
+          int curQuestID = qids.getInt("qid");
+          String rawQuestion = qids.getString("rawQuestion");
+          String gtQuery = qids.getString("gtquery");
+
+          // for this question get all its answers 
+            sql = "select answerText from answers where questID=" + curQuestID + ";";
+            Statement answersStmt = dbConnection.createStatement();
+            ResultSet answersRS = answersStmt.executeQuery(sql);
+            Vector<String> answers = Utils.resultSet2Vect(answersRS, "answerText");
+            answersStmt.close();
+            answersRS.close();
+
+          // for this question get all its snippets 
+            sql = "select snippet from GoogleSearchDocs where questID=" + curQuestID + ";";
+            Statement snippetsStmt = dbConnection.createStatement();
+            ResultSet snippetsRS = snippetsStmt.executeQuery(sql);
+            Vector<String> snippets = Utils.resultSet2Vect(snippetsRS, "snippet");
+            snippetsStmt.close();
+            snippetsRS.close();
+
+          // apply different similarities here
+            HashMap<String, Double> scoredSnippets = simpleIntersection(rawQuestion, answers, snippets);
+            // HashMap<String, Double> scoredSnippets = simpleIntersectionNoQuery(rawQuestion, answers, snippets, gtQuery);
+            
+            List<Entry<String, Double>> rankedSnippets = Utils.entriesSortedByValues(scoredSnippets, "dec");
+            for (Entry<String, Double> e : rankedSnippets) {
+              System.out.println(e.getValue() + "::" + e.getKey());
+            }
+
+          input.next();
+
+      }
+      qidsStmt.close();
+      qids.close();
+
+    } catch (SQLException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }
   }
 
+  public static HashMap<String, Double> simpleIntersection (String question, Vector<String> answers, Vector<String> snippets) {
+  /// only do slight preprocessing - remove punctuation (no stopping or stemming)
+  /// compare words intersection - (question + collective answer) and (snippet)
+
+    question = Utils.shrinkRepeatedChars(Utils.removePunct(question));
+    answers = Utils.removePunctVect(answers);
+    snippets = Utils.removePunctVect(snippets);
+
+
+    HashMap<String, Double> scoredSnippets = new HashMap<String, Double>();
+
+    Joiner joiner = Joiner.on(" ");
+    String collectiveAnswer = Utils.shrinkRepeatedChars(joiner.join(answers));
+
+    HashSet<String> qaWords = new HashSet<String>(Arrays.asList(question.split("\\s")));
+    qaWords.addAll(Arrays.asList(collectiveAnswer.split("\\s")));
+
+    for (String snippet : snippets) {
+      HashSet<String> sWords = new HashSet<String>(Arrays.asList(snippet.split("\\s")));
+      double sLength = 1.0 * sWords.size();
+      sWords.retainAll(qaWords);
+      double score = sWords.size() / sLength;
+
+      scoredSnippets.put(snippet, new Double(score));
+    }
+    return scoredSnippets;
+  }
+  
+  public static HashMap<String, Double> simpleIntersectionNoQuery (String question, Vector<String> answers, Vector<String> snippets, String query) {
+  /// only do slight preprocessing - remove punctuation (no stopping or stemming)
+  /// % of intersectiong words that were not in the query
+  /// ((question + answer) \ (query) ) and (snippet)
+
+    question = Utils.shrinkRepeatedChars(Utils.removePunct(question));
+    query = Utils.shrinkRepeatedChars(Utils.removePunct(query));
+    answers = Utils.removePunctVect(answers);
+    snippets = Utils.removePunctVect(snippets);
+
+
+    HashMap<String, Double> scoredSnippets = new HashMap<String, Double>();
+
+    Joiner joiner = Joiner.on(" ");
+    String collectiveAnswer = Utils.shrinkRepeatedChars(joiner.join(answers));
+
+    HashSet<String> qaWords = new HashSet<String>(Arrays.asList(question.split("\\s")));
+    qaWords.addAll(Arrays.asList(collectiveAnswer.split("\\s")));
+    qaWords.removeAll(Arrays.asList(query.split("\\s")));
+
+    for (String snippet : snippets) {
+      HashSet<String> sWords = new HashSet<String>(Arrays.asList(snippet.split("\\s")));
+      double sLength = 1.0 * sWords.size();
+      sWords.retainAll(qaWords);
+      double score = sWords.size() / sLength;
+
+      scoredSnippets.put(snippet, new Double(score));
+    }
+
+    return scoredSnippets;
+  }
+
+  public static Vector<String> getRandomQueriesForQuetsionID(int questID, int sampleSize) {
+  //// Given question id, find all the queries constructed for it and then select a random sample,
+  //// which hopefully should be uniform
+    Vector<String> randomQueries = new Vector<String>();
+    try {
+      String sql = "select query from queries where qid in (select distinct queryid from qqp where questid=" + questID + ");";
+      Statement queriesStmt = dbConnection.createStatement();
+      ResultSet queriesRS = queriesStmt.executeQuery(sql);
+
+      Vector<String> allQueries = Utils.resultSet2Vect(queriesRS, "query");
+      randomQueries = Utils.pickRandomSample(allQueries, sampleSize);
+
+
+      Vector<String> words = new Vector<String>();
+      for (String q : randomQueries) {
+        words.addAll(Utils.str2vect(q));
+      }
+
+      HashMap<String, Double> distr = Utils.buildDistribution(words);
+      for (Entry<String, Double> e : distr.entrySet()) {
+        System.out.println(e.getValue() + ":::" + e.getKey());
+      }
+
+
+      queriesStmt.close();
+      queriesRS.close();
+
+    } catch (SQLException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }
+    return randomQueries;
+  }
 
 
   public static void main(String[] args) throws IOException, ParseException, JSONException, FileNotFoundException, ParseException {
-      if (args.length < 2) {
-          System.out.println("Input arguments: index_path, query string");
-          return;
-      }
-
-      setThingsUp(args);
-      TestSimMeasures();
-
-      // addGoogleSearchDocs();
-      // GoogleSearch.searchTerms("dogs eat rocks", 16);
-      // addGTQueriesToDB();
-      // checkIfAnswersWereAddedToIndex();
-      // recalculateRBO();
-
-
-      System.out.println("DONE");
-      input.next();
-      
-
-      String sql = "";
-      Statement stmt = null;
-      try {
-      	stmt = dbConnection.createStatement();
-      } catch (SQLException e) {
-      	System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-  	  	System.exit(0);
-      }
-      
-      String strLine;
-
-      // PrintWriter writer = new PrintWriter(new FileOutputStream(new File("PassageWiseSimMeasures.txt"), true));
-
-      /// working with questions 1-30
-      int minQID = 1;
-      int maxQID = 30;
-      while ((strLine = br.readLine()) != null)   {
-
-        /// Read next question in JSON format and initialize. Start.
-          JSONObject jsonObj = new JSONObject(strLine);
-          int questID = jsonObj.getInt("id");
-
-          Vector<String> gtQuery = Utils.JSONArrayToVect(jsonObj.getJSONArray("gt_query"));
-          Joiner joiner = Joiner.on(" ");
-          Vector<String> analyzedGtQuery = new Vector<String>(luc.lucene_tokenize(new EnglishAnalyzer(), joiner.join(gtQuery)));
-          System.out.println(analyzedGtQuery.toString());
-
-          if (! (questID >= minQID) && (questID <= maxQID) ) {
-            continue;
-          }
-          // logger.log(Level.INFO, "Working with question " + questID + "...");
-          // averageSim(questID, analyzedGtQuery, writer);
-          // passageWiseSim(questID, analyzedGtQuery, writer);
-
-          // writer.flush();
-          
-
-          
-/// Calculating similarity and writing to the db
-/*          try {
-          	sql = "select atokens, qtokens from questions where qid=" + questID + ";";
-
-          	ResultSet qaTokens = stmt.executeQuery(sql);
-          	Vector<String> qtokens = Utils.str2vect(qaTokens.getString("qtokens"));
-          	Vector<String> atokens = Utils.str2vect(qaTokens.getString("atokens"));
-          	Vector<String> allTokens = new Vector<String>(qtokens);
-          	allTokens.addAll(atokens);
-
-          	sql = "select pid from qqp where questid=" + questID + ";";
-          	ResultSet pids = stmt.executeQuery(sql);	
-          	Statement passageStmt = dbConnection.createStatement();
-
-          	Statement addScoreStmt = dbConnection.createStatement();
-
-          	while (pids.next()) {
-          		int pid = pids.getInt("pid");
-          		sql = "select passage from passages where pid=" + pid + ";";
-          		ResultSet curPassageResultSet = passageStmt.executeQuery(sql);
-          		String curPassage = curPassageResultSet.getString("passage");
-
-          		Vector<String> curPassageTokens = Utils.str2vect(curPassage);
-
-          		// /// SIMILARITY TIME BABY!
-          		double aSim = Utils.KLD_JelinekMercerSmoothing(atokens, curPassageTokens, 0.9, luc);
-          		double qSim = Utils.KLD_JelinekMercerSmoothing(qtokens, curPassageTokens, 0.9, luc);
-          		double allSim = Utils.KLD_JelinekMercerSmoothing(allTokens, curPassageTokens, 0.9, luc);
-          		sql = "insert into KLDSim (pid, questid, atokensSim, qtokensSim, alltokensSim) values (" + pid + 
-          		", " + questID + ", " + aSim + ", " + qSim + ", " + allSim + ");";
-          		addScoreStmt.executeUpdate(sql);
-              curPassageResultSet.close();
-          	}
-            passageStmt.close();
-            addScoreStmt.close();
-            
-            pids.close();
-
-          } catch (SQLException e) {
-          	System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-          	continue;
-          } */
-
-
-//           /// ***** Compare passage and answers using repeated words start 
-
-//           // Vector<Entry<String, Double>> passagesIntersection = Utils.answersIntersection(passages, 0.5, luc);
-
-//           // // get high repetition words
-//           // Vector<String> passagesIntersectionWords = new Vector<String>();
-//           // for (Entry<String, Double> e : passagesIntersection) {
-//           //   // System.out.println (e.getKey() + " --- " + e.getValue());
-//           //   passagesIntersectionWords.add(e.getKey());
-//           // }
-
-//           // // find how many of them were in the answers
-//           // passagesIntersectionWords.retainAll(answersIntersectionWords);
-
-//           // System.out.println(i + ". " + current_query);
-//           // System.out.println("Frequent words in passages");
-//           // for (Entry<String, Double> e : passagesIntersection) {
-//           //   System.out.println (e.getKey() + " --- " + e.getValue());
-//           // }
-
-//           // System.out.println("Frequent words in answers");
-//           // System.out.println(answersIntersectionWords);
-
-//           // System.out.println("These words intersect");
-//           // System.out.println(passagesIntersectionWords);
-          
-//           // double score = (double)((double)passagesIntersectionWords.size() / (double)answersIntersectionWords.size());
-
-//           // if (score > maxScore) {
-//           //   maxScore = score;
-//           // }
-
-//           // System.out.println(score);
-//           // queryRanking.put(current_query, new Double(score));
-//           // // input.next();
-
-//           /// ***** Compare passage and answers using repeated words end        
+    if (args.length < 2) {
+        System.out.println("Input arguments: index_path, query string");
+        return;
     }
-
-    try {
-      
-	    stmt.close();
-	    dbConnection.commit();
-	    dbConnection.close();
-    } catch (SQLException e) {
-	  	System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-	  	System.exit(0);
-    }
-    // writer.close();
-    br.close();
+    setThingsUp(args);
+    addGoogleSearchDocs();
   }
 }
+
+//// USEFUL CODE SNIPPETS
+
+  //// 1. Loop through the questions from DB
+    /*
+    try {
+      Statement qidsStmt = dbConnection.createStatement();
+      String sql = "select qid, gtquery, qtokens, atokens from questions;";
+      ResultSet qids = qidsStmt.executeQuery(sql);
+
+      while (qids.next()) {
+          int curQuestID = qids.getInt("qid");
+          // do something here
+      }
+      qidsStmt.close();
+      qids.close();
+
+    } catch (SQLException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }
+    */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // populateDBWithRawQA();
+        // TestSimMeasures();
+        // addGoogleSearchDocs();
+        // GoogleSearch.searchTerms("dogs eat rocks", 16);
+        // addGTQueriesToDB();
+        // checkIfAnswersWereAddedToIndex();
+        // recalculateRBO();
+
+
+        // System.out.println("DONE");
+        // input.next();
+        
+
+        /*String sql = "";
+        Statement stmt = null;
+        try {
+
+        	stmt = dbConnection.createStatement();
+        } catch (SQLException e) {
+        	System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    	  	System.exit(0);
+        }
+        
+        String strLine;
+
+        // PrintWriter writer = new PrintWriter(new FileOutputStream(new File("PassageWiseSimMeasures.txt"), true));
+
+        /// working with questions 1-30
+        int minQID = 1;
+        int maxQID = 30;
+        while ((strLine = br.readLine()) != null)   {
+
+          /// Read next question in JSON format and initialize. Start.
+            JSONObject jsonObj = new JSONObject(strLine);
+            int questID = jsonObj.getInt("id");
+
+            Vector<String> gtQuery = Utils.JSONArrayToVect(jsonObj.getJSONArray("gt_query"));
+            Joiner joiner = Joiner.on(" ");
+            Vector<String> analyzedGtQuery = new Vector<String>(luc.lucene_tokenize(new EnglishAnalyzer(), joiner.join(gtQuery)));
+            System.out.println(analyzedGtQuery.toString());
+
+            if (! (questID >= minQID) && (questID <= maxQID) ) {
+              continue;
+            }
+            // logger.log(Level.INFO, "Working with question " + questID + "...");
+            // averageSim(questID, analyzedGtQuery, writer);
+            // passageWiseSim(questID, analyzedGtQuery, writer);
+
+            // writer.flush();
+            
+
+
+            
+  /// Calculating similarity and writing to the db
+            try {
+            	sql = "select atokens, qtokens from questions where qid=" + questID + ";";
+
+            	ResultSet qaTokens = stmt.executeQuery(sql);
+            	Vector<String> qtokens = Utils.str2vect(qaTokens.getString("qtokens"));
+            	Vector<String> atokens = Utils.str2vect(qaTokens.getString("atokens"));
+            	Vector<String> allTokens = new Vector<String>(qtokens);
+            	allTokens.addAll(atokens);
+
+            	sql = "select pid from qqp where questid=" + questID + ";";
+            	ResultSet pids = stmt.executeQuery(sql);	
+            	Statement passageStmt = dbConnection.createStatement();
+
+            	Statement addScoreStmt = dbConnection.createStatement();
+
+            	while (pids.next()) {
+            		int pid = pids.getInt("pid");
+            		sql = "select passage from passages where pid=" + pid + ";";
+            		ResultSet curPassageResultSet = passageStmt.executeQuery(sql);
+            		String curPassage = curPassageResultSet.getString("passage");
+
+            		Vector<String> curPassageTokens = Utils.str2vect(curPassage);
+
+            		// /// SIMILARITY TIME BABY!
+            		double aSim = Utils.KLD_JelinekMercerSmoothing(atokens, curPassageTokens, 0.9, luc);
+            		double qSim = Utils.KLD_JelinekMercerSmoothing(qtokens, curPassageTokens, 0.9, luc);
+            		double allSim = Utils.KLD_JelinekMercerSmoothing(allTokens, curPassageTokens, 0.9, luc);
+            		sql = "insert into KLDSim (pid, questid, atokensSim, qtokensSim, alltokensSim) values (" + pid + 
+            		", " + questID + ", " + aSim + ", " + qSim + ", " + allSim + ");";
+            		addScoreStmt.executeUpdate(sql);
+                curPassageResultSet.close();
+            	}
+              passageStmt.close();
+              addScoreStmt.close();
+              
+              pids.close();
+
+            } catch (SQLException e) {
+            	System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            	continue;
+            } 
+
+
+  //           /// ***** Compare passage and answers using repeated words start 
+
+  //           // Vector<Entry<String, Double>> passagesIntersection = Utils.answersIntersection(passages, 0.5, luc);
+
+  //           // // get high repetition words
+  //           // Vector<String> passagesIntersectionWords = new Vector<String>();
+  //           // for (Entry<String, Double> e : passagesIntersection) {
+  //           //   // System.out.println (e.getKey() + " --- " + e.getValue());
+  //           //   passagesIntersectionWords.add(e.getKey());
+  //           // }
+
+  //           // // find how many of them were in the answers
+  //           // passagesIntersectionWords.retainAll(answersIntersectionWords);
+
+  //           // System.out.println(i + ". " + current_query);
+  //           // System.out.println("Frequent words in passages");
+  //           // for (Entry<String, Double> e : passagesIntersection) {
+  //           //   System.out.println (e.getKey() + " --- " + e.getValue());
+  //           // }
+
+  //           // System.out.println("Frequent words in answers");
+  //           // System.out.println(answersIntersectionWords);
+
+  //           // System.out.println("These words intersect");
+  //           // System.out.println(passagesIntersectionWords);
+            
+  //           // double score = (double)((double)passagesIntersectionWords.size() / (double)answersIntersectionWords.size());
+
+  //           // if (score > maxScore) {
+  //           //   maxScore = score;
+  //           // }
+
+  //           // System.out.println(score);
+  //           // queryRanking.put(current_query, new Double(score));
+  //           // // input.next();
+
+  //           /// ***** Compare passage and answers using repeated words end        
+      
+      }
+
+      try {
+        
+  	    stmt.close();
+  	    dbConnection.commit();
+  	    dbConnection.close();
+      } catch (SQLException e) {
+  	  	System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+  	  	System.exit(0);
+      }
+      // writer.close();
+      br.close();*/
+  
 
 

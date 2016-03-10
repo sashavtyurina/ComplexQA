@@ -37,6 +37,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 // misc
 import java.text.DecimalFormat;
 import org.json.*;
+import java.sql.*;
 
 
 
@@ -44,9 +45,29 @@ public class Utils {
   private static Vector<String> stopwords;
   private static Scanner input = new Scanner(System.in);
 
+  public static Vector<String> resultSet2Vect(ResultSet rs, String fieldName) {
+    Vector<String> result = new Vector<String>();
+    try {
+      while(rs.next()) {
+        result.add(rs.getString(fieldName));
+      }
+    } catch (SQLException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }
+    return result;
+  }
+
   public static Vector<String> str2vect(String str) {
     // given a space separated string, convert it to vector<String>
-    return new Vector<String>(Arrays.asList(str.split("\\s")));
+
+    Vector<String> tokens = new Vector<String>();
+    for (String s :Arrays.asList(str.split("\\s"))) {
+      if (!s.trim().equals("")) {
+        tokens.add(s);
+      }
+    }
+    return tokens;
   }
 
 public static Vector<String> JSONArrayToVect(JSONArray jarr) throws JSONException {
@@ -258,11 +279,28 @@ public static void addtoDB () {
       return stemmed;
   }
 
-  private static String removePunct(String str) {
-    return str.replaceAll("[^A-Za-z\\s\\d]", "");
+  public static String removePunct(String str) {
+    return str.replaceAll("[^A-Za-z'\\s\\d]", " ");
   }
 
-  private static String shrinkRepeatedChars(String str) {
+  public static Vector<String> removeShortTokens(Vector<String> vect, int minLength) {
+    for (int i = 0; i < vect.size(); ++i) {
+      if (vect.get(i).length() < minLength) {
+        vect.remove(i);
+      }
+    }
+    return vect;
+  }
+
+  public static Vector<String> removePunctVect(Vector<String> vect) {
+    for (int i = 0;  i < vect.size(); ++i) {
+      vect.set(i, removePunct(vect.get(i)));
+    } 
+
+    return vect;
+  }
+
+  public static String shrinkRepeatedChars(String str) {
     Pattern p = Pattern.compile("(.)\\1{2,}");
     Matcher m = p.matcher(str);
     String res = m.replaceAll("$1"); 
@@ -600,35 +638,20 @@ public static void addtoDB () {
     return res;  
   }
 
-   public static Vector<String> pickRandomSample(Vector<String> queries, int sample_size){
-    // // first select all the queries of the length mazQueryLength
-    // Vector<String> long_queries = new Vector<String>();
-    
-    // Vector<String> queries = Utils.pick_queries_of_length(all_queries, maxQueryLength);
-
-
-    // for (int i = queries.size() - 1; i >= 0; --i) {
-    //   Vector<String> query_tokens = new Vector<String>(Arrays.asList(queries.get(i).split("\\s")));
-    //   if (query_tokens.size() < maxQueryLength) {
-    //     break;
-    //   }
-    //   long_queries.add(Utils.join_vector(query_tokens, " "));
-    // }
-
-    // System.out.println(long_queries);
-    // now long_queries is a vector of queries of size maxQueryLength. We will randomly pick a sample of 100 queries
+  public static Vector<String> pickRandomSample(Vector<String> queries, int sampleSize){
+  //// Given a vector of queries pick random sample of size sampleSize
     Random rand = new Random();
     // int max_sample_size = 100;
     int min = 0;
     int max = queries.size();
     Vector<String> randomSample = new Vector<String>();
 
-    if (max <= sample_size) {
+    if (max <= sampleSize) {
       return queries;
     }
 
     int count = 0;
-    while (count < sample_size) {
+    while (count < sampleSize) {
       int randomNum = rand.nextInt((max - min)) + min;
       // System.out.print(randomNum + "; ");
       String query = queries.get(randomNum);
@@ -639,10 +662,9 @@ public static void addtoDB () {
         count ++;
       }
     }
-
-
     return randomSample;
   }
+
 
   public static List<Entry<String, Double>> pointwiseKLD(Vector<String> foreground, LuceneHelper luc) {
     // returns KLD value with the background of the entire index
