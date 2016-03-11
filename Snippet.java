@@ -7,13 +7,16 @@ public class Snippet {
 	public String processed;
 	private Vector<String> tokens;
 
+
 	public int snippetID;
 	public int queryID;
 	public int questionID;
+	public boolean producedByTrueQuery = false;
+
 
 	private double simScore; // this will change depending on what measure is used 
 
-	public Snippet(String _original, String _queryText, int _snippetID, int _queryID, int _questionID) {
+	public Snippet(String _original, String _queryText, int _snippetID, int _queryID, int _questionID, boolean _producedByTrueQuery) {
 		original = _original;
 		snippetID = _snippetID;
 		queryID = _queryID;
@@ -23,6 +26,7 @@ public class Snippet {
 		processed = Utils.shrinkRepeatedChars(Utils.removePunct(original.toLowerCase()));
 		tokens = Utils.removeShortTokens(new Vector<String>(Arrays.asList(processed.split("\\s"))), 2);
 		simScore = -1.0;
+		producedByTrueQuery = _producedByTrueQuery;
 	}
 
 	public static Vector<Snippet> rsToSnippetList (ResultSet snippetsRS) {
@@ -35,7 +39,7 @@ public class Snippet {
 				int snipID = snippetsRS.getInt("snippetID");
 				int querID = snippetsRS.getInt("queryID");
 				int questID = snippetsRS.getInt("questID");
-				snippetsList.add(new Snippet(snippet, query, snipID, querID, questID));
+				snippetsList.add(new Snippet(snippet, query, snipID, querID, questID, false));
 
 			}
 		} catch (SQLException e) {

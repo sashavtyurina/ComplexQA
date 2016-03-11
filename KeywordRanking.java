@@ -1259,20 +1259,25 @@ public static void populateDBWithRawQA() {
             Statement snippetsStmt = dbConnection.createStatement();
             ResultSet snippetsRS = snippetsStmt.executeQuery(sql);
             Vector<Snippet> snippets = Snippet.rsToSnippetList(snippetsRS);
-
-
-            // HashMap<String, String> snippets = new HashMap<String, String>();
-            // try {
-            //   while(rs.next()) {
-            //     snippets.put(snippetsRS.getString("queryText"), snippetsRS.getString("snippet"));
-            //   }
-            // } catch (SQLException e) {
-            //   System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            //   System.exit(0);
-            // }
-
             snippetsStmt.close();
             snippetsRS.close();
+
+          // also select ground truth queries and their snippets
+            sql = "select queryText, snippet from googlesearchdocs where questid=" + curQuestID + ";";
+            Statement gtSnippetsStmt = dbConnection.createStatement();
+            ResultSet gtSnippetsRS = gtSnippetsStmt.executeQuery(sql);
+            Vector<Snippet> gtSnippets = new Vector<Snippet>();
+
+            while (gtSnippetsRS.next()) {
+              String snippetText = gtSnippetsRS.getString("snippet");
+              String queryText = gtSnippetsRS.getString("queryText");
+              Snippet s = new Snippet(snippetText, queryText, -1, -1, curQuestID, true);
+              gtSnippets.add(s);
+            }
+            gtSnippetsStmt.close();
+            gtSnippetsRS.close();
+
+            snippets.addAll(gtSnippets);
 
           // apply different similarities here
             Vector<Snippet> scoredSnippets = simpleIntersection(rawQuestion, answers, snippets);
@@ -1282,7 +1287,7 @@ public static void populateDBWithRawQA() {
             writer.println("::SNIPPETS::");
             for (Snippet s : rankedSnippets) {
               topQueryWords.addAll(Arrays.asList(s.queryText.split("\\s")));
-              writer.println(s.queryText + " :: " + s.original + "\n---");
+              writer.println(s.producedByTrueQuery + "::" + s.queryText + " :: " + s.original + "\n---");
             }
 
             List<Entry<String, Double>> rankedWords = Utils.entriesSortedByValues(Utils.buildDistribution(topQueryWords), "dec");
