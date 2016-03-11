@@ -1169,16 +1169,19 @@ public static void populateDBWithRawQA() {
           continue;
         }
 
-
-
         Vector<String> answers = Utils.JSONArrayToVect(jsonObj.getJSONArray("answers"));
         String bestAnswer = "";
         String qtitle = "";
         String qbody = "";
+
+        String qtQuery = "";
         try {
           bestAnswer = jsonObj.getString("best");
           qtitle = jsonObj.getString("title");
           qbody = jsonObj.getString("body");
+
+          Joiner joiner = Joiner.on(" ");
+          qtQuery = joiner.join(Utils.JSONArrayToVect(jsonObj.getJSONArray("gt_query")));
 
         } catch (JSONException e) {
           System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -1188,15 +1191,17 @@ public static void populateDBWithRawQA() {
 
         /// now insert raw question text to Questions table
 
-          sql = "update questions set rawQuestion=? where qid=" + questID + ";";
+          // sql = "update questions set rawQuestion=? where qid=" + questID + ";";
+          sql = "update questions set gtquery=? where qid=" + questID + ";";
 
           PreparedStatement addRawQTextStmt = dbConnection.prepareStatement(sql);
-          addRawQTextStmt.setString(1, rawQuestion);
+          // addRawQTextStmt.setString(1, rawQuestion);
+          addRawQTextStmt.setString(1, qtQuery);
           addRawQTextStmt.executeUpdate();
           addRawQTextStmt.close();
 
           
-          int isBestAnswer = 0;
+  /*          int isBestAnswer = 0;
           for (String a : answers) {
             if (a.equals(bestAnswer)) {
               isBestAnswer = 1;
@@ -1211,7 +1216,7 @@ public static void populateDBWithRawQA() {
 
             answerID += 1;
             isBestAnswer = 0;
-          }
+          }*/
           dbConnection.commit();
 
       }
@@ -1234,7 +1239,7 @@ public static void populateDBWithRawQA() {
       Statement qidsStmt = dbConnection.createStatement();
       String sql = "select qid, rawQuestion, gtquery from questions;";
       ResultSet qids = qidsStmt.executeQuery(sql);
-      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("SimpleIntersection.txt"), true));
+      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("SimpleIntersectionNoQueryWords.txt"), true));
 
 
       while (qids.next()) {
@@ -1280,7 +1285,9 @@ public static void populateDBWithRawQA() {
             snippets.addAll(gtSnippets);
 
           // apply different similarities here
-            Vector<Snippet> scoredSnippets = simpleIntersection(rawQuestion, answers, snippets);
+            // Vector<Snippet> scoredSnippets = simpleIntersection(rawQuestion, answers, snippets);
+            Vector<Snippet> scoredSnippets = simpleIntersectionNoQuery(rawQuestion, answers, snippets);
+            
             List<Snippet> rankedSnippets = Utils.sliceCollection(Snippet.sortSnippetsByScore(scoredSnippets, "dec"), 0, 20);
 
             Vector<String> topQueryWords = new Vector<String>();
@@ -1333,6 +1340,8 @@ public static void populateDBWithRawQA() {
     HashSet<String> qaWords = new HashSet<String>(qTokens);
     qaWords.addAll(aTokens);
 
+    qaWords.removeAll(Arrays.asList(query.split("\\s")));
+
 
     for (Snippet snippet : snippets) {
       HashSet<String> sWords = new HashSet<String>(snippet.tokens());
@@ -1344,36 +1353,47 @@ public static void populateDBWithRawQA() {
     return snippets;
   }
   
-  public static HashMap<String, Double> simpleIntersectionNoQuery (String question, Vector<String> answers, Vector<String> snippets, String query) {
+  public static Vector<Snippet> simpleIntersectionNoQuery (String question, Vector<String> answers, Vector<Snippet> snippets) {
   /// only do slight preprocessing - remove punctuation (no stopping or stemming)
   /// % of intersectiong words that were not in the query
   /// ((question + answer) \ (query) ) and (snippet)
 
-    question = Utils.shrinkRepeatedChars(Utils.removePunct(question));
-    query = Utils.shrinkRepeatedChars(Utils.removePunct(query));
-    answers = Utils.removePunctVect(answers);
-    snippets = Utils.removePunctVect(snippets);
-
-
-    HashMap<String, Double> scoredSnippets = new HashMap<String, Double>();
+    String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
+    Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
 
     Joiner joiner = Joiner.on(" ");
     String collectiveAnswer = Utils.shrinkRepeatedChars(joiner.join(answers));
+    collectiveAnswer = Utils.shrinkRepeatedChars(Utils.removePunct(collectiveAnswer.toLowerCase()));
+    Vector<String> aTokens = new Vector<String>(Arrays.asList(collectiveAnswer.split("\\s")));
 
-    HashSet<String> qaWords = new HashSet<String>(Arrays.asList(question.split("\\s")));
-    qaWords.addAll(Arrays.asList(collectiveAnswer.split("\\s")));
-    qaWords.removeAll(Arrays.asList(query.split("\\s")));
+    HashSet<String> qaWords = new HashSet<String>(qTokens);
+    qaWords.addAll(aTokens);
+    // qaWords.removeAll(Arrays.asList(query.split("\\s")));
 
-    for (String snippet : snippets) {
-      HashSet<String> sWords = new HashSet<String>(Arrays.asList(snippet.split("\\s")));
+
+    for (Snippet snippet : snippets) {
+      Vector<String> queryTokens = new Vector<String>(Arrays.asList(snippet.queryText.split("\\s")));
+      HashSet<String> sWords = new HashSet<String>(snippet.tokens());
+      // System.out.println(sWords);
+      sWords.removeAll(queryTokens);
+
+      HashSet<String> qaWordsNoQuery = new HashSet<String>(qaWords);
+      qaWordsNoQuery.removeAll(queryTokens);
+
+      
+      // System.out.println(snippet.queryText);
+      // System.out.println(sWords);
+      // System.out.println(qaWordsNoQuery);
+
       double sLength = 1.0 * sWords.size();
-      sWords.retainAll(qaWords);
+      sWords.retainAll(qaWordsNoQuery);
       double score = sWords.size() / sLength;
+      snippet.setSimScore(score);
 
-      scoredSnippets.put(snippet, new Double(score));
+
+      // input.next();
     }
-
-    return scoredSnippets;
+    return snippets;
   }
 
   public static Vector<String> getRandomQueriesForQuetsionID(int questID, int sampleSize) {
@@ -1411,16 +1431,18 @@ public static void populateDBWithRawQA() {
   }
 
 
-  public static void main(String[] args) throws IOException, ParseException, JSONException, FileNotFoundException, ParseException {
-    if (args.length < 2) {
-        System.out.println("Input arguments: index_path, query string");
-        return;
-    }
-    setThingsUp(args);
-    // addGoogleSearchDocs();
-    // addBingSearchResultsFromFile();
-    testSimilarityMeasures1();
+
+public static void main(String[] args) throws IOException, ParseException, JSONException, FileNotFoundException, ParseException {
+  if (args.length < 2) {
+      System.out.println("Input arguments: index_path, query string");
+      return;
   }
+  setThingsUp(args);
+  // addGoogleSearchDocs();
+  // addBingSearchResultsFromFile();
+  testSimilarityMeasures1();
+  // populateDBWithRawQA();
+}
 }
 
 //// USEFUL CODE SNIPPETS
