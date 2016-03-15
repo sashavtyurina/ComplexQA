@@ -1260,7 +1260,7 @@ public static void populateDBWithRawQA() {
             answersRS.close();
 
           // for this question get all its snippets 
-            sql = "select snippetID, queryID, questID, queryText, snippet from NewSnippets where questID=" + curQuestID + ";";
+            sql = "select snippetID, queryID, questID, queryText, snippet, docURL from NewSnippets where questID=" + curQuestID + ";";
             Statement snippetsStmt = dbConnection.createStatement();
             ResultSet snippetsRS = snippetsStmt.executeQuery(sql);
             Vector<Snippet> snippets = Snippet.rsToSnippetList(snippetsRS);
@@ -1268,12 +1268,17 @@ public static void populateDBWithRawQA() {
             snippetsRS.close();
 
           // also select ground truth queries and their snippets
-            sql = "select queryText, snippet from googlesearchdocs where questid=" + curQuestID + ";";
+            sql = "select queryText, snippet, url from googlesearchdocs where questid=" + curQuestID + ";";
             Statement gtSnippetsStmt = dbConnection.createStatement();
             ResultSet gtSnippetsRS = gtSnippetsStmt.executeQuery(sql);
             Vector<Snippet> gtSnippets = new Vector<Snippet>();
 
             while (gtSnippetsRS.next()) {
+              String gtURL = gtSnippetsRS.getString("url");
+              if (gtURL.contains("answers.yahoo.")) {
+                continue;
+              }
+              
               String snippetText = gtSnippetsRS.getString("snippet");
               String queryText = gtSnippetsRS.getString("queryText");
               Snippet s = new Snippet(snippetText, queryText, -1, -1, curQuestID, true);

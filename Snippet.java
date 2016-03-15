@@ -34,6 +34,11 @@ public class Snippet {
 		Vector<Snippet> snippetsList = new Vector<Snippet>();
 		try {
 			while (snippetsRS.next()) {
+				String docURL = snippetsRS.getString("docURL");
+				if (docURL.contains("answers.yahoo.")) {
+					continue;
+				}
+
 				String snippet = snippetsRS.getString("snippet");
 				String query = snippetsRS.getString("queryText");
 				int snipID = snippetsRS.getInt("snippetID");
