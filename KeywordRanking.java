@@ -1239,7 +1239,7 @@ public static void populateDBWithRawQA() {
       Statement qidsStmt = dbConnection.createStatement();
       String sql = "select qid, rawQuestion, gtquery from questions;";
       ResultSet qids = qidsStmt.executeQuery(sql);
-      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("SimpleIntersectionNoQueryWords.txt"), true));
+      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("KLDSimilarity.txt"), true));
 
 
       while (qids.next()) {
@@ -1278,7 +1278,7 @@ public static void populateDBWithRawQA() {
               if (gtURL.contains("answers.yahoo.")) {
                 continue;
               }
-              
+
               String snippetText = gtSnippetsRS.getString("snippet");
               String queryText = gtSnippetsRS.getString("queryText");
               Snippet s = new Snippet(snippetText, queryText, -1, -1, curQuestID, true);
@@ -1291,7 +1291,8 @@ public static void populateDBWithRawQA() {
 
           // apply different similarities here
             // Vector<Snippet> scoredSnippets = simpleIntersection(rawQuestion, answers, snippets);
-            Vector<Snippet> scoredSnippets = simpleIntersectionNoQuery(rawQuestion, answers, snippets);
+            // Vector<Snippet> scoredSnippets = simpleIntersectionNoQuery(rawQuestion, answers, snippets);
+            Vector<Snippet> scoredSnippets = kldSimilarity(rawQuestion, answers, snippets);
             
             List<Snippet> rankedSnippets = Utils.sliceCollection(Snippet.sortSnippetsByScore(scoredSnippets, "dec"), 0, 20);
 
@@ -1398,6 +1399,45 @@ public static void populateDBWithRawQA() {
 
       // input.next();
     }
+    return snippets;
+  }
+
+  public static Vector<Snippet> kldSimilarity(String question, Vector<String> answers, Vector<Snippet> snippets) {
+  //// Concat together question, collective answer and use it to compute KLD btw that and each snippet   
+    String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
+    Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
+
+    Joiner joiner = Joiner.on(" ");
+    String collectiveAnswer = Utils.shrinkRepeatedChars(joiner.join(answers));
+    collectiveAnswer = Utils.shrinkRepeatedChars(Utils.removePunct(collectiveAnswer.toLowerCase()));
+    Vector<String> aTokens = new Vector<String>(Arrays.asList(collectiveAnswer.split("\\s")));
+
+    aTokens.addAll(qTokens);
+    Vector<String> background = new Vector<String>(aTokens);
+    int minShortTokenLength = 2;
+    background = Utils.removeShortTokens(background, minShortTokenLength);
+
+    for (Snippet s : snippets) {
+      try {
+        // input.next();
+        Vector<String> foreground = Utils.removeShortTokens(s.tokens(), minShortTokenLength);
+        // System.out.println("foreground = " + foreground);
+        // System.out.println("background = " + background);
+        double kldSimScore = Utils.KLD_JelinekMercerSmoothing(foreground, background, 0.9, luc);
+        s.setSimScore(kldSimScore);
+
+        System.out.println(s.original);
+        System.out.println(kldSimScore);
+        System.out.println("\n***");
+      } catch (IOException e) {
+        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        continue;
+      } catch (ParseException e) {
+        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        continue;
+      }
+    }
+
     return snippets;
   }
 

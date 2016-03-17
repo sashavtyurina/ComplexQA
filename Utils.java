@@ -38,6 +38,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import java.text.DecimalFormat;
 import org.json.*;
 import java.sql.*;
+import com.google.common.base.Joiner;
 
 
 
@@ -284,12 +285,21 @@ public static void addtoDB () {
   }
 
   public static Vector<String> removeShortTokens(Vector<String> vect, int minLength) {
+    Vector<String> noShortTokens = new Vector<String>();
+
     for (int i = 0; i < vect.size(); ++i) {
-      if (vect.get(i).length() < minLength) {
-        vect.remove(i);
+      String token = vect.get(i).trim();
+      // System.out.println("Token = " + token);
+      // System.out.println("Length is " + token.length());
+      if (!(token.length() < minLength)) {
+        // vect.remove(i);
+        noShortTokens.add(token);
+        // System.out.println("Not a short token");
+      } else {
+        // System.out.println("Is a short token");
       }
     }
-    return vect;
+    return noShortTokens;
   }
 
   public static Vector<String> removePunctVect(Vector<String> vect) {
@@ -368,11 +378,18 @@ public static void addtoDB () {
       TokenStream stream  = analyzer.tokenStream(null, new StringReader(text));
       stream.reset();
       while (stream.incrementToken()) {
-        result.add(stream.getAttribute(CharTermAttribute.class).toString());
+          String resToken = stream.getAttribute(CharTermAttribute.class).toString();
+          // System.out.println(resToken);
+          result.add(resToken);
+         
       }
     } catch (IOException e) {
       // not thrown b/c we're using a string reader...
-      throw new RuntimeException(e);
+      // throw new RuntimeException(e);
+      System.out.println("Caught an exception");
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    } catch (Exception e) {
+      System.out.println("Caught an Exception");
     }
     return result;
   }
@@ -619,12 +636,14 @@ public static void addtoDB () {
   }
 
   private static String join_vector(Vector<String> vect, String delim) {
-    String res = "";
-    for (int i = 0; i < vect.size() - 1; ++i) {
-      res += vect.get(i) + delim;
-    }
-    res += vect.get(vect.size() - 1);
-    return res;
+    // String res = "";
+    // for (int i = 0; i < vect.size() - 1; ++i) {
+    //   res += vect.get(i) + delim;
+    // }
+    // res += vect.get(vect.size() - 1);
+    // return res;
+    Joiner joiner = Joiner.on(delim);
+    return joiner.join(vect);
   }
 
   private static Vector<String> pick_queries_of_length(Vector<String> queries, int query_length) {
@@ -699,15 +718,21 @@ public static void addtoDB () {
    public static double KLD_JelinekMercerSmoothing(Vector<String> foreground, Vector<String> background, double lambda, LuceneHelper luc) 
   throws IOException, ParseException {
 
+    Scanner input = new Scanner(System.in);
     HashMap<String, Double> fore_distr = buildDistribution(foreground);
     HashMap<String, Double> back_distr = buildDistribution(background);
 
     HashMap<String, Double> all_distr = new HashMap<String, Double> (fore_distr);
     all_distr.putAll(back_distr);
+    // System.out.println(fore_distr);
+    // System.out.println(back_distr);
+    // input.next();
+
 
     double kld_value = 0;
-    Scanner input = new Scanner(System.in);
+    // System.out.println("All distr = " + all_distr);
     for (String token : all_distr.keySet()) {
+      // System.out.println("Current token = " + token);
     // for (String token : fore_distr.keySet()) {
       
 
@@ -717,14 +742,22 @@ public static void addtoDB () {
       } 
 
 
-      double ci = (double)(luc.totalTermFreq(token)) / (double)(luc.totalTerms());
+
+      // System.out.println("Initial token = " + token);
+      String stemmedToken = Utils.join_vector(Utils.lucene_tokenize(token), " ");
+      // System.out.println("Stemmed token = " + stemmedToken);
+      if (stemmedToken.equals("")) {
+        continue;
+      }
+      // input.next();
+      double ci = (double)(luc.totalTermFreq(stemmedToken)) / (double)(luc.totalTerms());
+      // System.out.println("CI = " + ci);
       
       double qi = 0;
       if (back_distr.containsKey(token)) {
         qi = (double)(back_distr.get(token)); // / (double)(background.size());
       }
       if (ci == 0.0) {
-        
         continue;
       }
       double smoothed_pi = lambda * pi + (1 - lambda) * ci;
@@ -741,7 +774,7 @@ public static void addtoDB () {
         System.out.println("PI = " + smoothed_pi);
         System.out.println("CI = " + ci);
         System.out.println("QI = " + qi);
-        input.next();
+        // input.next();
         }
       }
     }

@@ -38,7 +38,6 @@ public class Snippet {
 				if (docURL.contains("answers.yahoo.")) {
 					continue;
 				}
-
 				String snippet = snippetsRS.getString("snippet");
 				String query = snippetsRS.getString("queryText");
 				int snipID = snippetsRS.getInt("snippetID");
