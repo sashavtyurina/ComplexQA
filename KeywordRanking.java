@@ -1239,7 +1239,7 @@ public static void populateDBWithRawQA() {
       Statement qidsStmt = dbConnection.createStatement();
       String sql = "select qid, rawQuestion, gtquery from questions;";
       ResultSet qids = qidsStmt.executeQuery(sql);
-      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("SimpleIntersectionWeighted_07_03.txt"), true));
+      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("SimpleIntersectionWeighted_03_07.txt"), true));
 
 
       while (qids.next()) {
@@ -1293,8 +1293,8 @@ public static void populateDBWithRawQA() {
             // Vector<Snippet> scoredSnippets = simpleIntersection(rawQuestion, answers, snippets);
             // Vector<Snippet> scoredSnippets = simpleIntersectionNoQuery(rawQuestion, answers, snippets);
             // Vector<Snippet> scoredSnippets = kldSimilarity(rawQuestion, answers, snippets);
-            double questSimWeight = 0.7;
-            double answerSimWeight = 0.3;
+            double questSimWeight = 0.3;
+            double answerSimWeight = 0.7;
             Vector<Snippet> scoredSnippets = simpleIntersectionWeighted(rawQuestion, answers, snippets, questSimWeight, answerSimWeight);
             
             List<Snippet> rankedSnippets = Utils.sliceCollection(Snippet.sortSnippetsByScore(scoredSnippets, "dec"), 0, 20);
@@ -1417,15 +1417,20 @@ public static void populateDBWithRawQA() {
     Vector<String> aTokens = new Vector<String>(Arrays.asList(collectiveAnswer.split("\\s")));
 
     for (Snippet snippet : snippets) {
+      Vector<String> queryTokens = new Vector<String>(Arrays.asList(snippet.queryText.split("\\s")));
       HashSet<String> sWords = new HashSet<String>(snippet.tokens());
+      sWords.removeAll(queryTokens);
       double sLength = 1.0 * sWords.size();
 
       // sim with question
+      qTokens.removeAll(queryTokens);
       sWords.retainAll(qTokens);
       double questScore = sWords.size() / sLength;
 
       // sim with answers
       sWords = new HashSet<String>(snippet.tokens());
+      sWords.removeAll(queryTokens);
+      aTokens.removeAll(queryTokens);
       sWords.retainAll(aTokens);
       double answerScore = sWords.size() / sLength;
 
