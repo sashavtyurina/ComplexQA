@@ -1239,7 +1239,7 @@ public static void populateDBWithRawQA() {
       Statement qidsStmt = dbConnection.createStatement();
       String sql = "select qid, rawQuestion, gtquery from questions;";
       ResultSet qids = qidsStmt.executeQuery(sql);
-      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("KLDSimilarity.txt"), true));
+      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("SimpleIntersectionWeighted_07_03.txt"), true));
 
 
       while (qids.next()) {
@@ -1292,7 +1292,10 @@ public static void populateDBWithRawQA() {
           // apply different similarities here
             // Vector<Snippet> scoredSnippets = simpleIntersection(rawQuestion, answers, snippets);
             // Vector<Snippet> scoredSnippets = simpleIntersectionNoQuery(rawQuestion, answers, snippets);
-            Vector<Snippet> scoredSnippets = kldSimilarity(rawQuestion, answers, snippets);
+            // Vector<Snippet> scoredSnippets = kldSimilarity(rawQuestion, answers, snippets);
+            double questSimWeight = 0.7;
+            double answerSimWeight = 0.3;
+            Vector<Snippet> scoredSnippets = simpleIntersectionWeighted(rawQuestion, answers, snippets, questSimWeight, answerSimWeight);
             
             List<Snippet> rankedSnippets = Utils.sliceCollection(Snippet.sortSnippetsByScore(scoredSnippets, "dec"), 0, 20);
 
@@ -1400,6 +1403,44 @@ public static void populateDBWithRawQA() {
       // input.next();
     }
     return snippets;
+  }
+
+  public static Vector<Snippet> simpleIntersectionWeighted(String question, Vector<String> answers, Vector<Snippet> snippets, double questSimWeight, double answerSimWeight) {
+  /// Do simple intersection between question and snippet, answer and snippet 
+  /// The final score is composed of  questSimWeight * SimWithQuestion + answerSimWeight * SimWithAnswer
+    String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
+    Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
+
+    Joiner joiner = Joiner.on(" ");
+    String collectiveAnswer = Utils.shrinkRepeatedChars(joiner.join(answers));
+    collectiveAnswer = Utils.shrinkRepeatedChars(Utils.removePunct(collectiveAnswer.toLowerCase()));
+    Vector<String> aTokens = new Vector<String>(Arrays.asList(collectiveAnswer.split("\\s")));
+
+    for (Snippet snippet : snippets) {
+      HashSet<String> sWords = new HashSet<String>(snippet.tokens());
+      double sLength = 1.0 * sWords.size();
+
+      // sim with question
+      sWords.retainAll(qTokens);
+      double questScore = sWords.size() / sLength;
+
+      // sim with answers
+      sWords = new HashSet<String>(snippet.tokens());
+      sWords.retainAll(aTokens);
+      double answerScore = sWords.size() / sLength;
+
+      double finalScore = questSimWeight * questScore + answerSimWeight * answerScore;
+      snippet.setSimScore(finalScore);
+    }
+    return snippets;
+
+  }
+
+  public static Vector<Snippet> simpleIntersectionTopWords(String question, Vector<String> answers, Vector<Snippet> snippets, double questSimWeight, double answerSimWeight) {
+  /// The score is the percentage of snippet words intersecting with top words from question and top words from answer
+  /// Top words from question are the words with the highest pointwise KLD score (or it can be only title words)
+  /// Top words from the answers are the words repeating throughout the answers (redundancy)
+    return null;
   }
 
   public static Vector<Snippet> kldSimilarity(String question, Vector<String> answers, Vector<Snippet> snippets) {
