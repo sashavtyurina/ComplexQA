@@ -1,0 +1,618 @@
+QUESTION :: Why is my 5 month old pit bull puppy eating rocks? My dog is very active and has a really good appetite. She loves to play and is very well mannered. Lately she has been eating small pea gravel from my landscaping. Is she just being a puppy or is something wrong?
+TRUE QUERY :: puppy rocks eating gravel
+0.194 :: puppy
+0.161 :: dog
+0.065 :: pea
+0.065 :: mannered
+0.065 :: appetite
+0.065 :: gravel
+0.065 :: month
+0.065 :: pit
+0.032 :: play
+0.032 :: landscaping
+0.032 :: rock
+0.032 :: puppi
+0.032 :: bull
+0.032 :: lately
+0.032 :: eat
+0.032 :: small
+QUESTION :: Microsoft Points for 360? I got bored, so I was looking around on my xbox 360 dashboard, when i came to the whole page that told you completely about microsoft points. It said you can buy them, and that you can also get them from promotions and stuff.
+
+What Kind Of Promotions do they mean?
+
+And is there a way to get them for free?
+TRUE QUERY :: Microsoft points free promotions 360
+0.25 :: points
+0.156 :: 360
+0.094 :: buy
+0.094 :: microsoft
+0.094 :: xbox
+0.062 :: dashboard
+0.031 :: told
+0.031 :: promotions
+0.031 :: bored
+0.031 :: came
+0.031 :: point
+0.031 :: free
+0.031 :: stuff
+0.031 :: promot
+QUESTION :: For high schoolers how many hours a day is perfect for school? Give me some specifics... how many class periods should they have, how long for lunch, how long the class periods should be. And give me some realistic answers. Don't say 2 hours should be for lunch or something like that.
+TRUE QUERY :: schoolers hours high perfect
+0.267 :: periods
+0.2 :: lunch
+0.133 :: long
+0.133 :: schoolers
+0.1 :: class
+0.067 :: school
+0.033 :: give
+0.033 :: don't
+0.033 :: high
+QUESTION :: Looking for whereabouts of a fishing boat from Boston (30's-40's) where do I  search for information? The boat was at one time owned by Peter Busalacchi, and named "Nina B".  It was one of seven boats, some of which were sold to carry troops to Europe during WWII.
+TRUE QUERY :: fishing troops Boston boats
+0.333 :: sold
+0.1 :: boston
+0.1 :: nina
+0.1 :: troops
+0.067 :: 30's
+0.033 :: named
+0.033 :: looking
+0.033 :: information
+0.033 :: seven
+0.033 :: 40's
+0.033 :: wwii
+0.033 :: fishing
+0.033 :: boat
+0.033 :: carry
+QUESTION :: Does Cayenne hurt house plants? Hello everyone,
+
+I just moved in with a new roommate. I am finding out that her cat loves to eat all my house plants. I haven't had this problem with my cat. Looking up info on trying to stop my roommates cat from eating plants and I see a remedy that calls for putting cayenne pepper on the plant to deter in worst case scenarios. I think I have reached this point, because the cat loves to play with the squirts from the squirt gun.  But my question is will the cayenne hurt my plants.
+
+Thanks for any answers,
+-Chris
+TRUE QUERY :: cayenne plants hurt cat
+0.167 :: plant
+0.1 :: squirt
+0.067 :: cayenne
+0.067 :: cat
+0.067 :: plants
+0.067 :: problem
+0.067 :: hurt
+0.067 :: remedy
+0.067 :: roommate
+0.033 :: think
+0.033 :: play
+0.033 :: pepper
+0.033 :: roommates
+0.033 :: scenarios
+0.033 :: moved
+0.033 :: thanks
+0.033 :: squirts
+QUESTION :: Best jeans for guys? Guys... what jeans combine the best quality, value, non-metrosexuality, fit, and look?  Or ladies... does your man where a certain pair of jeans that you like?
+TRUE QUERY :: jeans guys fit look value quality
+0.2 :: fit
+0.2 :: jeans
+0.167 :: pair
+0.133 :: best
+0.1 :: guys
+0.067 :: value
+0.033 :: ladies
+0.033 :: quality
+0.033 :: combine
+0.033 :: non
+QUESTION :: How do you know when you are in love? Ok see the love of my life called my house drunk and we are both under age and hes three years older than me but he cussed my dad out and he dont even remember.My dad told me that i am never allowed to talk to him again but he said hell quit drinking and smoking pot just to be with me! I love him with all my heart and i want to be with him for the reat of my life but i talk to him in the mornings an the bus and sometimes at night even though im not supposed to. He said he'll wait for me until I turn 18 but thats a while from now and i dont think my dad will forgive him.I dont know what to do or if he even loves me.Any suggestions?
+TRUE QUERY :: love know
+0.133 :: dad
+0.133 :: told
+0.1 :: love
+0.067 :: house
+0.067 :: years
+0.067 :: loves
+0.033 :: drinking
+0.033 :: drunk
+0.033 :: hell
+0.033 :: reat
+0.033 :: wait
+0.033 :: suggestions
+0.033 :: quit
+0.033 :: pot
+0.033 :: he'll
+0.033 :: life
+0.033 :: cussed
+0.033 :: hes
+0.033 :: talk
+QUESTION :: Songs needed for performance please read? I am doing a drama performance nxt week and I need slow sad songs. The main theme is the mother leaving them.
+
+Also I need sound effects like chatting and washing dishes, what songs can provide me with this, or websites (which has songs in em?)
+
+Thanks :)
+TRUE QUERY :: song sad slow drama
+0.233 :: sad
+0.133 :: needed
+0.133 :: main
+0.067 :: theme
+0.067 :: washing
+0.067 :: performance
+0.067 :: slow
+0.033 :: effects
+0.033 :: websites
+0.033 :: leaving
+0.033 :: sound
+0.033 :: dishes
+0.033 :: nxt
+0.033 :: em
+QUESTION :: How many inches should I set my html code at to create a website optimized for 800x600 viewing? Alright, so I want to create a webpage that will be viewable on 800x600.  For this I want to know how many inches would be optimal for say a table that I wish to span across the whole screen.
+TRUE QUERY :: optimized website 800x600
+0.133 :: set
+0.133 :: create
+0.1 :: viewable
+0.1 :: webpage
+0.1 :: 800x600
+0.1 :: optimal
+0.067 :: inches
+0.067 :: know
+0.033 :: website
+0.033 :: say
+0.033 :: html
+0.033 :: alright
+0.033 :: viewing
+0.033 :: table
+QUESTION :: Okay, i need actual help here? Okay, so last night the american music awards were on and i was SO psyced that i just had to watch it so decided to record Veronica Mars and watch it later. The problem was that my VCR had been on the wrong channel and i got a black screen for the entire hour. This eppie was supposed to be So good and i really need to see it.
+
+So, i've been looking online for the past hour for sites that have the eppisode online and can't find any. So can someone ACTUALLY look and not just give me something that would have vids on it like youtube, because i looked there and it wasn't on there. Also tried to cw site and everywhere else.
+
+If someone can actually find the site with the video on it, i'll give you 10pts. <33
+TRUE QUERY :: veronica mars online
+0.167 :: watch
+0.1 :: vcr
+0.1 :: screen
+0.1 :: eppie
+0.067 :: eppisode
+0.033 :: sites
+0.033 :: later
+0.033 :: tried
+0.033 :: problem
+0.033 :: 33
+0.033 :: actually
+0.033 :: online
+0.033 :: okay
+0.033 :: can't
+0.033 :: awards
+0.033 :: youtube
+0.033 :: psyced
+0.033 :: channel
+0.033 :: video
+QUESTION :: junior prom tickets? for the students, do we have "wedding style" tickets with an envelope, card, photo info, etc? or is that just for the chaperones? i was thinking of a huge "index card" length ticket. i dunno. just give me some input plz.
+TRUE QUERY :: prom tickets style
+0.333 :: prom
+0.1 :: envelope
+0.067 :: chaperones
+0.067 :: huge
+0.067 :: students
+0.067 :: give
+0.067 :: wedding
+0.067 :: tickets
+0.033 :: input
+0.033 :: style
+0.033 :: dunno
+0.033 :: card
+0.033 :: info
+QUESTION :: How can you ? who will approve the names of the newest elements? Wil it be A) the scientist that discover each element
+B) a committee scientist
+C) the chemist's from a research insitution
+TRUE QUERY :: newest elements names
+0.2 :: element
+0.2 :: elements
+0.133 :: chemist's
+0.133 :: discover
+0.1 :: names
+0.1 :: scientist
+0.067 :: approve
+0.067 :: newest
+QUESTION :: What do I wear...? I didnt shave my legs recently and and I dont have any pants and I need a outfit in 5 minutes. I cant get in the shower!!
+TRUE QUERY :: wear legs shave
+0.267 :: wear
+0.2 :: minutes
+0.167 :: outfit
+0.133 :: legs
+0.1 :: pants
+0.067 :: shave
+0.067 :: shower
+QUESTION :: What dance class other than poms? I am going to take a poms dance class I would like to know which other dance class I should take.Dance classes as in hiphop , Jazz , or Ballet. What do you think?
+TRUE QUERY :: dance classes
+0.233 :: jazz
+0.133 :: class
+0.1 :: classes
+0.1 :: take
+0.1 :: poms
+0.1 :: ballet
+0.1 :: dance
+0.067 :: know
+0.033 :: think
+0.033 :: hiphop
+QUESTION :: King of the Hill? How often do you guys watch King of the Hill? What is your favorite episode? My favorite one is when Luanne, meets this guy and the guy does something to her (like i don't know), so then, she tells, someone that she is pregant. Then Bobby, sneaks under her bed when she leaves. O'h my that one was really crazy.
+TRUE QUERY :: king hill favorite episode
+0.233 :: luanne
+0.2 :: hill
+0.133 :: king
+0.1 :: bobby
+0.1 :: don't
+0.033 :: pregant
+0.033 :: episode
+0.033 :: crazy
+0.033 :: guy
+0.033 :: watch
+0.033 :: leaves
+0.033 :: guys
+QUESTION :: serial killers? well i just got finished watching this thing about serial killers, and i was wondering what are the symphtoms of peple who are going to become serial killers when they grow up???????
+TRUE QUERY :: serial killer symphtoms
+0.333 :: serial
+0.233 :: killers
+0.1 :: peple
+0.1 :: wondering
+0.067 :: grow
+0.067 :: thing
+0.033 :: symphtoms
+0.033 :: watching
+0.033 :: finished
+QUESTION :: christina aguilera set list? does anyone know what songs christina aguilera plays in her concert.  i am going to see her on thursday and cant wait.  much obliged to anyone who knows.
+TRUE QUERY :: aguilera set list christina songs
+0.333 :: aguilera
+0.2 :: songs
+0.133 :: wait
+0.067 :: knows
+0.067 :: obliged
+0.033 :: concert
+0.033 :: going
+0.033 :: thursday
+0.033 :: list
+0.033 :: know
+0.033 :: christina
+QUESTION :: Scared to death..? I took my daughter to the emergency room because of a limp. We sat 3 hours, had numerous x-rays done and then lots of blood work and the nurses came in and told me that she needed to see a hematologist on monday and that it wasn't her leg that was bothering her it was her blood. They said they "weren't comfortable" giving a diagnosis but when i said  that she didn't act sick or anything they said "Well she feels pretty bad, I can guarantee that- probably too sick to complain." I'm nervous and scared and don't know what it could be. Her white count was elevated and her iron was 22/3 when it should be 12/17. It's a long weekend and they want me to wait until Monday to know anything..has anyone heard of this before? Experienced it? Any doctors out there that know what it might be?
+TRUE QUERY :: limp iron hematologist
+0.2 :: sick
+0.1 :: scared
+0.067 :: lots
+0.067 :: know
+0.067 :: didn't
+0.033 :: work
+0.033 :: count
+0.033 :: bothering
+0.033 :: took
+0.033 :: diagnosis
+0.033 :: daughter
+0.033 :: emergency
+0.033 :: 22
+0.033 :: hematologist
+0.033 :: feels
+0.033 :: wasn't
+0.033 :: blood
+0.033 :: long
+0.033 :: rays
+0.033 :: act
+QUESTION :: What causes neck spasms? I have been getting spasms in my neck not all the time but occassionally they will happen... what causes the neck to spasm?  I do have tmj in my jaw...could that be why? And please no answers Like "OMG YOUR DYING!" K thanks.
+TRUE QUERY :: neck spasms tmj cause jaw
+0.233 :: spasm
+0.2 :: jaw
+0.167 :: spasms
+0.1 :: neck
+0.067 :: happen
+0.067 :: causes
+0.067 :: tmj
+0.033 :: time
+0.033 :: omg
+0.033 :: dying
+QUESTION :: How to make jeans fit you better, how long do you sit in the bath with them on? I've heard that to make jeans fit you better, you should sit in the bath with them on before you first wash them. Is this right?  How long for?
+TRUE QUERY :: jeans bath fit
+0.233 :: jeans
+0.233 :: make
+0.167 :: fit
+0.1 :: sit
+0.1 :: better
+0.067 :: wash
+0.067 :: right
+0.033 :: long
+QUESTION :: Where Can I get Preppy pants? Where can i get preppy pants not from Hollister or anything like that i dont have enough money but are there any cheaper pants that are similar that i can afford? Tell me what style please , also
+TRUE QUERY :: cheaper preppy pants
+0.333 :: pants
+0.2 :: hollister
+0.133 :: preppy
+0.1 :: tell
+0.1 :: cheaper
+0.067 :: style
+0.033 :: money
+0.033 :: afford
+QUESTION :: Wat shud i do? Recently my best boy friend has been treating me really unfairly! Every chance he gets he starts me and shouts at me! He bosses me about and bullys me! Recently he said 2me that he wants to hav a truths, i z that was grand but then he siad a whole pile of stuff, that people r sayin things bout me, wen i ask them they said that they did'nt say anything like that! Im really startin 2 hate him! Wat shud i do?
+TRUE QUERY :: boy friend shouts bosses bullys
+0.133 :: 2me
+0.067 :: siad
+0.067 :: bout
+0.067 :: wants
+0.067 :: starts
+0.067 :: ask
+0.067 :: friend
+0.033 :: shud
+0.033 :: startin
+0.033 :: gets
+0.033 :: chance
+0.033 :: wat
+0.033 :: people
+0.033 :: treating
+0.033 :: stuff
+0.033 :: recently
+0.033 :: say
+0.033 :: bosses
+0.033 :: sayin
+0.033 :: unfairly
+0.033 :: wen
+QUESTION :: What are my rights as a consumer when I've paid for 15 montths of a service, used 12 and want to discontinue? I've practiced Kunk Fu at a School for the past year.  I'm not interested in continuing.  I signed a contract saying that if I need to discontinue, they'll reimburse.  The contract doesn't specify how much or a time-frame of paying back.  Is the amount pro-rated by law? Thanks for your time and expertise.  Daniel, Berkeley, Ca.
+TRUE QUERY :: contract discontinue reimburse service
+0.2 :: contract
+0.1 :: expertise
+0.1 :: pro
+0.067 :: kunk
+0.067 :: fu
+0.033 :: daniel
+0.033 :: ca
+0.033 :: montths
+0.033 :: discontinue
+0.033 :: they'll
+0.033 :: 15
+0.033 :: past
+0.033 :: consumer
+0.033 :: berkeley
+0.033 :: 12
+0.033 :: amount
+0.033 :: thanks
+0.033 :: time
+0.033 :: i'm
+QUESTION :: what is the best way to scan in magazine clippings w photos and file them in MS word? Can buy new scanner. I will need to be able to classify and find articles easily. Please recomend a scanner product that will help.
+TRUE QUERY :: scan classify find MS file word
+0.3 :: scanner
+0.1 :: find
+0.067 :: clippings
+0.067 :: able
+0.067 :: word
+0.033 :: recomend
+0.033 :: articles
+0.033 :: buy
+0.033 :: way
+0.033 :: easily
+0.033 :: photos
+0.033 :: product
+0.033 :: magazine
+0.033 :: classify
+0.033 :: file
+0.033 :: best
+0.033 :: scan
+QUESTION :: Login button? I have the Yahoo login button on my IE. I have SBC which has an agreement with Yahoo. Is there anyway to put it on my Firefox. 
+Thanks!
+TRUE QUERY :: firefox yahoo login button
+0.267 :: firefox
+0.233 :: button
+0.133 :: sbc
+0.133 :: login
+0.067 :: thanks
+0.067 :: put
+0.067 :: agreement
+0.033 :: yahoo
+QUESTION :: My new girlfriend has kids... should I tell my friends? My friends or people I hang out with in this case aren't really as important as say my girlfriend or closer friends. Just more of a group of couples and stags that get together from time to time. They are high class and judgmental. Their opinions of me mean little but they do enjoy gossip and I'd rather not give them some fuel. Should I not let it known my new girl has children and if not, do you think its rude to ask my girlfriend not to mention it?
+TRUE QUERY :: girlfriend kids
+0.172 :: friends
+0.138 :: girlfriend
+0.069 :: children
+0.069 :: kids
+0.069 :: people
+0.069 :: mention
+0.034 :: rude
+0.034 :: think
+0.034 :: stags
+0.034 :: judgmental
+0.034 :: enjoy
+0.034 :: hang
+0.034 :: closer
+0.034 :: kid
+0.034 :: couples
+0.034 :: girl
+0.034 :: tell
+0.034 :: aren't
+QUESTION :: What are some websites that tell/teach you how to play different dynamics on a flute? I need to find 10 different websites that talk about playing different dynamics on a flute and am having a lot of trouble with it, can any one help me??
+TRUE QUERY :: flute websites dynamics
+0.333 :: flute
+0.133 :: dynamics
+0.1 :: playing
+0.1 :: websites
+0.067 :: trouble
+0.067 :: find
+0.067 :: talk
+0.033 :: different
+0.033 :: 10
+0.033 :: lot
+0.033 :: tell
+QUESTION :: How often do you incorporate the breastpump in your day?For how long? I tried 15 min and a probably filled 1/3 of a bottle..Its so frustrating , how long does it take to fill a bottle?Im I not producing enough milk? Then it feels like one breast is not enough to feel the baby ..Im really confused about this..
+TRUE QUERY :: breastpump producing day
+0.267 :: breastpump
+0.1 :: breast
+0.1 :: probably
+0.067 :: feel
+0.067 :: milk
+0.067 :: baby
+0.067 :: bottle
+0.067 :: long
+0.033 :: incorporate
+0.033 :: confused
+0.033 :: take
+0.033 :: fill
+0.033 :: 15
+0.033 :: producing
+QUESTION :: What kind of make-up would look good on a thirteen-year-old with curly brown hairand green eyes? I don't want to wear a lot and look like a tart. Just a little to enhance my features...etc. What colours would suit me? Bring out my eyes etc.
+TRUE QUERY :: make-up brown green eyes hair
+0.2 :: brown
+0.167 :: look
+0.133 :: curly
+0.133 :: eyes
+0.1 :: enhance
+0.1 :: wear
+0.033 :: hairand
+0.033 :: green
+0.033 :: lot
+0.033 :: don't
+0.033 :: thirteen
+QUESTION :: Does your spouse buy you Christmas presents with your money? Several years ago I got a computer for Christmas from my wife. It was really great. What I didn't know was she bought it through the Company I work for and I suddenly had an unexpected $125 a month coming off my pay cheque. The thought was great but the appearance of the bill was disturbing. Has this type of thing ever happened to you?
+TRUE QUERY :: spouse pay presents
+0.133 :: work
+0.1 :: 125
+0.1 :: presents
+0.1 :: didn't
+0.1 :: wife
+0.067 :: unexpected
+0.067 :: disturbing
+0.067 :: spouse
+0.067 :: money
+0.033 :: suddenly
+0.033 :: christmas
+0.033 :: know
+0.033 :: great
+0.033 :: years
+0.033 :: cheque
+QUESTION :: Has anyone had a positive experience with MyDataJob.com? I'm looking for a typing job from home in my spare time.  They are presently asking for $49.99 and you will be provided with names of companies that can utilize your service (more or less).
+TRUE QUERY :: mydatajob experience
+0.167 :: job
+0.167 :: i'm
+0.133 :: spare
+0.1 :: 49
+0.1 :: 99
+0.067 :: mydatajob
+0.067 :: time
+0.033 :: home
+0.033 :: looking
+0.033 :: typing
+0.033 :: experience
+0.033 :: positive
+0.033 :: presently
+QUESTION :: Woah! What happened here? Theres so many questions about dating in this section? How is dating realted to yahoo answers? Theres a reason there is a "singles and dating" section? Why are so many questions miscategorized now? And yahoo still hasnt started policing the perverted questions on the "family and relationships" section yet. It would be really nice if they would. All who agree say something and report the miscatagorized questions and perverted questions.
+TRUE QUERY :: yahoo questions missclassified
+0.2 :: perverted
+0.133 :: section
+0.1 :: woah
+0.1 :: nice
+0.1 :: hasnt
+0.067 :: reason
+0.067 :: say
+0.067 :: questions
+0.067 :: dating
+0.033 :: theres
+0.033 :: policing
+0.033 :: realted
+QUESTION :: Both in love beyond words...cant be together...do I let go? We are both in love, more than I thought possible, but he has gone back to his wife and kids for their sake, hes not happy but cant cause more pain.  They do not have a physical relationship.  We still see each other and there are no promises made, but I truly doubt in my heart he will stay married after the kids are out of the house in 5 years or so.  Do I keep a relationship, constantly reminded of how much I love and miss him when we are not together, having faith that it will work out in the end, or just cut it off completely, end the relationship, and try to move on.  I am not that young and have plenty of life experiences so this is not an infatuation.
+TRUE QUERY :: relationship married other
+0.2 :: love
+0.133 :: infatuation
+0.1 :: end
+0.067 :: truly
+0.067 :: kids
+0.033 :: work
+0.033 :: physical
+0.033 :: cause
+0.033 :: constantly
+0.033 :: made
+0.033 :: doubt
+0.033 :: gone
+0.033 :: young
+0.033 :: completely
+0.033 :: life
+0.033 :: words
+0.033 :: reminded
+0.033 :: hes
+QUESTION :: Why do my Word Documents have a Wordpad Icon? I consider myself somewhat of an "advanced" computer user, but this problem I have not resolved...
+
+All of my .doc files have a wordpad icon and wordpad association with them, but open in Microsoft Word. I have tried to uninstall and reinstall Word with no success. I have also went into explorer and changed the file type association with all word files and still no luck.
+Documents still open with Word fine, but this is annoying.
+Any suggestions? Thanks in advance.
+TRUE QUERY :: word wordpad association icon
+0.167 :: wordpad
+0.1 :: reinstall
+0.1 :: went
+0.1 :: thanks
+0.1 :: doc
+0.067 :: icon
+0.067 :: type
+0.033 :: files
+0.033 :: documents
+0.033 :: tried
+0.033 :: changed
+0.033 :: microsoft
+0.033 :: resolved
+0.033 :: uninstall
+0.033 :: word
+0.033 :: annoying
+QUESTION :: my sis has diabetes, its new to her? she is a hard worker and pays out her nose for prescriptions, co-pays ets. not to mention the rate for health insurance. Is there anywhere a person get some discounted stuff for diabetics,meds, strips, lancets..please help me to help her.  cammie
+TRUE QUERY :: diabetes discounted
+0.2 :: lancets
+0.167 :: pays
+0.133 :: diabetics
+0.1 :: diabetes
+0.1 :: strips
+0.067 :: health
+0.067 :: nose
+0.033 :: co
+0.033 :: new
+0.033 :: ets
+0.033 :: stuff
+0.033 :: hard
+QUESTION :: Kidney Failure? My mother is suffering of kidney failure but she is not at the point of dialysis yet but she has too much protein in her urine.  Does anyone know of anything that helps get rid off protein in the urine for someone suffering of kidney failure.  At this stage, food is not an issue that has been confirmed by a specialist. . .
+TRUE QUERY :: kidney failure protein
+0.267 :: protein
+0.133 :: kidney
+0.133 :: urine
+0.1 :: dialysis
+0.067 :: failure
+0.067 :: confirmed
+0.067 :: issue
+0.067 :: know
+0.033 :: point
+0.033 :: rid
+0.033 :: specialist
+QUESTION :: How long would it take America to supply what China makes for us now? Since China is the "wild card" nation, what would happen if she closed her ports? How long would it take America to produce and manufacture what we now purchase from China? Would it even be practical at this point considering the state of our own limited manufacturing capability? I mean if things really hit the fan, wouldn't we be in a real fix?
+TRUE QUERY :: china manufacture america produce
+0.25 :: america
+0.25 :: manufactur
+0.25 :: produc
+0.25 :: china
+QUESTION :: How can I get rid of gallstones without having surgery? I was just diagnosed with gallstones in my gallblatter I really dont want to have surgery and have been told that there are other ways to get rid of the stones so if anyone knows how im open for suggestions
+TRUE QUERY :: gallstones rid stones
+0.333 :: rid
+0.333 :: gallston
+0.333 :: stone
+QUESTION :: Back 2 my other question about that girl who likes me...? I had a lot of people say stuff like get 2 know her better but i dont think i can i've knew her 4 about 6 years! I have asked her out a few times but she says she sees me as just a friend, what should i do?
+TRUE QUERY :: girl just friend
+0.333 :: just
+0.333 :: girl
+0.333 :: friend
+QUESTION :: need cool, simple, inspirational words...help, please? i'm doing an art project for school, and the assignment is to pick ONE word that is inspirational/has meaning to us and create a work of art encompassing the overall mood/significance of the word.
+
+i wanted something inspiring, maybe...?
+
+i had "live", "believe", "dream", and "imagine" in mind...but i want something a bit more creative if at all possible. i'm having trouble trying to think of something that's not so cheesy or cliche.
+
+thanks :-)
+TRUE QUERY :: word inspiration
+0.5 :: inspir
+0.5 :: word
+QUESTION :: can you get pregnant after a tubal? i had a tubal 16 months ago after the birth of my son because my husband was abusive but since then i have left him and found a wonderful man we would love to have a baby togather but i want to know if its possible
+TRUE QUERY :: pregnant after tubal
+QUESTION :: Those who do not believe in God: mock him to his face.? Considering the stories I read about those who mocked God and died, I thought it would be interesting to dare atheists to do the same. Okay. So, you don't believe in God. I dare all atheists, then, to mock him. In particular, you all should challenge him to stop you from doing something, preferably while insulting him. Say that God can't do it, and see what happens.
+TRUE QUERY :: god mock insulting
+QUESTION :: What is this song called? It was played on the commericial with the Honda Civic. I think it was a new wave rock music. it also played on one tree hill: 
+http://youtube.com/watch?v=Wrg50pqZCMQ
+It starts playing when the raven cheerleaders start cheering. Does anyone know what the song is called? Thanks!
+TRUE QUERY :: what song called
+QUESTION :: Relationship advice? Okay, here's the thing. This girl broke up with me last year. Now I have a new girlfriend who I love very much. However, I got an email reminder of the first's birthday yesterday, with a note saying, "I do still love her." Apparently, I saved that last year after she broke up with me when I still had feelings for her. Anyway, when I read that, it almost felt like it was TELLING me that I do still love her, even just a little bit. But I love my girlfriend now...but what do I do? (preferably to get my mind off the one who broke up with me)...oh, yeah, she told me she still has feelings for me, too...but I told her I didn't because I didn't at the time, but now I'm not so sure. Advice?
+TRUE QUERY :: love girlfriend
+QUESTION :: I need to start a tv show club with my friends? The show is the oc! I need help starting it! Ideas ummmmmmmmmmmmmmm flyers, watch shows. something at my or my friends house. help me!
+TRUE QUERY :: tv show club
+QUESTION :: why are bassoons so expensive? I was looking at bassoons over at Musician's Friend ( http://www.musiciansfriend.com/bo/navigation?page=1&N=100001+305585&Ns=P_Price%7C0 ) and am wondering why they cost $2500-$14,000.
+
+Does anyone know?
+Thanks
+m98s
+TRUE QUERY :: bassoons expensive

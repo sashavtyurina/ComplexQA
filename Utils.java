@@ -183,11 +183,19 @@ public static void addtoDB () {
   }
 
   public static <T> List<T> sliceCollection(List<T> collection, int from, int to) {
-    
-    if (!((from >= 0) && (to <= collection.size()))) {
+
+    if (!(from >= 0)) {
       System.out.println("Slice vector. Bad indicies. Returning null. ");
       return null;
-    } 
+    }
+
+    if (!(to <= collection.size())) {
+      return collection;
+    }
+    // if (!((from >= 0) && (to <= collection.size()))) {
+    //   System.out.println("Slice vector. Bad indicies. Returning null. ");
+    //   return null;
+    // } 
 
     List<T> result = new ArrayList<T>();
 
@@ -448,6 +456,37 @@ public static void addtoDB () {
     return entries;
   }
 
+  static <K,V extends Comparable<? super V>> Vector<Entry<K, V>> entriesSortedByValues(Vector<Entry<K,V>> entries, String direction) {
+    if (direction.equals("inc")) {
+          Collections.sort(entries, 
+            new Comparator<Entry<K,V>>() {
+                @Override
+                public int compare(Entry<K,V> e1, Entry<K,V> e2) {
+                    return e1.getValue().compareTo(e2.getValue());
+                }
+            }
+      );
+    } else {
+          Collections.sort(entries, 
+            new Comparator<Entry<K,V>>() {
+                @Override
+                public int compare(Entry<K,V> e1, Entry<K,V> e2) {
+                    return e2.getValue().compareTo(e1.getValue());
+                }
+            }
+      );
+    }
+    // Collections.sort(entries, 
+    //         new Comparator<Entry<K,V>>() {
+    //             @Override
+    //             public int compare(Entry<K,V> e1, Entry<K,V> e2) {
+    //                 return e1.getValue().compareTo(e2.getValue());
+    //             }
+    //         }
+    // );
+    return entries;
+  }
+
 
   public static <K,V> void printMap(Map<K,V> map) {
     for (Entry<K,V> e : map.entrySet()) {
@@ -649,7 +688,7 @@ public static void addtoDB () {
     return new_queries;
   }
 
-  private static String join_vector(Vector<String> vect, String delim) {
+  public static String join_vector(Vector<String> vect, String delim) {
     // String res = "";
     // for (int i = 0; i < vect.size() - 1; ++i) {
     //   res += vect.get(i) + delim;
@@ -727,6 +766,57 @@ public static void addtoDB () {
 
     // static <K,V extends Comparable<? super V>> List<Entry<K, V>> entriesSortedByValues(Map<K,V> map) {
     return entriesSortedByValues(kldValues, "dec");
+  }
+
+  public static List<Entry<String, Double>> getTopWordsFromAnswers(Vector<Vector<String>> answersTokens, LuceneHelper luc, int topNumWords) {
+  //// Same as pointwise KLD only instead of frequency within an answer we use frequency netween answers 
+    HashMap<String, Double> fore_distr = new HashMap<String, Double>();
+    int numAnswers = answersTokens.size();
+
+
+    for (Vector<String> tokens : answersTokens) {
+      // System.out.println(tokens + "\n\n");
+
+      HashSet<String> uniqueTokens = new HashSet<String>(tokens);
+      for (String token : uniqueTokens) {
+        if (! fore_distr.containsKey(token)) {
+          fore_distr.put(token, 1.0);
+        } else {
+          double curRepScore = fore_distr.get(token);
+          fore_distr.put(token, curRepScore + 1.0);
+        }
+
+      }
+    }
+    for (Entry<String, Double> e : fore_distr.entrySet()) {
+      fore_distr.put(e.getKey(), e.getValue() / numAnswers);
+    }
+
+    /// now that we have a distribution, we can start calculating KLD
+    HashMap<String, Double> kldValues = new HashMap<String, Double>();
+
+    for (Entry<String, Double> e : fore_distr.entrySet()) {
+      try {
+        double p_i = e.getValue();
+        double q_i = (double)(luc.totalTermFreq(e.getKey())) / (double)(luc.totalTerms());
+        if (q_i == 0) {
+          continue;
+        } 
+
+        double kldScore = p_i * Math.log(p_i / q_i);
+        kldValues.put(e.getKey(), new Double(kldScore));
+      } catch (IOException exc) {
+        System.out.println(exc.getMessage());
+        continue;
+      } catch (ParseException exc) {
+        System.out.println(exc.getMessage());
+        continue;
+      }
+
+    }
+
+    return Utils.sliceCollection(entriesSortedByValues(kldValues, "dec"), 0, topNumWords);
+
   }
 
    public static double KLD_JelinekMercerSmoothing(Vector<String> foreground, Vector<String> background, double lambda, LuceneHelper luc) 
@@ -944,7 +1034,7 @@ public static void addtoDB () {
           HashSet<String> setAtokens = new HashSet<String>();
           setAtokens.addAll(atokens);
 
-          setAtokens.retainAll(allWords); // setAtokens contains only tokens occuring in bother sets
+          setAtokens.retainAll(allWords); // setAtokens contains only tokens occuring in both sets
           for (String s : setAtokens) {
             if (wordsRep.containsKey(s)) {
               int reps = wordsRep.get(s) + 1;
@@ -1028,6 +1118,9 @@ public static void addtoDB () {
       /// Ranking v2 end
       return topRepWords;
   }
+
+
+
 
 
     // private static void loadStopWords() throws FileNotFoundException, IOException {

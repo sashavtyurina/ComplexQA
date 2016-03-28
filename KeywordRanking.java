@@ -1239,7 +1239,7 @@ public static void populateDBWithRawQA() {
       Statement qidsStmt = dbConnection.createStatement();
       String sql = "select qid, rawQuestion, gtquery from questions;";
       ResultSet qids = qidsStmt.executeQuery(sql);
-      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("BigramsIntersection.txt"), true));
+      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("TopWordsIntersection2.txt"), true));
 
 
       while (qids.next()) {
@@ -1288,19 +1288,34 @@ public static void populateDBWithRawQA() {
             gtSnippetsRS.close();
 
             snippets.addAll(gtSnippets);
+            Vector<String> topProbes = scoreProbes(rawQuestion, answers, snippets);
+            System.out.println(topProbes);
+
+            //// now rank separate words
+            Vector<String> topQueryWords = new Vector<String>();
+            for (String s : topProbes) {
+              topQueryWords.addAll(Arrays.asList(s.split("\\s")));
+            }
+
+            List<Entry<String, Double>> rankedWords = Utils.entriesSortedByValues(Utils.buildDistribution(topQueryWords), "dec");
+            for (Entry<String, Double> e : rankedWords) {
+              System.out.println(e.getValue() + "::" + e.getKey());
+              writer.println(decimalFormat.format(e.getValue()) + " :: " + e.getKey());
+            }
+
 
           // apply different similarities here
             // Vector<Snippet> scoredSnippets = simpleIntersection(rawQuestion, answers, snippets);
             // Vector<Snippet> scoredSnippets = simpleIntersectionNoQuery(rawQuestion, answers, snippets);
             // Vector<Snippet> scoredSnippets = kldSimilarity(rawQuestion, answers, snippets);
-            double questSimWeight = 0.3;
-            double answerSimWeight = 0.7;
-            Vector<Snippet> scoredSnippets = simpleIntersectionWeighted(rawQuestion, answers, snippets, questSimWeight, answerSimWeight);
-            bigramsIntersection(rawQuestion, answers, snippets);
+            // double questSimWeight = 0.3;
+            // double answerSimWeight = 0.7;
+            // Vector<Snippet> scoredSnippets = simpleIntersectionWeighted(rawQuestion, answers, snippets, questSimWeight, answerSimWeight);
+            // bigramsIntersection(rawQuestion, answers, snippets);
+            // Vector<Snippet> scoredSnippets = simpleIntersectionTopWords(rawQuestion, answers, snippets, questSimWeight, answerSimWeight, writer);
 
-            
-            List<Snippet> rankedSnippets = Utils.sliceCollection(Snippet.sortSnippetsByScore(scoredSnippets, "dec"), 0, 10);
-            // System.out.println(rankedSnippets);
+    //// Ranking separate snippets        
+      /*    List<Snippet> rankedSnippets = Utils.sliceCollection(Snippet.sortSnippetsByScore(scoredSnippets, "dec"), 0, 10);
 
             Vector<String> topQueryWords = new Vector<String>();
             writer.println("::SNIPPETS::");
@@ -1313,20 +1328,14 @@ public static void populateDBWithRawQA() {
             for (Entry<String, Double> e : rankedWords) {
               System.out.println(e.getValue() + "::" + e.getKey());
               writer.println(decimalFormat.format(e.getValue()) + " :: " + e.getKey());
-            }
+            }*/
 
-            // HashMap<String, Double> scoredSnippets = simpleIntersectionNoQuery(rawQuestion, answers, snippets, gtQuery);
-            
-            // List<Entry<String, Double>> rankedSnippets = Utils.sliceCollection(Utils.entriesSortedByValues(scoredSnippets, "dec"), 0, 20);
-            // for (Entry<String, Double> e : rankedSnippets) {
-            //   System.out.println(e.getValue() + "::" + e.getKey());
-            // }
-            System.out.println("next?");
-            input.next();
       }
       qidsStmt.close();
       qids.close();
       writer.close();
+
+            
 
     } catch (SQLException e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -1445,7 +1454,7 @@ public static void populateDBWithRawQA() {
 
   }
 
-  public static Vector<Snippet> simpleIntersectionTopWords(String question, Vector<String> answers, Vector<Snippet> snippets, double questSimWeight, double answerSimWeight) {
+  public static Vector<Snippet> simpleIntersectionTopWords(String question, Vector<String> answers, Vector<Snippet> snippets, double questSimWeight, double answerSimWeight, PrintWriter writer) {
   /// The score is the percentage of snippet words intersecting with top words from question and top words from answer
   /// Top words from question are the words with the highest pointwise KLD score (or it can be only title words)
   /// Top words from the answers are the words repeating throughout the answers (redundancy)
@@ -1453,10 +1462,71 @@ public static void populateDBWithRawQA() {
     // get top words from the question
     String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
     Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
+    qTokens = Utils.removeShortTokens(qTokens, 2);
 
-    List<Entry<String, Double>> topQuestionWords = Utils.pointwiseKLD(qTokens, luc);
-    System.out.println(topQuestionWords);
-    return null;
+    List<Entry<String, Double>> highKLDQuestion = Utils.sliceCollection(Utils.pointwiseKLD(qTokens, luc),0, 5);
+    // System.out.println("quest::: " + highKLDQuestion);
+
+    Vector<String> topQuestionWords = new Vector<String>();
+    for (Entry<String, Double> e : highKLDQuestion) {
+      topQuestionWords.add(e.getKey());
+    }
+
+    Vector<String> cleanAnswers = new Vector<String>();
+    for (String a: answers) {
+      String newAnswer = Utils.shrinkRepeatedChars(Utils.removePunct(a.toLowerCase()));
+      Vector<String> aTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
+      aTokens = Utils.removeShortTokens(aTokens, 2);
+      newAnswer = Utils.join_vector(aTokens, " ");
+
+      cleanAnswers.add(newAnswer);
+    }
+
+    Vector<Entry<String, Double>> repAnswers = Utils.answersIntersection(cleanAnswers, 0.4, luc);
+    List<Entry<String, Double>> sortedRepAnswers = Utils.entriesSortedByValues(repAnswers, "dec");
+
+    Vector<Entry<String, Double>> copySortedRepAnswers = new Vector<Entry<String, Double>>();
+    copySortedRepAnswers.addAll(sortedRepAnswers);
+
+    List<Entry<String, Double>> topEntriesAnswers = Utils.sliceCollection(copySortedRepAnswers ,0, 5);
+    // System.out.println("asw::: " + topEntriesAnswers);
+    Vector<String> topAnswersWords = new Vector<String>();
+    for (Entry<String, Double> e : topEntriesAnswers) {
+      topAnswersWords.add(e.getKey());
+    }
+
+    HashSet<String> topWords = new HashSet<String>();
+    topWords.addAll(topAnswersWords);
+    topWords.addAll(topQuestionWords);
+    // System.out.println("TOTAL:: " + topWords); 
+
+    writer.println("::TOP WORDS FROM QUESTION:: " + topQuestionWords);
+    writer.println("::TOP WORDS FROM ANSWERS:: " + topAnswersWords);
+
+
+
+    for (Snippet snippet : snippets) {
+      HashSet<String> sWords = new HashSet<String>(snippet.tokens());
+
+      Vector<String> queryTokens = new Vector<String>(Arrays.asList(snippet.queryText.split("\\s")));
+      sWords.removeAll(queryTokens);
+
+      Vector<String> copySWords = new Vector<String> (sWords);
+
+
+
+      double sLength = 1.0 * sWords.size();
+      sWords.retainAll(topQuestionWords);
+      double questionScore = sWords.size()*1.0 / sLength;
+
+      copySWords.retainAll(topAnswersWords);
+      double answersScore = copySWords.size()*1.0 / sLength;
+
+
+      snippet.setSimScore(questSimWeight*questionScore + answerSimWeight*answersScore);
+    }
+    return snippets;
+  
   }
 
   public static Vector<Snippet> kldSimilarity(String question, Vector<String> answers, Vector<Snippet> snippets) {
@@ -1569,6 +1639,119 @@ public static void populateDBWithRawQA() {
     }
     return snippets;
   }
+
+  public static Vector<String> scoreProbes(String question, Vector<String> answers, Vector<Snippet> snippets) {
+    HashMap<String, Vector<Snippet>> snippetsSplitByProbe = Snippet.splitSnippetsToProbes(snippets);
+
+    HashMap<String, Double> scoredProbesMap = new HashMap<String, Double>();
+
+    Vector<String> topQuestionWords = getTopQuestionWords(question, 10);
+    Vector<String> topAnswersWords = getTopAnswerWords(answers, 10);
+
+    // System.out.println(topQuestionWords);
+    // System.out.println(topAnswersWords);
+
+
+
+    for (Entry<String, Vector<Snippet>> e : snippetsSplitByProbe.entrySet()) {
+      
+      Double score = new Double(scoreForSingleProbe(topQuestionWords, topAnswersWords, e.getValue()));
+      // System.out.println(e.getKey() + " :: " + score);
+      scoredProbesMap.put(e.getKey(), score);
+
+    }
+    Vector<String> topProbes = new Vector<String>();
+    List<Entry<String, Double>> scoredProbes = Utils.sliceCollection(Utils.entriesSortedByValues(scoredProbesMap, "dec"), 0, 10);
+    for (Entry<String, Double> e : scoredProbes) {
+      topProbes.add(e.getKey());
+    }
+    
+    return topProbes;
+
+  }
+
+  public static double scoreForSingleProbe(Vector<String> topQuestionWords, Vector<String> topAnswersWords, Vector<Snippet> snippets) {
+    //// average intersection with question across snippets
+    double aveQuestionIntersection = averageIntersection(snippets, topQuestionWords);
+    double aveAnswersIntersection = averageIntersection(snippets, topAnswersWords);
+
+    //// now intersection of all snippets with answer
+    double questionIntersection = allSnippetsIntersection(snippets, topQuestionWords);
+    double answersIntersection = allSnippetsIntersection(snippets, topAnswersWords);
+
+    double probeScore = aveQuestionIntersection + aveAnswersIntersection + questionIntersection + answersIntersection;
+    return probeScore;
+  }
+
+  public static double allSnippetsIntersection(Vector<Snippet> snippets, Vector<String> tokens) {
+    HashSet<String> snippetsTokens = new HashSet<String>();
+
+    for (Snippet s : snippets) {
+      snippetsTokens.addAll(s.tokens());
+    }
+    snippetsTokens.retainAll(tokens);
+    double length = tokens.size() * 1.0;
+    return snippetsTokens.size()* 1.0 / length; 
+
+  }
+  public static double averageIntersection(Vector<Snippet> snippets, Vector<String> tokens) {
+    double length = tokens.size() * 1.0;
+    int accumScore = 0;
+    // System.out.println(tokens + "\n***\n\n");
+    for (Snippet s : snippets) {
+      // System.out.println(s.tokens());
+      HashSet<String> sTokens = new HashSet<String>(s.tokens());
+      sTokens.retainAll(tokens);
+      accumScore += sTokens.size();
+      // System.out.println(sTokens + "\n\n");
+    }
+    double aveScore = accumScore / length;
+    return aveScore;
+  }
+
+  public static Vector<String> getTopQuestionWords (String question, int topNumWords) {
+    String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
+    Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
+    qTokens = Utils.removeShortTokens(qTokens, 2);
+    List<Entry<String, Double>> highKLDQuestion = Utils.sliceCollection(Utils.pointwiseKLD(qTokens, luc),0, topNumWords);
+
+    Vector<String> topQuestionWords = new Vector<String>();
+    for (Entry<String, Double> e : highKLDQuestion) {
+      topQuestionWords.add(e.getKey());
+    }
+    return topQuestionWords;
+  }
+
+  public static Vector<String> getTopAnswerWords (Vector<String> answers, int topNumWords) {
+    if (answers.size() < 3) {
+      String collectiveAnswer = Utils.join_vector(answers, " ");
+      return getTopQuestionWords(collectiveAnswer, 10);
+    }
+
+    Vector<Vector<String>> cleanAnswers = new Vector<Vector<String>>();
+    for (String a: answers) {
+      String newAnswer = Utils.shrinkRepeatedChars(Utils.removePunct(a.toLowerCase()));
+      Vector<String> aTokens = new Vector<String>(Arrays.asList(newAnswer.split("\\s")));
+      aTokens = Utils.removeShortTokens(aTokens, 2);
+      cleanAnswers.add(aTokens);
+    }
+
+    List<Entry<String, Double>> topScoredWords = Utils.getTopWordsFromAnswers(cleanAnswers, luc, topNumWords);
+    Vector<String> topAnswersWords = new Vector<String>();
+    for (Entry<String, Double> e : topScoredWords) {
+      topAnswersWords.add(e.getKey());
+    }
+    return topAnswersWords;
+  }
+
+  // public static Vcetor<String> getTopWordsQA(String question, Vector<String> answers) {
+  //   String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
+  //   Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
+
+  //   List<Entry<String, Double>> highKLDQuestion = Utils.sliceCollection(Utils.pointwiseKLD(qTokens), 0, 5);
+  //   Vector<String> topQuestionWords = new Vector<
+
+  // }
 
 
 

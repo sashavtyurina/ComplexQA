@@ -118,6 +118,26 @@ public class Snippet {
 		return snippets;
 	}
 
+	public static HashMap<String, Vector<Snippet>> splitSnippetsToProbes(Vector<Snippet> snippets) {
+
+		HashMap<String, Vector<Snippet>> result = new HashMap<String, Vector<Snippet>>();
+
+		for (Snippet s : snippets) {
+			String probe = s.queryText;
+			if (!result.containsKey(probe)) {
+				Vector<Snippet> ss = new Vector<Snippet>();
+				ss.add(s);
+				result.put(probe, ss);
+			} else {
+				Vector<Snippet> curSnippets = result.get(probe);
+				curSnippets.add(s);
+				result.put(probe, curSnippets);
+			}
+		}
+
+		return result;
+	}
+
 
 
 
