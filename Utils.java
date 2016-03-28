@@ -59,6 +59,20 @@ public class Utils {
     return result;
   }
 
+  public static Vector<String> bigramsFromSentence(String sentence) {
+    String processed = Utils.shrinkRepeatedChars(Utils.removePunct(sentence.toLowerCase()));
+
+    Vector<String> tokens = Utils.dropStopWords(Utils.removeShortTokens(new Vector<String>(Arrays.asList(processed.split("\\s"))), 2));
+    Vector<String> bigrams = new Vector<String>();
+
+    int length = tokens.size();
+    for (int i = 0; i < length - 1; ++i) {
+      String bigram = tokens.get(i) + " " + tokens.get(i + 1);
+      bigrams.add(bigram);
+    }
+    return bigrams;
+  }
+
   public static Vector<String> str2vect(String str) {
     // given a space separated string, convert it to vector<String>
 
@@ -923,7 +937,8 @@ public static void addtoDB () {
           String answer = answers.get(i); // .toString();
 
           // clean and tokenize with lucene heavy tokenizer
-          Vector<String> atokens = Utils.dropStopWords(Utils.lucene_tokenize(Utils.shrinkRepeatedChars(Utils.removePunct(answer))));
+          // Vector<String> atokens = Utils.dropStopWords(Utils.lucene_tokenize(Utils.shrinkRepeatedChars(Utils.removePunct(answer))));
+          Vector<String> atokens = new Vector<String>(Arrays.asList(Utils.shrinkRepeatedChars(Utils.removePunct(answer.toLowerCase())).split("\\s")));
 
           allWords.addAll(atokens);
           HashSet<String> setAtokens = new HashSet<String>();

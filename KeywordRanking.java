@@ -1239,7 +1239,7 @@ public static void populateDBWithRawQA() {
       Statement qidsStmt = dbConnection.createStatement();
       String sql = "select qid, rawQuestion, gtquery from questions;";
       ResultSet qids = qidsStmt.executeQuery(sql);
-      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("SimpleIntersectionWeighted_03_07.txt"), true));
+      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("BigramsIntersection.txt"), true));
 
 
       while (qids.next()) {
@@ -1296,8 +1296,11 @@ public static void populateDBWithRawQA() {
             double questSimWeight = 0.3;
             double answerSimWeight = 0.7;
             Vector<Snippet> scoredSnippets = simpleIntersectionWeighted(rawQuestion, answers, snippets, questSimWeight, answerSimWeight);
+            bigramsIntersection(rawQuestion, answers, snippets);
+
             
-            List<Snippet> rankedSnippets = Utils.sliceCollection(Snippet.sortSnippetsByScore(scoredSnippets, "dec"), 0, 20);
+            List<Snippet> rankedSnippets = Utils.sliceCollection(Snippet.sortSnippetsByScore(scoredSnippets, "dec"), 0, 10);
+            // System.out.println(rankedSnippets);
 
             Vector<String> topQueryWords = new Vector<String>();
             writer.println("::SNIPPETS::");
@@ -1318,8 +1321,8 @@ public static void populateDBWithRawQA() {
             // for (Entry<String, Double> e : rankedSnippets) {
             //   System.out.println(e.getValue() + "::" + e.getKey());
             // }
-
-
+            System.out.println("next?");
+            input.next();
       }
       qidsStmt.close();
       qids.close();
@@ -1333,6 +1336,7 @@ public static void populateDBWithRawQA() {
       System.exit(0);
     }
   }
+
 
   public static Vector<Snippet> simpleIntersection (String question, Vector<String> answers, Vector<Snippet> snippets) {
   /// only do slight preprocessing - remove punctuation (no stopping or stemming)
@@ -1445,6 +1449,13 @@ public static void populateDBWithRawQA() {
   /// The score is the percentage of snippet words intersecting with top words from question and top words from answer
   /// Top words from question are the words with the highest pointwise KLD score (or it can be only title words)
   /// Top words from the answers are the words repeating throughout the answers (redundancy)
+
+    // get top words from the question
+    String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
+    Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
+
+    List<Entry<String, Double>> topQuestionWords = Utils.pointwiseKLD(qTokens, luc);
+    System.out.println(topQuestionWords);
     return null;
   }
 
@@ -1521,6 +1532,44 @@ public static void populateDBWithRawQA() {
     return randomQueries;
   }
 
+  public static Vector<Snippet> bigramsIntersection(String question, Vector<String> answers, Vector<Snippet> snippets) {
+    //// count the number of intersecting bigrams in the snippet and question/answer
+    HashSet<String> questionBigrams = new HashSet<String>(Utils.bigramsFromSentence(question));
+
+    Vector<String> answersBigrams = new Vector<String>();
+
+    for (String a : answers) {
+      answersBigrams.addAll(Utils.bigramsFromSentence(a));
+    }
+    System.out.println(Utils.entriesSortedByValues(Utils.buildDistribution(answersBigrams), "dec"));
+
+    HashSet<String> allBigrams = new HashSet<String>(questionBigrams);
+    allBigrams.addAll(answersBigrams);
+
+    for (Snippet s : snippets) {
+      s.generateBigrams();
+      // System.out.println("SNIPPET: " + s.original);
+      // System.out.println("BIGRAMS: " + s.getBigrams());
+      // input.next();
+      HashSet<String> intersectionBigrams = new HashSet<String>(s.getBigrams());
+      double total = s.getBigrams().size();
+
+      intersectionBigrams.retainAll(allBigrams);
+      double intersect = intersectionBigrams.size();
+
+      
+      if (intersectionBigrams.size() != 0) {
+        // System.out.println(intersectionBigrams);
+        // System.out.println(s.original);
+        // System.out.println(s.queryText + "\n\n");
+      }
+
+      s.setSimScore(intersect);
+
+    }
+    return snippets;
+  }
+
 
 
 public static void main(String[] args) throws IOException, ParseException, JSONException, FileNotFoundException, ParseException {
@@ -1534,6 +1583,7 @@ public static void main(String[] args) throws IOException, ParseException, JSONE
   testSimilarityMeasures1();
   // populateDBWithRawQA();
 }
+
 }
 
 //// USEFUL CODE SNIPPETS

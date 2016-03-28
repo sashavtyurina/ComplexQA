@@ -6,6 +6,7 @@ public class Snippet {
 	public String queryText;
 	public String processed;
 	private Vector<String> tokens;
+	private Vector<String> bigrams;
 
 
 	public int snippetID;
@@ -27,6 +28,7 @@ public class Snippet {
 		tokens = Utils.removeShortTokens(new Vector<String>(Arrays.asList(processed.split("\\s"))), 2);
 		simScore = -1.0;
 		producedByTrueQuery = _producedByTrueQuery;
+		this.bigrams = new Vector<String>();
 	}
 
 	public static Vector<Snippet> rsToSnippetList (ResultSet snippetsRS) {
@@ -70,6 +72,22 @@ public class Snippet {
 		return simScore;
 	}
 
+	public Vector<String> getBigrams() {
+		return this.bigrams;
+	}
+
+	public void generateBigrams() {
+		
+		Vector<String> stoppedTokens = Utils.dropStopWords(this.tokens);
+		int length = stoppedTokens.size();
+
+		for (int i = 0; i < length - 1; ++i) {
+			String bigram = stoppedTokens.get(i) + " " + stoppedTokens.get(i + 1);
+			this.bigrams.add(bigram);
+		}
+	}
+
+
 	public static Vector<Snippet> sortSnippetsByScore(Vector<Snippet> snippets, String direction) {
 
     /// direction can be either "inc" or "dec"
@@ -99,5 +117,8 @@ public class Snippet {
 		}
 		return snippets;
 	}
+
+
+
 
 }
