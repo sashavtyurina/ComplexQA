@@ -1,6 +1,20 @@
 QUESTION :: Why is my 5 month old pit bull puppy eating rocks? My dog is very active and has a really good appetite. She loves to play and is very well mannered. Lately she has been eating small pea gravel from my landscaping. Is she just being a puppy or is something wrong?
 TRUE QUERY :: puppy rocks eating gravel
-0.194 :: puppy
+
+TOP SCORED PROBES::
+puppy rocks eating gravel :: 6.6
+gravel puppy dog :: 5
+lately puppy dog :: 5
+mannered pit dog :: 4.3
+appetite month puppy :: 4.1
+pea puppy dog :: 4.1
+appetite pit dog :: 4
+month puppy small :: 3.8
+mannered play bull :: 3.7
+pea landscaping puppy :: 3.6
+
+WORDS RANKED BY FREQUENCY::
+0.226 :: puppy
 0.161 :: dog
 0.065 :: pea
 0.065 :: mannered
@@ -10,34 +24,62 @@ TRUE QUERY :: puppy rocks eating gravel
 0.065 :: pit
 0.032 :: play
 0.032 :: landscaping
-0.032 :: rock
-0.032 :: puppi
 0.032 :: bull
+0.032 :: eating
 0.032 :: lately
-0.032 :: eat
+0.032 :: rocks
 0.032 :: small
+
+
 QUESTION :: Microsoft Points for 360? I got bored, so I was looking around on my xbox 360 dashboard, when i came to the whole page that told you completely about microsoft points. It said you can buy them, and that you can also get them from promotions and stuff.
 
 What Kind Of Promotions do they mean?
 
 And is there a way to get them for free?
 TRUE QUERY :: Microsoft points free promotions 360
-0.25 :: points
+
+TOP SCORED PROBES::
+Microsoft points free promotions 360 :: 9.1
+buy 360 points :: 6.8
+360 stuff points :: 6.4
+buy points xbox :: 6.2
+came points xbox :: 5.9
+told 360 points :: 5.9
+bored points dashboard :: 5.7
+buy microsoft points :: 5.5
+promotions 360 microsoft :: 5.4
+points dashboard xbox :: 5.4
+
+WORDS RANKED BY FREQUENCY::
+0.281 :: points
 0.156 :: 360
 0.094 :: buy
-0.094 :: microsoft
 0.094 :: xbox
+0.062 :: promotions
+0.062 :: microsoft
 0.062 :: dashboard
 0.031 :: told
-0.031 :: promotions
 0.031 :: bored
+0.031 :: Microsoft
 0.031 :: came
-0.031 :: point
 0.031 :: free
 0.031 :: stuff
-0.031 :: promot
 QUESTION :: For high schoolers how many hours a day is perfect for school? Give me some specifics... how many class periods should they have, how long for lunch, how long the class periods should be. And give me some realistic answers. Don't say 2 hours should be for lunch or something like that.
 TRUE QUERY :: schoolers hours high perfect
+
+TOP SCORED PROBES::
+periods don't lunch :: 5.8
+periods school lunch :: 5.6
+periods lunch schoolers :: 5.6
+periods long high :: 5.3
+periods long school :: 5.2
+periods give lunch :: 5.1
+class long lunch :: 4.7
+class lunch schoolers :: 4.5
+periods class schoolers :: 4.5
+periods long schoolers :: 4.4
+
+WORDS RANKED BY FREQUENCY::
 0.267 :: periods
 0.2 :: lunch
 0.133 :: long
@@ -49,6 +91,20 @@ TRUE QUERY :: schoolers hours high perfect
 0.033 :: high
 QUESTION :: Looking for whereabouts of a fishing boat from Boston (30's-40's) where do I  search for information? The boat was at one time owned by Peter Busalacchi, and named "Nina B".  It was one of seven boats, some of which were sold to carry troops to Europe during WWII.
 TRUE QUERY :: fishing troops Boston boats
+
+TOP SCORED PROBES::
+seven boston sold :: 3.8
+looking nina sold :: 3.6
+30's nina sold :: 3.5
+boston carry sold :: 3.5
+wwii troops sold :: 3.4
+troops fishing sold :: 3.2
+named 40's sold :: 3.1
+information nina sold :: 3
+boat troops sold :: 2.9
+boston 30's sold :: 2.8
+
+WORDS RANKED BY FREQUENCY::
 0.333 :: sold
 0.1 :: boston
 0.1 :: nina
@@ -70,6 +126,20 @@ I just moved in with a new roommate. I am finding out that her cat loves to eat 
 Thanks for any answers,
 -Chris
 TRUE QUERY :: cayenne plants hurt cat
+
+TOP SCORED PROBES::
+squirts plant cat :: 3.9
+pepper roommate squirt :: 3.7
+roommates play hurt :: 3.6
+plant cat problem :: 3.3
+plant plants remedy :: 3.1
+thanks cayenne squirt :: 3.1
+scenarios roommate hurt :: 3
+cayenne squirt moved :: 2.9
+think plant plants :: 2.9
+plant problem remedy :: 2.8
+
+WORDS RANKED BY FREQUENCY::
 0.167 :: plant
 0.1 :: squirt
 0.067 :: cayenne
@@ -89,6 +159,20 @@ TRUE QUERY :: cayenne plants hurt cat
 0.033 :: squirts
 QUESTION :: Best jeans for guys? Guys... what jeans combine the best quality, value, non-metrosexuality, fit, and look?  Or ladies... does your man where a certain pair of jeans that you like?
 TRUE QUERY :: jeans guys fit look value quality
+
+TOP SCORED PROBES::
+guys fit best :: 5.4
+jeans fit value :: 5.1
+pair fit best :: 4.4
+ladies pair jeans :: 4.3
+pair fit combine :: 4.3
+jeans non best :: 4.3
+jeans guys best :: 4.3
+jeans value quality :: 4.2
+pair guys fit :: 4.2
+pair jeans fit :: 4.1
+
+WORDS RANKED BY FREQUENCY::
 0.2 :: fit
 0.2 :: jeans
 0.167 :: pair
@@ -101,6 +185,20 @@ TRUE QUERY :: jeans guys fit look value quality
 0.033 :: non
 QUESTION :: How do you know when you are in love? Ok see the love of my life called my house drunk and we are both under age and hes three years older than me but he cussed my dad out and he dont even remember.My dad told me that i am never allowed to talk to him again but he said hell quit drinking and smoking pot just to be with me! I love him with all my heart and i want to be with him for the reat of my life but i talk to him in the mornings an the bus and sometimes at night even though im not supposed to. He said he'll wait for me until I turn 18 but thats a while from now and i dont think my dad will forgive him.I dont know what to do or if he even loves me.Any suggestions?
 TRUE QUERY :: love know
+
+TOP SCORED PROBES::
+love dad told :: 6.2
+quit pot dad :: 5.5
+love cussed told :: 4.2
+love life hes :: 4
+told reat years :: 3.9
+loves told years :: 3.9
+dad hell suggestions :: 3.7
+wait loves talk :: 3.4
+drinking house dad :: 3.2
+drunk house he'll :: 3.1
+
+WORDS RANKED BY FREQUENCY::
 0.133 :: dad
 0.133 :: told
 0.1 :: love
@@ -126,6 +224,20 @@ Also I need sound effects like chatting and washing dishes, what songs can provi
 
 Thanks :)
 TRUE QUERY :: song sad slow drama
+
+TOP SCORED PROBES::
+sad needed dishes :: 3.8
+sad theme effects :: 3.8
+nxt slow needed :: 3.6
+sad washing em :: 3.2
+sad theme main :: 3.1
+sad main sound :: 3
+performance washing needed :: 2.9
+sad needed main :: 2.9
+sad leaving main :: 2.8
+performance slow websites :: 2.8
+
+WORDS RANKED BY FREQUENCY::
 0.233 :: sad
 0.133 :: needed
 0.133 :: main
@@ -142,6 +254,20 @@ TRUE QUERY :: song sad slow drama
 0.033 :: em
 QUESTION :: How many inches should I set my html code at to create a website optimized for 800x600 viewing? Alright, so I want to create a webpage that will be viewable on 800x600.  For this I want to know how many inches would be optimal for say a table that I wish to span across the whole screen.
 TRUE QUERY :: optimized website 800x600
+
+TOP SCORED PROBES::
+set know webpage :: 2.9
+table optimal create :: 2.8
+set 800x600 viewable :: 2.6
+website set know :: 2.6
+optimal create viewable :: 2.5
+optimal create viewing :: 2.4
+create html alright :: 2.4
+set inches say :: 2.3
+800x600 webpage inches :: 2.3
+800x600 viewable webpage :: 2.3
+
+WORDS RANKED BY FREQUENCY::
 0.133 :: set
 0.133 :: create
 0.1 :: viewable
@@ -162,6 +288,20 @@ So, i've been looking online for the past hour for sites that have the eppisode 
 
 If someone can actually find the site with the video on it, i'll give you 10pts. <33
 TRUE QUERY :: veronica mars online
+
+TOP SCORED PROBES::
+watch eppie okay :: 4.35
+eppisode screen eppie :: 3.65
+33 youtube video :: 3.55
+actually watch sites :: 3.5
+vcr eppisode awards :: 3.4
+can't screen watch :: 3.3
+watch problem channel :: 3.25
+vcr tried later :: 3.1
+vcr online eppie :: 3
+screen watch psyced :: 2.9
+
+WORDS RANKED BY FREQUENCY::
 0.167 :: watch
 0.1 :: vcr
 0.1 :: screen
@@ -183,6 +323,20 @@ TRUE QUERY :: veronica mars online
 0.033 :: video
 QUESTION :: junior prom tickets? for the students, do we have "wedding style" tickets with an envelope, card, photo info, etc? or is that just for the chaperones? i was thinking of a huge "index card" length ticket. i dunno. just give me some input plz.
 TRUE QUERY :: prom tickets style
+
+TOP SCORED PROBES::
+prom huge card :: 3.8
+envelope prom tickets :: 3.4
+chaperones students prom :: 3.2
+prom dunno tickets :: 3.2
+prom style wedding :: 3.2
+students prom input :: 3.2
+chaperones prom wedding :: 3
+give prom huge :: 2.9
+envelope prom info :: 2.9
+give envelope prom :: 2.7
+
+WORDS RANKED BY FREQUENCY::
 0.333 :: prom
 0.1 :: envelope
 0.067 :: chaperones
@@ -200,6 +354,20 @@ QUESTION :: How can you ? who will approve the names of the newest elements? Wil
 B) a committee scientist
 C) the chemist's from a research insitution
 TRUE QUERY :: newest elements names
+
+TOP SCORED PROBES::
+discover names elements :: 4.9
+chemist's discover elements :: 4.9
+element approve chemist's :: 4.6
+element scientist names :: 4.5
+element chemist's elements :: 4.4
+newest names elements :: 4.4
+element chemist's discover :: 4.4
+discover scientist elements :: 4.4
+element scientist elements :: 4.4
+element approve newest :: 4.4
+
+WORDS RANKED BY FREQUENCY::
 0.2 :: element
 0.2 :: elements
 0.133 :: chemist's
@@ -210,6 +378,20 @@ TRUE QUERY :: newest elements names
 0.067 :: newest
 QUESTION :: What do I wear...? I didnt shave my legs recently and and I dont have any pants and I need a outfit in 5 minutes. I cant get in the shower!!
 TRUE QUERY :: wear legs shave
+
+TOP SCORED PROBES::
+minutes pants wear :: 4
+outfit legs wear :: 3.8
+minutes legs wear :: 3.7
+minutes outfit legs :: 3.6
+minutes outfit wear :: 3.6
+minutes shower wear :: 3.5
+shave pants wear :: 3.5
+minutes pants outfit :: 3.4
+shave outfit wear :: 3.4
+shower legs wear :: 3.3
+
+WORDS RANKED BY FREQUENCY::
 0.267 :: wear
 0.2 :: minutes
 0.167 :: outfit
@@ -219,6 +401,20 @@ TRUE QUERY :: wear legs shave
 0.067 :: shower
 QUESTION :: What dance class other than poms? I am going to take a poms dance class I would like to know which other dance class I should take.Dance classes as in hiphop , Jazz , or Ballet. What do you think?
 TRUE QUERY :: dance classes
+
+TOP SCORED PROBES::
+jazz ballet dance :: 7.3
+classes jazz poms :: 7.2
+jazz class know :: 7.1
+take ballet dance :: 7.1
+think jazz class :: 6.9
+class take dance :: 6.5
+jazz poms ballet :: 6.4
+classes jazz take :: 6.4
+class poms hiphop :: 6.4
+classes jazz know :: 6.3
+
+WORDS RANKED BY FREQUENCY::
 0.233 :: jazz
 0.133 :: class
 0.1 :: classes
@@ -231,6 +427,20 @@ TRUE QUERY :: dance classes
 0.033 :: hiphop
 QUESTION :: King of the Hill? How often do you guys watch King of the Hill? What is your favorite episode? My favorite one is when Luanne, meets this guy and the guy does something to her (like i don't know), so then, she tells, someone that she is pregant. Then Bobby, sneaks under her bed when she leaves. O'h my that one was really crazy.
 TRUE QUERY :: king hill favorite episode
+
+TOP SCORED PROBES::
+guy king luanne :: 4.2
+don't king luanne :: 4.1
+episode bobby luanne :: 3.9
+hill guys luanne :: 3.8
+hill don't bobby :: 3.7
+hill leaves luanne :: 3.6
+watch king luanne :: 3.6
+hill crazy bobby :: 3.4
+hill pregant luanne :: 3.2
+hill don't king :: 3.1
+
+WORDS RANKED BY FREQUENCY::
 0.233 :: luanne
 0.2 :: hill
 0.133 :: king
@@ -245,6 +455,20 @@ TRUE QUERY :: king hill favorite episode
 0.033 :: guys
 QUESTION :: serial killers? well i just got finished watching this thing about serial killers, and i was wondering what are the symphtoms of peple who are going to become serial killers when they grow up???????
 TRUE QUERY :: serial killer symphtoms
+
+TOP SCORED PROBES::
+killers finished serial :: 5.3
+peple killers serial :: 5
+peple serial thing :: 4.8
+killers watching serial :: 4.6
+killers grow serial :: 4.6
+killers wondering serial :: 4.5
+symphtoms killers serial :: 4.4
+killers serial thing :: 4.2
+peple wondering serial :: 4.1
+wondering grow serial :: 4
+
+WORDS RANKED BY FREQUENCY::
 0.333 :: serial
 0.233 :: killers
 0.1 :: peple
@@ -256,6 +480,20 @@ TRUE QUERY :: serial killer symphtoms
 0.033 :: finished
 QUESTION :: christina aguilera set list? does anyone know what songs christina aguilera plays in her concert.  i am going to see her on thursday and cant wait.  much obliged to anyone who knows.
 TRUE QUERY :: aguilera set list christina songs
+
+TOP SCORED PROBES::
+aguilera songs list :: 5.4
+aguilera wait obliged :: 4.6
+aguilera going songs :: 4.6
+aguilera songs wait :: 4.6
+aguilera wait knows :: 4.5
+aguilera concert obliged :: 4.5
+aguilera thursday wait :: 4.5
+aguilera songs know :: 4.3
+aguilera songs christina :: 4.2
+aguilera songs knows :: 4.2
+
+WORDS RANKED BY FREQUENCY::
 0.333 :: aguilera
 0.2 :: songs
 0.133 :: wait
@@ -269,6 +507,20 @@ TRUE QUERY :: aguilera set list christina songs
 0.033 :: christina
 QUESTION :: Scared to death..? I took my daughter to the emergency room because of a limp. We sat 3 hours, had numerous x-rays done and then lots of blood work and the nurses came in and told me that she needed to see a hematologist on monday and that it wasn't her leg that was bothering her it was her blood. They said they "weren't comfortable" giving a diagnosis but when i said  that she didn't act sick or anything they said "Well she feels pretty bad, I can guarantee that- probably too sick to complain." I'm nervous and scared and don't know what it could be. Her white count was elevated and her iron was 22/3 when it should be 12/17. It's a long weekend and they want me to wait until Monday to know anything..has anyone heard of this before? Experienced it? Any doctors out there that know what it might be?
 TRUE QUERY :: limp iron hematologist
+
+TOP SCORED PROBES::
+feels long sick :: 3.1
+emergency scared sick :: 3
+didn't know act :: 3
+count lots sick :: 2.9
+lots 22 sick :: 2.8
+hematologist blood sick :: 2.6
+work scared daughter :: 2.6
+wasn't rays sick :: 2.6
+diagnosis didn't know :: 2.5
+bothering took scared :: 2.4
+
+WORDS RANKED BY FREQUENCY::
 0.2 :: sick
 0.1 :: scared
 0.067 :: lots
@@ -291,6 +543,20 @@ TRUE QUERY :: limp iron hematologist
 0.033 :: act
 QUESTION :: What causes neck spasms? I have been getting spasms in my neck not all the time but occassionally they will happen... what causes the neck to spasm?  I do have tmj in my jaw...could that be why? And please no answers Like "OMG YOUR DYING!" K thanks.
 TRUE QUERY :: neck spasms tmj cause jaw
+
+TOP SCORED PROBES::
+neck spasms causes :: 4.7
+spasm jaw dying :: 4.7
+neck spasm jaw :: 4.5
+jaw spasms causes :: 4.5
+omg spasms tmj :: 4.5
+neck spasm spasms :: 4.5
+spasm jaw spasms :: 4.3
+spasm happen tmj :: 4.1
+spasm jaw time :: 4.1
+spasm jaw happen :: 4
+
+WORDS RANKED BY FREQUENCY::
 0.233 :: spasm
 0.2 :: jaw
 0.167 :: spasms
@@ -303,6 +569,20 @@ TRUE QUERY :: neck spasms tmj cause jaw
 0.033 :: dying
 QUESTION :: How to make jeans fit you better, how long do you sit in the bath with them on? I've heard that to make jeans fit you better, you should sit in the bath with them on before you first wash them. Is this right?  How long for?
 TRUE QUERY :: jeans bath fit
+
+TOP SCORED PROBES::
+jeans fit make :: 7.5
+fit better make :: 6.9
+jeans better make :: 6.9
+jeans sit make :: 6.4
+jeans sit fit :: 6.3
+jeans sit right :: 6.3
+jeans long make :: 6.3
+jeans wash make :: 6.2
+fit wash make :: 6.1
+fit better right :: 5.8
+
+WORDS RANKED BY FREQUENCY::
 0.233 :: jeans
 0.233 :: make
 0.167 :: fit
@@ -313,6 +593,20 @@ TRUE QUERY :: jeans bath fit
 0.033 :: long
 QUESTION :: Where Can I get Preppy pants? Where can i get preppy pants not from Hollister or anything like that i dont have enough money but are there any cheaper pants that are similar that i can afford? Tell me what style please , also
 TRUE QUERY :: cheaper preppy pants
+
+TOP SCORED PROBES::
+pants style hollister :: 5.3
+pants money hollister :: 4.8
+pants hollister cheaper :: 4.6
+pants hollister tell :: 3.5
+pants preppy style :: 3.4
+pants preppy tell :: 3.4
+pants preppy cheaper :: 3.3
+pants hollister afford :: 3.3
+pants preppy hollister :: 3.3
+pants tell cheaper :: 3.3
+
+WORDS RANKED BY FREQUENCY::
 0.333 :: pants
 0.2 :: hollister
 0.133 :: preppy
@@ -323,6 +617,20 @@ TRUE QUERY :: cheaper preppy pants
 0.033 :: afford
 QUESTION :: Wat shud i do? Recently my best boy friend has been treating me really unfairly! Every chance he gets he starts me and shouts at me! He bosses me about and bullys me! Recently he said 2me that he wants to hav a truths, i z that was grand but then he siad a whole pile of stuff, that people r sayin things bout me, wen i ask them they said that they did'nt say anything like that! Im really startin 2 hate him! Wat shud i do?
 TRUE QUERY :: boy friend shouts bosses bullys
+
+TOP SCORED PROBES::
+2me sayin stuff :: 2.3
+people bout friend :: 2.1
+siad gets wants :: 2
+wants starts say :: 1.9
+wat siad starts :: 1.8
+2me wen ask :: 1.7
+2me recently ask :: 1.7
+2me bosses friend :: 1.7
+shud chance unfairly :: 1.7
+treating startin bout :: 1.6
+
+WORDS RANKED BY FREQUENCY::
 0.133 :: 2me
 0.067 :: siad
 0.067 :: bout
@@ -346,6 +654,20 @@ TRUE QUERY :: boy friend shouts bosses bullys
 0.033 :: wen
 QUESTION :: What are my rights as a consumer when I've paid for 15 montths of a service, used 12 and want to discontinue? I've practiced Kunk Fu at a School for the past year.  I'm not interested in continuing.  I signed a contract saying that if I need to discontinue, they'll reimburse.  The contract doesn't specify how much or a time-frame of paying back.  Is the amount pro-rated by law? Thanks for your time and expertise.  Daniel, Berkeley, Ca.
 TRUE QUERY :: contract discontinue reimburse service
+
+TOP SCORED PROBES::
+thanks contract pro :: 2.4
+berkeley pro i'm :: 2.4
+15 contract pro :: 2.2
+12 discontinue contract :: 2
+time contract kunk :: 1.9
+ca fu expertise :: 1.9
+daniel montths contract :: 1.8
+consumer amount contract :: 1.8
+they'll past expertise :: 1.8
+fu kunk expertise :: 1.8
+
+WORDS RANKED BY FREQUENCY::
 0.2 :: contract
 0.1 :: expertise
 0.1 :: pro
@@ -367,6 +689,20 @@ TRUE QUERY :: contract discontinue reimburse service
 0.033 :: i'm
 QUESTION :: what is the best way to scan in magazine clippings w photos and file them in MS word? Can buy new scanner. I will need to be able to classify and find articles easily. Please recomend a scanner product that will help.
 TRUE QUERY :: scan classify find MS file word
+
+TOP SCORED PROBES::
+best scan find :: 5.9
+articles way scanner :: 5.65
+clippings word scanner :: 5.35
+classify able scanner :: 4.9
+magazine find scanner :: 4.85
+easily file scanner :: 4.6
+product photos scanner :: 4.45
+buy able scanner :: 4.45
+recomend word scanner :: 4.45
+clippings find scanner :: 4
+
+WORDS RANKED BY FREQUENCY::
 0.3 :: scanner
 0.1 :: find
 0.067 :: clippings
@@ -387,6 +723,20 @@ TRUE QUERY :: scan classify find MS file word
 QUESTION :: Login button? I have the Yahoo login button on my IE. I have SBC which has an agreement with Yahoo. Is there anyway to put it on my Firefox. 
 Thanks!
 TRUE QUERY :: firefox yahoo login button
+
+TOP SCORED PROBES::
+firefox button login :: 7.1
+firefox sbc login :: 6.8
+firefox put button :: 6.7
+thanks firefox sbc :: 6.3
+put button login :: 6
+button sbc login :: 5.7
+thanks firefox button :: 5.4
+firefox button sbc :: 5.4
+firefox agreement yahoo :: 5.3
+firefox button agreement :: 4.8
+
+WORDS RANKED BY FREQUENCY::
 0.267 :: firefox
 0.233 :: button
 0.133 :: sbc
@@ -397,10 +747,24 @@ TRUE QUERY :: firefox yahoo login button
 0.033 :: yahoo
 QUESTION :: My new girlfriend has kids... should I tell my friends? My friends or people I hang out with in this case aren't really as important as say my girlfriend or closer friends. Just more of a group of couples and stags that get together from time to time. They are high class and judgmental. Their opinions of me mean little but they do enjoy gossip and I'd rather not give them some fuel. Should I not let it known my new girl has children and if not, do you think its rude to ask my girlfriend not to mention it?
 TRUE QUERY :: girlfriend kids
+
+TOP SCORED PROBES::
+judgmental friends mention :: 4.9
+mention tell girlfriend :: 4.8
+children hang girlfriend :: 4.6
+people friends aren't :: 4.3
+friends kids couples :: 3.9
+girl friends stags :: 3.7
+girlfriend kids :: 3.7
+closer people girlfriend :: 3.7
+rude think enjoy :: 3.6
+children friends kids :: 3.3
+
+WORDS RANKED BY FREQUENCY::
 0.172 :: friends
 0.138 :: girlfriend
+0.103 :: kids
 0.069 :: children
-0.069 :: kids
 0.069 :: people
 0.069 :: mention
 0.034 :: rude
@@ -410,13 +774,26 @@ TRUE QUERY :: girlfriend kids
 0.034 :: enjoy
 0.034 :: hang
 0.034 :: closer
-0.034 :: kid
 0.034 :: couples
 0.034 :: girl
 0.034 :: tell
 0.034 :: aren't
 QUESTION :: What are some websites that tell/teach you how to play different dynamics on a flute? I need to find 10 different websites that talk about playing different dynamics on a flute and am having a lot of trouble with it, can any one help me??
 TRUE QUERY :: flute websites dynamics
+
+TOP SCORED PROBES::
+trouble flute dynamics :: 4.5
+playing flute dynamics :: 4.3
+websites flute talk :: 4.2
+10 flute talk :: 4.1
+flute dynamics tell :: 4
+playing flute lot :: 3.9
+flute dynamics find :: 3.8
+websites playing flute :: 3.8
+different websites flute :: 3.6
+trouble flute find :: 3.6
+
+WORDS RANKED BY FREQUENCY::
 0.333 :: flute
 0.133 :: dynamics
 0.1 :: playing
@@ -430,6 +807,20 @@ TRUE QUERY :: flute websites dynamics
 0.033 :: tell
 QUESTION :: How often do you incorporate the breastpump in your day?For how long? I tried 15 min and a probably filled 1/3 of a bottle..Its so frustrating , how long does it take to fill a bottle?Im I not producing enough milk? Then it feels like one breast is not enough to feel the baby ..Im really confused about this..
 TRUE QUERY :: breastpump producing day
+
+TOP SCORED PROBES::
+feel breastpump milk :: 7.4
+breast incorporate milk :: 6.8
+fill breastpump take :: 6.7
+long breastpump breast :: 6.6
+long breast baby :: 6.6
+confused bottle breastpump :: 6.5
+breastpump probably baby :: 6.2
+bottle breastpump probably :: 5.9
+feel producing breastpump :: 5.8
+15 breastpump probably :: 5.8
+
+WORDS RANKED BY FREQUENCY::
 0.267 :: breastpump
 0.1 :: breast
 0.1 :: probably
@@ -446,6 +837,20 @@ TRUE QUERY :: breastpump producing day
 0.033 :: producing
 QUESTION :: What kind of make-up would look good on a thirteen-year-old with curly brown hairand green eyes? I don't want to wear a lot and look like a tart. Just a little to enhance my features...etc. What colours would suit me? Bring out my eyes etc.
 TRUE QUERY :: make-up brown green eyes hair
+
+TOP SCORED PROBES::
+eyes enhance brown :: 4.4
+look enhance brown :: 4.2
+hairand brown wear :: 4
+look don't curly :: 3.9
+look green eyes :: 3.9
+look curly brown :: 3.9
+curly brown wear :: 3.9
+eyes curly thirteen :: 3.9
+look enhance lot :: 3.8
+eyes brown wear :: 3.8
+
+WORDS RANKED BY FREQUENCY::
 0.2 :: brown
 0.167 :: look
 0.133 :: curly
@@ -459,6 +864,20 @@ TRUE QUERY :: make-up brown green eyes hair
 0.033 :: thirteen
 QUESTION :: Does your spouse buy you Christmas presents with your money? Several years ago I got a computer for Christmas from my wife. It was really great. What I didn't know was she bought it through the Company I work for and I suddenly had an unexpected $125 a month coming off my pay cheque. The thought was great but the appearance of the bill was disturbing. Has this type of thing ever happened to you?
 TRUE QUERY :: spouse pay presents
+
+TOP SCORED PROBES::
+didn't unexpected 125 :: 3.6
+suddenly didn't work :: 3.4
+money presents wife :: 3.3
+spouse christmas years :: 3.2
+125 great cheque :: 2.9
+unexpected spouse work :: 2.9
+didn't presents wife :: 2.8
+disturbing money work :: 2.8
+work presents wife :: 2.7
+disturbing 125 know :: 2.7
+
+WORDS RANKED BY FREQUENCY::
 0.133 :: work
 0.1 :: 125
 0.1 :: presents
@@ -476,6 +895,20 @@ TRUE QUERY :: spouse pay presents
 0.033 :: cheque
 QUESTION :: Has anyone had a positive experience with MyDataJob.com? I'm looking for a typing job from home in my spare time.  They are presently asking for $49.99 and you will be provided with names of companies that can utilize your service (more or less).
 TRUE QUERY :: mydatajob experience
+
+TOP SCORED PROBES::
+spare 99 presently :: 2.8
+job mydatajob i'm :: 2.8
+job time i'm :: 2.7
+looking 99 i'm :: 2.7
+spare job i'm :: 2.6
+spare typing 99 :: 2.6
+job time positive :: 2.6
+49 job i'm :: 2.5
+49 home mydatajob :: 2.4
+49 spare experience :: 2.3
+
+WORDS RANKED BY FREQUENCY::
 0.167 :: job
 0.167 :: i'm
 0.133 :: spare
@@ -491,6 +924,20 @@ TRUE QUERY :: mydatajob experience
 0.033 :: presently
 QUESTION :: Woah! What happened here? Theres so many questions about dating in this section? How is dating realted to yahoo answers? Theres a reason there is a "singles and dating" section? Why are so many questions miscategorized now? And yahoo still hasnt started policing the perverted questions on the "family and relationships" section yet. It would be really nice if they would. All who agree say something and report the miscatagorized questions and perverted questions.
 TRUE QUERY :: yahoo questions missclassified
+
+TOP SCORED PROBES::
+nice section perverted :: 2
+section perverted woah :: 2
+section perverted say :: 1.9
+reason questions section :: 1.9
+nice perverted woah :: 1.6
+hasnt dating policing :: 1.5
+hasnt dating perverted :: 1.5
+reason nice perverted :: 1.4
+questions theres say :: 1.4
+hasnt realted woah :: 1.4
+
+WORDS RANKED BY FREQUENCY::
 0.2 :: perverted
 0.133 :: section
 0.1 :: woah
@@ -505,6 +952,20 @@ TRUE QUERY :: yahoo questions missclassified
 0.033 :: realted
 QUESTION :: Both in love beyond words...cant be together...do I let go? We are both in love, more than I thought possible, but he has gone back to his wife and kids for their sake, hes not happy but cant cause more pain.  They do not have a physical relationship.  We still see each other and there are no promises made, but I truly doubt in my heart he will stay married after the kids are out of the house in 5 years or so.  Do I keep a relationship, constantly reminded of how much I love and miss him when we are not together, having faith that it will work out in the end, or just cut it off completely, end the relationship, and try to move on.  I am not that young and have plenty of life experiences so this is not an infatuation.
 TRUE QUERY :: relationship married other
+
+TOP SCORED PROBES::
+truly doubt infatuation :: 4.7
+cause love end :: 4.2
+truly life infatuation :: 4
+love end gone :: 4
+love work kids :: 4
+constantly end infatuation :: 3.9
+physical hes infatuation :: 3.7
+love words kids :: 3.6
+completely love young :: 3.5
+made love reminded :: 3.5
+
+WORDS RANKED BY FREQUENCY::
 0.2 :: love
 0.133 :: infatuation
 0.1 :: end
@@ -529,6 +990,20 @@ All of my .doc files have a wordpad icon and wordpad association with them, but 
 Documents still open with Word fine, but this is annoying.
 Any suggestions? Thanks in advance.
 TRUE QUERY :: word wordpad association icon
+
+TOP SCORED PROBES::
+reinstall went doc :: 3.5
+tried reinstall thanks :: 3.4
+microsoft uninstall files :: 3
+went wordpad documents :: 3
+resolved wordpad word :: 3
+reinstall type thanks :: 2.9
+type wordpad doc :: 2.9
+thanks wordpad annoying :: 2.9
+changed icon doc :: 2.8
+went wordpad icon :: 2.8
+
+WORDS RANKED BY FREQUENCY::
 0.167 :: wordpad
 0.1 :: reinstall
 0.1 :: went
@@ -547,6 +1022,20 @@ TRUE QUERY :: word wordpad association icon
 0.033 :: annoying
 QUESTION :: my sis has diabetes, its new to her? she is a hard worker and pays out her nose for prescriptions, co-pays ets. not to mention the rate for health insurance. Is there anywhere a person get some discounted stuff for diabetics,meds, strips, lancets..please help me to help her.  cammie
 TRUE QUERY :: diabetes discounted
+
+TOP SCORED PROBES::
+lancets diabetics pays :: 4.6
+diabetics pays hard :: 4
+diabetes lancets stuff :: 3.9
+lancets health strips :: 3.8
+diabetes lancets ets :: 3.8
+diabetes strips pays :: 3.4
+health diabetics pays :: 3.2
+lancets new pays :: 3.2
+co diabetics nose :: 3.1
+lancets strips nose :: 3.1
+
+WORDS RANKED BY FREQUENCY::
 0.2 :: lancets
 0.167 :: pays
 0.133 :: diabetics
@@ -561,6 +1050,20 @@ TRUE QUERY :: diabetes discounted
 0.033 :: hard
 QUESTION :: Kidney Failure? My mother is suffering of kidney failure but she is not at the point of dialysis yet but she has too much protein in her urine.  Does anyone know of anything that helps get rid off protein in the urine for someone suffering of kidney failure.  At this stage, food is not an issue that has been confirmed by a specialist. . .
 TRUE QUERY :: kidney failure protein
+
+TOP SCORED PROBES::
+rid protein kidney :: 5.7
+know protein kidney :: 5.5
+issue urine dialysis :: 5.4
+know urine protein :: 5.2
+confirmed protein dialysis :: 5.2
+confirmed protein kidney :: 5.1
+urine failure kidney :: 4.9
+urine point protein :: 4.7
+issue failure protein :: 4.7
+specialist protein dialysis :: 4.3
+
+WORDS RANKED BY FREQUENCY::
 0.267 :: protein
 0.133 :: kidney
 0.133 :: urine
@@ -574,17 +1077,32 @@ TRUE QUERY :: kidney failure protein
 0.033 :: specialist
 QUESTION :: How long would it take America to supply what China makes for us now? Since China is the "wild card" nation, what would happen if she closed her ports? How long would it take America to produce and manufacture what we now purchase from China? Would it even be practical at this point considering the state of our own limited manufacturing capability? I mean if things really hit the fan, wouldn't we be in a real fix?
 TRUE QUERY :: china manufacture america produce
+
+TOP SCORED PROBES::
+china manufacture america produce :: 0.8
+
+WORDS RANKED BY FREQUENCY::
 0.25 :: america
-0.25 :: manufactur
-0.25 :: produc
+0.25 :: manufacture
+0.25 :: produce
 0.25 :: china
 QUESTION :: How can I get rid of gallstones without having surgery? I was just diagnosed with gallstones in my gallblatter I really dont want to have surgery and have been told that there are other ways to get rid of the stones so if anyone knows how im open for suggestions
 TRUE QUERY :: gallstones rid stones
+
+TOP SCORED PROBES::
+gallstones rid stones :: 1.4
+
+WORDS RANKED BY FREQUENCY::
+0.333 :: gallstones
 0.333 :: rid
-0.333 :: gallston
-0.333 :: stone
+0.333 :: stones
 QUESTION :: Back 2 my other question about that girl who likes me...? I had a lot of people say stuff like get 2 know her better but i dont think i can i've knew her 4 about 6 years! I have asked her out a few times but she says she sees me as just a friend, what should i do?
 TRUE QUERY :: girl just friend
+
+TOP SCORED PROBES::
+girl just friend :: 1.2
+
+WORDS RANKED BY FREQUENCY::
 0.333 :: just
 0.333 :: girl
 0.333 :: friend
@@ -596,23 +1114,52 @@ i had "live", "believe", "dream", and "imagine" in mind...but i want something a
 
 thanks :-)
 TRUE QUERY :: word inspiration
-0.5 :: inspir
+
+TOP SCORED PROBES::
+word inspiration :: 2
+
+WORDS RANKED BY FREQUENCY::
+0.5 :: inspiration
 0.5 :: word
 QUESTION :: can you get pregnant after a tubal? i had a tubal 16 months ago after the birth of my son because my husband was abusive but since then i have left him and found a wonderful man we would love to have a baby togather but i want to know if its possible
 TRUE QUERY :: pregnant after tubal
+
+TOP SCORED PROBES::
+
+WORDS RANKED BY FREQUENCY::
 QUESTION :: Those who do not believe in God: mock him to his face.? Considering the stories I read about those who mocked God and died, I thought it would be interesting to dare atheists to do the same. Okay. So, you don't believe in God. I dare all atheists, then, to mock him. In particular, you all should challenge him to stop you from doing something, preferably while insulting him. Say that God can't do it, and see what happens.
 TRUE QUERY :: god mock insulting
+
+TOP SCORED PROBES::
+
+WORDS RANKED BY FREQUENCY::
 QUESTION :: What is this song called? It was played on the commericial with the Honda Civic. I think it was a new wave rock music. it also played on one tree hill: 
 http://youtube.com/watch?v=Wrg50pqZCMQ
 It starts playing when the raven cheerleaders start cheering. Does anyone know what the song is called? Thanks!
 TRUE QUERY :: what song called
+
+TOP SCORED PROBES::
+
+WORDS RANKED BY FREQUENCY::
 QUESTION :: Relationship advice? Okay, here's the thing. This girl broke up with me last year. Now I have a new girlfriend who I love very much. However, I got an email reminder of the first's birthday yesterday, with a note saying, "I do still love her." Apparently, I saved that last year after she broke up with me when I still had feelings for her. Anyway, when I read that, it almost felt like it was TELLING me that I do still love her, even just a little bit. But I love my girlfriend now...but what do I do? (preferably to get my mind off the one who broke up with me)...oh, yeah, she told me she still has feelings for me, too...but I told her I didn't because I didn't at the time, but now I'm not so sure. Advice?
 TRUE QUERY :: love girlfriend
+
+TOP SCORED PROBES::
+
+WORDS RANKED BY FREQUENCY::
 QUESTION :: I need to start a tv show club with my friends? The show is the oc! I need help starting it! Ideas ummmmmmmmmmmmmmm flyers, watch shows. something at my or my friends house. help me!
 TRUE QUERY :: tv show club
+
+TOP SCORED PROBES::
+
+WORDS RANKED BY FREQUENCY::
 QUESTION :: why are bassoons so expensive? I was looking at bassoons over at Musician's Friend ( http://www.musiciansfriend.com/bo/navigation?page=1&N=100001+305585&Ns=P_Price%7C0 ) and am wondering why they cost $2500-$14,000.
 
 Does anyone know?
 Thanks
 m98s
 TRUE QUERY :: bassoons expensive
+
+TOP SCORED PROBES::
+
+WORDS RANKED BY FREQUENCY::
