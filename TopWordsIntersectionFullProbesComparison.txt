@@ -6,31 +6,31 @@ Thanks :)
 TRUE QUERY :: song sad slow drama
 
 TOP SCORED PROBES::
-songs slow main :: 0.194
-needed sad dishes :: 0.184
-sad sound thanks :: 0.181
-songs needed washing :: 0.177
-needed performance songs :: 0.175
-drama sad washing :: 0.173
-needed slow mother :: 0.172
-songs needed leaving :: 0.168
-songs slow leaving :: 0.167
-songs needed em :: 0.164
+sad needed dishes :: 3.8
+sad theme effects :: 3.8
+nxt slow needed :: 3.6
+sad washing em :: 3.2
+sad theme main :: 3.1
+sad main sound :: 3
+performance washing needed :: 2.9
+sad needed main :: 2.9
+sad leaving main :: 2.8
+performance slow websites :: 2.8
 
 WORDS RANKED BY FREQUENCY::
-0.2 :: songs
-0.2 :: needed
-0.1 :: sad
-0.1 :: slow
+0.233 :: sad
+0.133 :: needed
+0.133 :: main
+0.067 :: theme
 0.067 :: washing
-0.067 :: leaving
-0.033 :: drama
-0.033 :: main
-0.033 :: thanks
-0.033 :: mother
+0.067 :: performance
+0.067 :: slow
+0.033 :: effects
+0.033 :: websites
+0.033 :: leaving
 0.033 :: sound
-0.033 :: performance
 0.033 :: dishes
+0.033 :: nxt
 0.033 :: em
 
 ————————————————————————————
@@ -41,28 +41,27 @@ C) the chemist's from a research insitution
 TRUE QUERY :: newest elements names
 
 TOP SCORED PROBES::
-approve newest element :: 0.302
-approve names chemist's :: 0.291
-wil scientist element :: 0.275
-approve scientist element :: 0.269
-approve newest elements :: 0.258
-element committee chemist's :: 0.257
-approve element chemist's :: 0.255
-elements scientist chemist's :: 0.255
-approve elements chemist's :: 0.247
-newest element research :: 0.246
+discover names elements :: 4.9
+chemist's discover elements :: 4.9
+element approve chemist's :: 4.6
+element scientist names :: 4.5
+element chemist's elements :: 4.4
+newest names elements :: 4.4
+element chemist's discover :: 4.4
+discover scientist elements :: 4.4
+element scientist elements :: 4.4
+element approve newest :: 4.4
+
 
 WORDS RANKED BY FREQUENCY::
 0.2 :: element
-0.2 :: approve
-0.167 :: chemist's
-0.1 :: newest
+0.2 :: elements
+0.133 :: chemist's
+0.133 :: discover
+0.1 :: names
 0.1 :: scientist
-0.1 :: elements
-0.033 :: committee
-0.033 :: names
-0.033 :: research
-0.033 :: wil
+0.067 :: approve
+0.067 :: newest
 
 ————————————————————————————
 
@@ -70,25 +69,26 @@ QUESTION :: serial killers? well i just got finished watching this thing about s
 TRUE QUERY :: serial killer symphtoms
 
 TOP SCORED PROBES::
-killers symphtoms going :: 0.259
-serial thing symphtoms :: 0.217
-killers symphtoms peple :: 0.194
-serial thing peple :: 0.194
-killers thing peple :: 0.188
-serial symphtoms peple :: 0.185
-serial peple grow :: 0.172
-serial peple going :: 0.161
-killers thing symphtoms :: 0.157
-killers finished peple :: 0.156
+killers finished serial :: 5.3
+peple killers serial :: 5
+peple serial thing :: 4.8
+killers watching serial :: 4.6
+killers grow serial :: 4.6
+killers wondering serial :: 4.5
+symphtoms killers serial :: 4.4
+killers serial thing :: 4.2
+peple wondering serial :: 4.1
+wondering grow serial :: 4
 
 WORDS RANKED BY FREQUENCY::
-0.233 :: peple
-0.167 :: symphtoms
-0.167 :: killers
-0.167 :: serial
-0.133 :: thing
-0.067 :: going
-0.033 :: grow
+0.333 :: serial
+0.233 :: killers
+0.1 :: peple
+0.1 :: wondering
+0.067 :: grow
+0.067 :: thing
+0.033 :: symphtoms
+0.033 :: watching
 0.033 :: finished
 
 ————————————————————————————
@@ -97,29 +97,28 @@ QUESTION :: What causes neck spasms? I have been getting spasms in my neck not a
 TRUE QUERY :: neck spasms tmj cause jaw
 
 TOP SCORED PROBES::
-spasms occassionally jaw :: 0.277
-occassionally spasm jaw :: 0.248
-neck spasm thanks :: 0.239
-spasms occassionally tmj :: 0.236
-spasms time jaw :: 0.235
-spasms jaw dying :: 0.232
-happen spasm jaw :: 0.224
-causes spasms jaw :: 0.219
-spasm jaw dying :: 0.216
-spasms happen jaw :: 0.211
+neck spasms causes :: 4.7
+spasm jaw dying :: 4.7
+neck spasm jaw :: 4.5
+jaw spasms causes :: 4.5
+omg spasms tmj :: 4.5
+neck spasm spasms :: 4.5
+spasm jaw spasms :: 4.3
+spasm happen tmj :: 4.1
+spasm jaw time :: 4.1
+spasm jaw happen :: 4
 
 WORDS RANKED BY FREQUENCY::
-0.267 :: jaw
-0.2 :: spasms
-0.133 :: spasm
-0.1 :: occassionally
+0.233 :: spasm
+0.2 :: jaw
+0.167 :: spasms
+0.1 :: neck
 0.067 :: happen
-0.067 :: dying
+0.067 :: causes
+0.067 :: tmj
 0.033 :: time
-0.033 :: thanks
-0.033 :: neck
-0.033 :: causes
-0.033 :: tmj
+0.033 :: omg
+0.033 :: dying
 
 ————————————————————————————
 
@@ -127,31 +126,32 @@ QUESTION :: How often do you incorporate the breastpump in your day?For how long
 TRUE QUERY :: breastpump producing day
 
 TOP SCORED PROBES::
-breastpump fill feel :: 0.492
-breastpump fill feels :: 0.469
-breastpump probably producing :: 0.456
-breastpump bottle confused :: 0.455
-breastpump long fill :: 0.453
-incorporate breastpump take :: 0.453
-breastpump probably feel :: 0.453
-breastpump 15 take :: 0.453
-breastpump long producing :: 0.446
-breastpump fill milk :: 0.444
+feel breastpump milk :: 7.4
+breast incorporate milk :: 6.8
+fill breastpump take :: 6.7
+long breastpump breast :: 6.6
+long breast baby :: 6.6
+confused bottle breastpump :: 6.5
+breastpump probably baby :: 6.2
+bottle breastpump probably :: 5.9
+feel producing breastpump :: 5.8
+15 breastpump probably :: 5.8
 
 WORDS RANKED BY FREQUENCY::
-0.333 :: breastpump
-0.133 :: fill
+0.267 :: breastpump
+0.1 :: breast
+0.1 :: probably
 0.067 :: feel
+0.067 :: milk
+0.067 :: baby
+0.067 :: bottle
 0.067 :: long
-0.067 :: producing
-0.067 :: take
-0.067 :: probably
-0.033 :: confused
-0.033 :: feels
-0.033 :: 15
-0.033 :: bottle
 0.033 :: incorporate
-0.033 :: milk
+0.033 :: confused
+0.033 :: take
+0.033 :: fill
+0.033 :: 15
+0.033 :: producing
 
 ————————————————————————————
 
@@ -159,31 +159,33 @@ QUESTION :: Does your spouse buy you Christmas presents with your money? Several
 TRUE QUERY :: spouse pay presents
 
 TOP SCORED PROBES::
-buy presents didn't :: 0.348
-spouse christmas didn't :: 0.333
-spouse presents computer :: 0.314
-presents didn't bought :: 0.313
-presents wife know :: 0.312
-presents ago wife :: 0.308
-presents wife suddenly :: 0.282
-spouse presents thought :: 0.269
-spouse buy presents :: 0.269
-presents ago unexpected :: 0.269
+didn't unexpected 125 :: 3.6
+suddenly didn't work :: 3.4
+money presents wife :: 3.3
+spouse christmas years :: 3.2
+125 great cheque :: 2.9
+unexpected spouse work :: 2.9
+didn't presents wife :: 2.8
+disturbing money work :: 2.8
+work presents wife :: 2.7
+disturbing 125 know :: 2.7
 
 WORDS RANKED BY FREQUENCY::
-0.3 :: presents
-0.133 :: spouse
+0.133 :: work
+0.1 :: 125
+0.1 :: presents
 0.1 :: didn't
 0.1 :: wife
-0.067 :: buy
-0.067 :: ago
-0.033 :: computer
+0.067 :: unexpected
+0.067 :: disturbing
+0.067 :: spouse
+0.067 :: money
 0.033 :: suddenly
 0.033 :: christmas
-0.033 :: thought
 0.033 :: know
-0.033 :: unexpected
-0.033 :: bought
+0.033 :: great
+0.033 :: years
+0.033 :: cheque
 
 ————————————————————————————
 
@@ -191,26 +193,30 @@ QUESTION :: How many inches should I set my html code at to create a website opt
 TRUE QUERY :: optimized website 800x600
 
 TOP SCORED PROBES::
-set 800x600 webpage :: 0.235
-html 800x600 say :: 0.22
-inches 800x600 say :: 0.21
-website 800x600 say :: 0.21
-inches html 800x600 :: 0.208
-inches 800x600 know :: 0.202
-inches create 800x600 :: 0.194
-html website viewing :: 0.185
-create 800x600 screen :: 0.184
-800x600 viewing screen :: 0.179
+set know webpage :: 2.9
+table optimal create :: 2.8
+set 800x600 viewable :: 2.6
+website set know :: 2.6
+optimal create viewable :: 2.5
+optimal create viewing :: 2.4
+create html alright :: 2.4
+set inches say :: 2.3
+800x600 webpage inches :: 2.3
+800x600 viewable webpage :: 2.3
 
 WORDS RANKED BY FREQUENCY::
-0.3 :: 800x600
-0.133 :: inches
-0.1 :: say
-0.1 :: html
-0.067 :: screen
-0.067 :: website
-0.067 :: viewing
-0.067 :: create
-0.033 :: webpage
-0.033 :: set
-0.033 :: know
+0.133 :: set
+0.133 :: create
+0.1 :: viewable
+0.1 :: webpage
+0.1 :: 800x600
+0.1 :: optimal
+0.067 :: inches
+0.067 :: know
+0.033 :: website
+0.033 :: say
+0.033 :: html
+0.033 :: alright
+0.033 :: viewing
+0.033 :: table
+
