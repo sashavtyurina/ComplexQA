@@ -1,39 +1,3 @@
-QUESTION :: Does Cayenne hurt house plants? Hello everyone,
-
-I just moved in with a new roommate. I am finding out that her cat loves to eat all my house plants. I haven't had this problem with my cat. Looking up info on trying to stop my roommates cat from eating plants and I see a remedy that calls for putting cayenne pepper on the plant to deter in worst case scenarios. I think I have reached this point, because the cat loves to play with the squirts from the squirt gun.  But my question is will the cayenne hurt my plants.
-
-Thanks for any answers,
--Chris
-TRUE QUERY :: cayenne plants hurt cat
-
-TOP SCORED PROBES::
-deter play squirts :: 0.389
-roommates deter squirts :: 0.373
-deter case squirts :: 0.373
-roommates pepper scenarios :: 0.341
-deter reached squirt :: 0.33
-roommate deter squirts :: 0.33
-house squirts cayenne :: 0.317
-roommates squirt plants :: 0.307
-pepper deter hurt :: 0.276
-plant cayenne hurt :: 0.271
-
-WORDS RANKED BY FREQUENCY::
-0.2 :: deter
-0.167 :: squirts
-0.1 :: roommates
-0.067 :: cayenne
-0.067 :: pepper
-0.067 :: squirt
-0.067 :: hurt
-0.033 :: plant
-0.033 :: plants
-0.033 :: play
-0.033 :: house
-0.033 :: scenarios
-0.033 :: roommate
-0.033 :: case
-0.033 :: reached
 QUESTION :: Songs needed for performance please read? I am doing a drama performance nxt week and I need slow sad songs. The main theme is the mother leaving them.
 
 Also I need sound effects like chatting and washing dishes, what songs can provide me with this, or websites (which has songs in em?)
@@ -68,6 +32,7 @@ WORDS RANKED BY FREQUENCY::
 0.033 :: performance
 0.033 :: dishes
 0.033 :: em
+
 QUESTION :: How can you ? who will approve the names of the newest elements? Wil it be A) the scientist that discover each element
 B) a committee scientist
 C) the chemist's from a research insitution
@@ -96,6 +61,8 @@ WORDS RANKED BY FREQUENCY::
 0.033 :: names
 0.033 :: research
 0.033 :: wil
+
+
 QUESTION :: serial killers? well i just got finished watching this thing about serial killers, and i was wondering what are the symphtoms of peple who are going to become serial killers when they grow up???????
 TRUE QUERY :: serial killer symphtoms
 
@@ -120,6 +87,8 @@ WORDS RANKED BY FREQUENCY::
 0.067 :: going
 0.033 :: grow
 0.033 :: finished
+
+
 QUESTION :: What causes neck spasms? I have been getting spasms in my neck not all the time but occassionally they will happen... what causes the neck to spasm?  I do have tmj in my jaw...could that be why? And please no answers Like "OMG YOUR DYING!" K thanks.
 TRUE QUERY :: neck spasms tmj cause jaw
 
@@ -147,6 +116,9 @@ WORDS RANKED BY FREQUENCY::
 0.033 :: neck
 0.033 :: causes
 0.033 :: tmj
+
+
+
 QUESTION :: How often do you incorporate the breastpump in your day?For how long? I tried 15 min and a probably filled 1/3 of a bottle..Its so frustrating , how long does it take to fill a bottle?Im I not producing enough milk? Then it feels like one breast is not enough to feel the baby ..Im really confused about this..
 TRUE QUERY :: breastpump producing day
 
@@ -176,6 +148,8 @@ WORDS RANKED BY FREQUENCY::
 0.033 :: bottle
 0.033 :: incorporate
 0.033 :: milk
+
+
 QUESTION :: Does your spouse buy you Christmas presents with your money? Several years ago I got a computer for Christmas from my wife. It was really great. What I didn't know was she bought it through the Company I work for and I suddenly had an unexpected $125 a month coming off my pay cheque. The thought was great but the appearance of the bill was disturbing. Has this type of thing ever happened to you?
 TRUE QUERY :: spouse pay presents
 
@@ -205,6 +179,9 @@ WORDS RANKED BY FREQUENCY::
 0.033 :: know
 0.033 :: unexpected
 0.033 :: bought
+
+
+
 QUESTION :: How many inches should I set my html code at to create a website optimized for 800x600 viewing? Alright, so I want to create a webpage that will be viewable on 800x600.  For this I want to know how many inches would be optimal for say a table that I wish to span across the whole screen.
 TRUE QUERY :: optimized website 800x600
 
