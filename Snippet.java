@@ -43,7 +43,8 @@ public class Snippet {
 				String snippet = snippetsRS.getString("snippet");
 				String query = snippetsRS.getString("queryText");
 				int snipID = snippetsRS.getInt("snippetID");
-				int querID = snippetsRS.getInt("queryID");
+				// int querID = snippetsRS.getInt("queryID");
+				int querID = -1;
 				int questID = snippetsRS.getInt("questID");
 				snippetsList.add(new Snippet(snippet, query, snipID, querID, questID, false));
 

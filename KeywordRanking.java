@@ -54,6 +54,408 @@ public class KeywordRanking {
   private static FileInputStream fstream = null;
   private static BufferedReader br = null;
   private static Random rand = null;
+  private static Similarity similarity = null;
+
+
+  static public String FIELD_BODY = "contents"; // primary field name where all the text is stored
+  static public String FIELD_ID = "id";
+
+  //// SETUP METHODS
+    public static void setupDBConnection() {
+
+      try {
+        Class.forName("org.sqlite.JDBC");
+        dbConnection = DriverManager.getConnection("jdbc:sqlite:KeywordRankingDB.db");
+        dbConnection.setAutoCommit(false);
+        System.out.println("Opened database successfully");
+      } catch ( Exception e ) {
+        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        System.exit(0);
+      }    
+    }
+
+    public static void loggerSetup() {
+      try {
+        FileHandler fileHandler = new FileHandler("StealingSnippetsFromBing.%u.%g.txt");
+        fileHandler.setFormatter(new SimpleFormatter());
+        ConsoleHandler consoleHandler = new ConsoleHandler();
+        logger.addHandler(fileHandler);
+        logger.addHandler(consoleHandler);
+        logger.setLevel(Level.INFO);
+        logger.setUseParentHandlers(false);
+      } catch (IOException e) {
+        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        System.exit(0);
+      }
+    }
+
+    public static void setThingsUp(String[] args) throws IOException, FileNotFoundException, ParseException {
+      index_path = args[0].toString();
+      luc = new LuceneHelper(index_path); 
+      loggerSetup();
+      query = args[1].toString();
+      decimalFormat = new DecimalFormat("#.###");
+      setupDBConnection();
+      fstream = new FileInputStream("gtQuestions.txt");
+      br = new BufferedReader(new InputStreamReader(fstream));
+      rand = new Random();
+      similarity = new Similarity(luc, dbConnection);
+    }
+
+
+/* SIMILARITY METRIC THAT WORKS */
+  public static void testSimilarityMeasures1() {
+  /// for each question compare its answers with google snippets and rank passages accordingly
+    try {
+      String sql = "select distinct questID from FullProbes;";
+      Statement questIDStmt = dbConnection.createStatement();
+      ResultSet questIDsRS = questIDStmt.executeQuery(sql);
+      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("TopWordsIntersectionFullProbes.txt"), true));
+
+      while (questIDsRS.next()) {
+          int curQuestID = questIDsRS.getInt("questID");
+
+
+          Statement qidsStmt = dbConnection.createStatement();
+          sql = "select qid, rawQuestion, gtquery from questions where qid=" + curQuestID + ";";
+          ResultSet qids = qidsStmt.executeQuery(sql);
+          
+
+          // int curQuestID = qids.getInt("qid");
+          String rawQuestion = qids.getString("rawQuestion");
+          String gtQuery = qids.getString("gtquery");
+
+          writer.println("QUESTION :: " + rawQuestion);
+          writer.println("TRUE QUERY :: " + gtQuery);
+
+          // for this question get all its answers 
+            sql = "select answerText from answers where questID=" + curQuestID + ";";
+            Statement answersStmt = dbConnection.createStatement();
+            ResultSet answersRS = answersStmt.executeQuery(sql);
+            Vector<String> answers = Utils.resultSet2Vect(answersRS, "answerText");
+            answersStmt.close();
+            answersRS.close();
+
+          // for this question get all its snippets 
+            /*sql = "select snippetID, queryID, questID, queryText, snippet, docURL from NewSnippets where questID=" + curQuestID + ";";
+            Statement snippetsStmt = dbConnection.createStatement();
+            ResultSet snippetsRS = snippetsStmt.executeQuery(sql);
+            Vector<Snippet> snippets = Snippet.rsToSnippetList(snippetsRS);
+            snippetsStmt.close();
+            snippetsRS.close();*/
+
+          // for this question get all its snippets from FullProbes
+            sql = "select snippetID, questID, queryText, snippet, docURL from FullProbes where questID=" + curQuestID + ";";
+            Statement snippetsStmt = dbConnection.createStatement();
+            ResultSet snippetsRS = snippetsStmt.executeQuery(sql);
+            Vector<Snippet> snippets = Snippet.rsToSnippetList(snippetsRS);
+            snippetsStmt.close();
+            snippetsRS.close();
+
+          // also select ground truth queries and their snippets
+            sql = "select queryText, snippet, url from googlesearchdocs where questid=" + curQuestID + ";";
+            Statement gtSnippetsStmt = dbConnection.createStatement();
+            ResultSet gtSnippetsRS = gtSnippetsStmt.executeQuery(sql);
+            Vector<Snippet> gtSnippets = new Vector<Snippet>();
+
+            while (gtSnippetsRS.next()) {
+              String gtURL = gtSnippetsRS.getString("url");
+              if (gtURL.contains("answers.yahoo.")) {
+                continue;
+              }
+
+              String snippetText = gtSnippetsRS.getString("snippet");
+              String queryText = gtQuery;//gtSnippetsRS.getString("queryText");
+              Snippet s = new Snippet(snippetText, queryText, -1, -1, curQuestID, true);
+              gtSnippets.add(s);
+            }
+            gtSnippetsStmt.close();
+            gtSnippetsRS.close();
+
+            snippets.addAll(gtSnippets);
+            Vector<String> topProbes = scoreProbes(rawQuestion, answers, snippets, writer);
+            // System.out.println(topProbes);
+
+            //// now rank separate words
+            Vector<String> topQueryWords = new Vector<String>();
+            for (String s : topProbes) {
+              topQueryWords.addAll(Arrays.asList(s.split("\\s")));
+            }
+
+            writer.println("\nWORDS RANKED BY FREQUENCY::");
+            List<Entry<String, Double>> rankedWords = Utils.entriesSortedByValues(Utils.buildDistribution(topQueryWords), "dec");
+            for (Entry<String, Double> e : rankedWords) {
+              System.out.println(e.getValue() + "::" + e.getKey());
+              writer.println(decimalFormat.format(e.getValue()) + " :: " + e.getKey());
+            }
+
+
+          // apply different similarities here
+            // Vector<Snippet> scoredSnippets = simpleIntersection(rawQuestion, answers, snippets);
+            // Vector<Snippet> scoredSnippets = simpleIntersectionNoQuery(rawQuestion, answers, snippets);
+            // Vector<Snippet> scoredSnippets = kldSimilarity(rawQuestion, answers, snippets);
+            // double questSimWeight = 0.3;
+            // double answerSimWeight = 0.7;
+            // Vector<Snippet> scoredSnippets = simpleIntersectionWeighted(rawQuestion, answers, snippets, questSimWeight, answerSimWeight);
+            // bigramsIntersection(rawQuestion, answers, snippets);
+            // Vector<Snippet> scoredSnippets = simpleIntersectionTopWords(rawQuestion, answers, snippets, questSimWeight, answerSimWeight, writer);
+
+    //// Ranking separate snippets        
+      /*    List<Snippet> rankedSnippets = Utils.sliceCollection(Snippet.sortSnippetsByScore(scoredSnippets, "dec"), 0, 10);
+
+            Vector<String> topQueryWords = new Vector<String>();
+            writer.println("::SNIPPETS::");
+            for (Snippet s : rankedSnippets) {
+              topQueryWords.addAll(Arrays.asList(s.queryText.split("\\s")));
+              writer.println(s.producedByTrueQuery + "::" + s.queryText + " :: " + s.original + "\n---");
+            }
+
+            List<Entry<String, Double>> rankedWords = Utils.entriesSortedByValues(Utils.buildDistribution(topQueryWords), "dec");
+            for (Entry<String, Double> e : rankedWords) {
+              System.out.println(e.getValue() + "::" + e.getKey());
+              writer.println(decimalFormat.format(e.getValue()) + " :: " + e.getKey());
+            }*/
+            qidsStmt.close();
+            qids.close();
+      }
+
+      questIDStmt.close();
+      questIDsRS.close();
+      
+      writer.close();
+
+            
+
+    } catch (SQLException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    } catch (FileNotFoundException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }
+  }
+  public static Vector<String> scoreProbes(String question, Vector<String> answers, Vector<Snippet> snippets, PrintWriter writer) {
+  //// This method uses a combination of overlap scores btw snippet and question/answer
+    HashMap<String, Vector<Snippet>> snippetsSplitByProbe = Snippet.splitSnippetsToProbes(snippets);
+
+    HashMap<String, Double> scoredProbesMap = new HashMap<String, Double>();
+
+    Vector<String> topQuestionWords = similarity.getTopQuestionWords(question, 10);
+    Vector<String> topAnswersWords = similarity.getTopAnswerWords(answers, 10);
+
+    for (Entry<String, Vector<Snippet>> e : snippetsSplitByProbe.entrySet()) {  
+      Double score = new Double(similarity.scoreForSingleProbe(topQuestionWords, topAnswersWords, e.getValue()));
+      scoredProbesMap.put(e.getKey(), score);
+    }
+
+    Vector<String> topProbes = new Vector<String>();
+    writer.println("\nTOP SCORED PROBES::");
+    List<Entry<String, Double>> scoredProbes = Utils.sliceCollection(Utils.entriesSortedByValues(scoredProbesMap, "dec"), 0, 10);
+    for (Entry<String, Double> e : scoredProbes) {
+      topProbes.add(e.getKey());
+      writer.println(e.getKey() + " :: " + decimalFormat.format(e.getValue()));
+      System.out.println(e.getKey() + " :: " + decimalFormat.format(e.getValue()));
+    }
+    
+    return topProbes;
+  }
+/* SIMILARITY METRIC THAT WORKS. END. */
+
+
+
+/* TRY TO PROBE WITH ALL POSSIBLE COMBINATIONS OF WORDS */ 
+
+  public static void probeWithAllQueries() {
+    BufferedReader reader = null;
+    try {
+      reader = new BufferedReader(new InputStreamReader(new FileInputStream("data/questionsAllProbes.txt")));
+    } catch (FileNotFoundException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }
+
+    try {
+      String str = "";
+      int snippetID = 0;
+
+      while ((str = reader.readLine()) != null) {
+
+        try {
+
+          /// Read next question in JSON format
+          JSONObject jsonObj = new JSONObject(str);
+          String title = jsonObj.getString("title");
+          String body = jsonObj.getString("body");
+          String question = title + " " + body;
+          int questID = jsonObj.getInt("id");
+          PrintWriter queryWriter = new PrintWriter(new FileOutputStream(new File("QueriesFirQuestion" + questID + ".txt"), false));
+
+          String sql = "select queryText from FullProbes;";
+          Statement queriesStmt = dbConnection.createStatement();
+          ResultSet queriesRS = queriesStmt.executeQuery(sql);
+          Vector<String> existingQueries = Utils.resultSet2Vect(queriesRS, "queryText");
+          queriesStmt.close();
+          queriesRS.close();
+
+          sql = "select max(snippetID) as maxSnippetID from FullProbes;";
+          queriesStmt = dbConnection.createStatement();
+          queriesRS = queriesStmt.executeQuery(sql);
+          int maxSnippetID = queriesRS.getInt("maxSnippetID");
+          snippetID = maxSnippetID + 1;
+
+
+          logger.log(Level.INFO, "Question #" + questID);
+          logger.log(Level.INFO, "Title :: " + title);
+          logger.log(Level.INFO, "Body :: " + body);
+
+          /// clean question and split into tokens
+          String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
+          Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
+          qTokens = Utils.dropStopWords(qTokens);
+          qTokens = Utils.removeShortTokens(qTokens, 2);
+
+          qTokens = Utils.removeDuplicateTokens(qTokens);
+
+          /// compose all possible queries
+          logger.log(Level.INFO, "Words to compose probes from :: " + qTokens);
+          Vector<String> probes = Utils.composeQueries1(qTokens, 3).get(3);
+          logger.log(Level.INFO, "Probes composed for this question: " + probes.size());
+          logger.log(Level.INFO, "Started probing Bing");
+          
+          int randomProbeNumber = 2;
+          for (String query : probes) {
+            if (existingQueries.contains(query)) {
+              logger.log(Level.INFO, "This query is already in the database :: " + query);
+              continue;
+            }
+            queryWriter.println(query);
+
+
+/*            // will make a long sleep every 3-6 probes
+            if (randomProbeNumber == 0) {
+
+              int minLongSleep = 2 * 60 * 1000; // 4 mins - 250000 // reduced to 2 mins
+              int maxLongSleep = 4 * 60 * 1000; // 8 mins - 500000 // reduced to 4 mins
+              int randomLongSleep = rand.nextInt((maxLongSleep - minLongSleep) + 1) + minLongSleep;
+              logger.log(Level.INFO, "Waiting for " + randomLongSleep + " seconds...");
+              Thread.sleep(randomLongSleep);
+
+
+              int minProbes = 2;
+              int maxProbes = 7;
+              randomProbeNumber = rand.nextInt((maxProbes - minProbes) + 1) + minProbes;
+              logger.log(Level.INFO, "Will be sleeping after " + randomProbeNumber + " probes...");
+            }
+            randomProbeNumber--;
+
+
+            System.out.println(query);
+            logger.log(Level.INFO, "Now probing with :: " + query);
+
+            HashMap<String, String> snippetsMap = GoogleSearch.searchSnippetsBing(query);
+
+            for (Entry<String, String> e : snippetsMap.entrySet()) {
+              String docURL = e.getKey();
+              String snippet = e.getValue();
+
+              sql = "insert into FullProbes (snippetID, snippet, docURL, questID, queryText)" +
+                    " values (" + snippetID + ", ?, ?, " + questID + ", ?);";
+
+              PreparedStatement addToGoogleSearchStmt = dbConnection.prepareStatement(sql);
+              addToGoogleSearchStmt.setString(1, snippet);
+              addToGoogleSearchStmt.setString(2, docURL);
+              addToGoogleSearchStmt.setString(3, query);
+
+              addToGoogleSearchStmt.executeUpdate();
+              addToGoogleSearchStmt.close();
+              dbConnection.commit();
+
+              snippetID ++;
+            }
+
+            int min = 10000; // 15 sec // reduced to 10 sec
+            int max = 15000; // 23 sec // reduced to 15 sec
+            int randomWaitPeriod = rand.nextInt((max - min) + 1) + min;
+            logger.log(Level.INFO, "Waiting for " + randomWaitPeriod + " seconds...");
+            Thread.sleep(randomWaitPeriod);*/
+           
+          }
+          queryWriter.close(); 
+
+        } catch (JSONException e) {
+          System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+          continue;  
+        } catch (SQLException e) {
+          System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+          continue;  
+        } /*catch (InterruptedException e) {
+          System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+          continue;  
+        }*/ catch (Exception e) {
+          logger.log(Level.INFO, e.getClass().getName() + ": " + e.getMessage());
+          Thread.sleep(10 * 60 * 1000); // wait for 10 mins if we got blocked
+        }
+      }
+
+
+    } catch (IOException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    } catch (InterruptedException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }
+
+  }
+
+/* TRY TO PROBE WITH ALL POSSIBLE COMBINATIONS OF WORDS. END. */ 
+
+  
+
+public static void main(String[] args) throws IOException, ParseException, JSONException, FileNotFoundException, ParseException {
+  if (args.length < 2) {
+      System.out.println("Input arguments: index_path, query string");
+      return;
+  }
+  setThingsUp(args);
+  // addGoogleSearchDocs();
+  // addBingSearchResultsFromFile();
+  testSimilarityMeasures1();
+  // populateDBWithRawQA();
+  // probeWithAllQueries();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   public static class WordRanking {
     // a class to track and afterwards rank query words based on how often they appear in good queries
@@ -103,50 +505,39 @@ public class KeywordRanking {
   } 
 
 
-  static public String FIELD_BODY = "contents"; // primary field name where all the text is stored
-  static public String FIELD_ID = "id";
+public static Vector<String> getRandomQueriesForQuetsionID(int questID, int sampleSize) {
+  //// Given question id, find all the queries constructed for it and then select a random sample,
+  //// which hopefully should be uniform
+    Vector<String> randomQueries = new Vector<String>();
+    try {
+      String sql = "select query from queries where qid in (select distinct queryid from qqp where questid=" + questID + ");";
+      Statement queriesStmt = dbConnection.createStatement();
+      ResultSet queriesRS = queriesStmt.executeQuery(sql);
 
-  //// SETUP METHODS
-    public static void setupDBConnection() {
+      Vector<String> allQueries = Utils.resultSet2Vect(queriesRS, "query");
+      randomQueries = Utils.pickRandomSample(allQueries, sampleSize);
 
-      try {
-        Class.forName("org.sqlite.JDBC");
-        dbConnection = DriverManager.getConnection("jdbc:sqlite:KeywordRankingDB.db");
-        dbConnection.setAutoCommit(false);
-        System.out.println("Opened database successfully");
-      } catch ( Exception e ) {
-        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-        System.exit(0);
-      }    
-    }
 
-    public static void loggerSetup() {
-      try {
-        FileHandler fileHandler = new FileHandler("StealingSnippetsFromGoogle.%u.%g.txt");
-        fileHandler.setFormatter(new SimpleFormatter());
-        ConsoleHandler consoleHandler = new ConsoleHandler();
-        logger.addHandler(fileHandler);
-        logger.addHandler(consoleHandler);
-        logger.setLevel(Level.INFO);
-        logger.setUseParentHandlers(false);
-      } catch (IOException e) {
-        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-        System.exit(0);
+      Vector<String> words = new Vector<String>();
+      for (String q : randomQueries) {
+        words.addAll(Utils.str2vect(q));
       }
-    }
 
-    public static void setThingsUp(String[] args) throws IOException, FileNotFoundException, ParseException {
-      index_path = args[0].toString();
-      luc = new LuceneHelper(index_path); 
-      loggerSetup();
-      query = args[1].toString();
-      decimalFormat = new DecimalFormat("#.###");
-      setupDBConnection();
-      fstream = new FileInputStream("gtQuestions.txt");
-      br = new BufferedReader(new InputStreamReader(fstream));
-      rand = new Random();
-    }
+      HashMap<String, Double> distr = Utils.buildDistribution(words);
+      for (Entry<String, Double> e : distr.entrySet()) {
+        System.out.println(e.getValue() + ":::" + e.getKey());
+      }
 
+
+      queriesStmt.close();
+      queriesRS.close();
+
+    } catch (SQLException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }
+    return randomQueries;
+  }
 
 
 /// Different methods of ranking queries 
@@ -201,22 +592,23 @@ throws FileNotFoundException, IOException, ParseException {
 }
 
 public static Vector<String> getTopWords(List<Entry<String, Double>> scoredQueries, int depth) {
-	// take top "depth" queries and return a vector of words in those queries. Sorted from the most frequent to the least frequent.
-	List<Entry<String, Double>> slice = Utils.sliceCollection(scoredQueries, 0, depth);
-	Vector<String> words = new Vector<String>();
-	for (Entry<String, Double> e : slice) {
-		words.addAll(Arrays.asList(e.getKey().split("\\s")));
-	}
+  // take top "depth" queries and return a vector of words in those queries. Sorted from the most frequent to the least frequent.
+  List<Entry<String, Double>> slice = Utils.sliceCollection(scoredQueries, 0, depth);
+  Vector<String> words = new Vector<String>();
+  for (Entry<String, Double> e : slice) {
+    words.addAll(Arrays.asList(e.getKey().split("\\s")));
+  }
 
-	HashMap<String, Double> scoredWords = Utils.buildDistribution(words);
-	List<Entry<String, Double>> sortedWords = Utils.entriesSortedByValues(scoredWords, "dec");
+  HashMap<String, Double> scoredWords = Utils.buildDistribution(words);
+  List<Entry<String, Double>> sortedWords = Utils.entriesSortedByValues(scoredWords, "dec");
 
-	words.clear();
-	for (Entry<String, Double> e : sortedWords) {
-		words.add(e.getKey());
-	}
-	return words;
+  words.clear();
+  for (Entry<String, Double> e : sortedWords) {
+    words.add(e.getKey());
+  }
+  return words;
 }
+
 public static Vector<String> passagesForQuestion(int questID) {
   if (dbConnection == null) {
     System.out.println("Setup db connection properly. Exiting...");
@@ -962,8 +1354,17 @@ public static void addGoogleSearchDocs() {
 
 public static void addBingSearchResultsFromFile() {  
   try {
-    int snippetID = 1;
-    BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("BingSearchResults.txt")));
+
+    // find the max snippetID to avoid duplicate values in the table
+    String sql = "select max(snippetID) as snippetID from FullProbes;";
+    Statement snippetIDStmt = dbConnection.createStatement();
+    ResultSet snippetIDRS = snippetIDStmt.executeQuery(sql);
+    int snippetID = snippetIDRS.getInt("snippetID") + 1;
+    snippetIDRS.close();
+    snippetIDStmt.close();
+
+
+    BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("FullProbes/FullProbesSnippets.txt")));
     String strLine;
     while ((strLine = reader.readLine()) != null) {
 
@@ -971,6 +1372,7 @@ public static void addBingSearchResultsFromFile() {
       try {
         JSONObject jsonObj = new JSONObject(strLine);
         String curQuery = jsonObj.getString("query");
+        int questID = jsonObj.getInt("questID");
         System.out.println(curQuery);
         JSONArray snippets = jsonObj.getJSONArray("snippets");
         Vector<String> snippetsStr = Utils.JSONArrayToVect(snippets);
@@ -981,14 +1383,14 @@ public static void addBingSearchResultsFromFile() {
           // System.out.println(snippet);
           // System.out.println(url);
 
-          String sql = "select queryID, questID from newqueries where queryText=?;";
+/*          String sql = "select queryID, questID from newqueries where queryText=?;";
           PreparedStatement queryIDStmt = dbConnection.prepareStatement(sql);
           queryIDStmt.setString(1, curQuery);
           ResultSet queryIDRS = queryIDStmt.executeQuery();
           int queryID = queryIDRS.getInt("queryID");
           int questID = queryIDRS.getInt("questID");
           queryIDRS.close();
-          queryIDStmt.close();
+          queryIDStmt.close();*/
           // System.out.println("Query = " + curQuery + "; queryID = " + queryID + "; questID = " + questID);
           // if (input.next().equals(".")){
           //   continue;
@@ -996,8 +1398,8 @@ public static void addBingSearchResultsFromFile() {
 
 
 
-          sql = "insert into NewSnippets (snippetID, snippet, docURL, queryID, questID, queryText)" +
-                  " values (" + snippetID + ", ?, ?, " + queryID + ", " + questID + ", ?);";
+          sql = "insert into FullProbes (snippetID, questID, snippet, docURL, queryText)" +
+                  " values (" + snippetID + ", " + questID + ", ?, ?, ?);";
           snippetID ++;
 
           PreparedStatement addToGoogleSearchStmt = dbConnection.prepareStatement(sql);
@@ -1232,540 +1634,15 @@ public static void populateDBWithRawQA() {
     }
 }
 
-/*MARCH 9TH*/
-  public static void testSimilarityMeasures1() {
-  /// for each question compare its answers with google snippets and rank passages accordingly
-    try {
-      Statement qidsStmt = dbConnection.createStatement();
-      String sql = "select qid, rawQuestion, gtquery from questions;";
-      ResultSet qids = qidsStmt.executeQuery(sql);
-      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("TopWordsIntersection2.txt"), true));
 
 
-      while (qids.next()) {
 
-          int curQuestID = qids.getInt("qid");
-          String rawQuestion = qids.getString("rawQuestion");
-          String gtQuery = qids.getString("gtquery");
 
-          writer.println("QUESTION :: " + rawQuestion);
-          writer.println("TRUE QUERY :: " + gtQuery);
 
-          // for this question get all its answers 
-            sql = "select answerText from answers where questID=" + curQuestID + ";";
-            Statement answersStmt = dbConnection.createStatement();
-            ResultSet answersRS = answersStmt.executeQuery(sql);
-            Vector<String> answers = Utils.resultSet2Vect(answersRS, "answerText");
-            answersStmt.close();
-            answersRS.close();
 
-          // for this question get all its snippets 
-            sql = "select snippetID, queryID, questID, queryText, snippet, docURL from NewSnippets where questID=" + curQuestID + ";";
-            Statement snippetsStmt = dbConnection.createStatement();
-            ResultSet snippetsRS = snippetsStmt.executeQuery(sql);
-            Vector<Snippet> snippets = Snippet.rsToSnippetList(snippetsRS);
-            snippetsStmt.close();
-            snippetsRS.close();
 
-          // also select ground truth queries and their snippets
-            sql = "select queryText, snippet, url from googlesearchdocs where questid=" + curQuestID + ";";
-            Statement gtSnippetsStmt = dbConnection.createStatement();
-            ResultSet gtSnippetsRS = gtSnippetsStmt.executeQuery(sql);
-            Vector<Snippet> gtSnippets = new Vector<Snippet>();
 
-            while (gtSnippetsRS.next()) {
-              String gtURL = gtSnippetsRS.getString("url");
-              if (gtURL.contains("answers.yahoo.")) {
-                continue;
-              }
 
-              String snippetText = gtSnippetsRS.getString("snippet");
-              String queryText = gtSnippetsRS.getString("queryText");
-              Snippet s = new Snippet(snippetText, queryText, -1, -1, curQuestID, true);
-              gtSnippets.add(s);
-            }
-            gtSnippetsStmt.close();
-            gtSnippetsRS.close();
-
-            snippets.addAll(gtSnippets);
-            Vector<String> topProbes = scoreProbes(rawQuestion, answers, snippets);
-            System.out.println(topProbes);
-
-            //// now rank separate words
-            Vector<String> topQueryWords = new Vector<String>();
-            for (String s : topProbes) {
-              topQueryWords.addAll(Arrays.asList(s.split("\\s")));
-            }
-
-            List<Entry<String, Double>> rankedWords = Utils.entriesSortedByValues(Utils.buildDistribution(topQueryWords), "dec");
-            for (Entry<String, Double> e : rankedWords) {
-              System.out.println(e.getValue() + "::" + e.getKey());
-              writer.println(decimalFormat.format(e.getValue()) + " :: " + e.getKey());
-            }
-
-
-          // apply different similarities here
-            // Vector<Snippet> scoredSnippets = simpleIntersection(rawQuestion, answers, snippets);
-            // Vector<Snippet> scoredSnippets = simpleIntersectionNoQuery(rawQuestion, answers, snippets);
-            // Vector<Snippet> scoredSnippets = kldSimilarity(rawQuestion, answers, snippets);
-            // double questSimWeight = 0.3;
-            // double answerSimWeight = 0.7;
-            // Vector<Snippet> scoredSnippets = simpleIntersectionWeighted(rawQuestion, answers, snippets, questSimWeight, answerSimWeight);
-            // bigramsIntersection(rawQuestion, answers, snippets);
-            // Vector<Snippet> scoredSnippets = simpleIntersectionTopWords(rawQuestion, answers, snippets, questSimWeight, answerSimWeight, writer);
-
-    //// Ranking separate snippets        
-      /*    List<Snippet> rankedSnippets = Utils.sliceCollection(Snippet.sortSnippetsByScore(scoredSnippets, "dec"), 0, 10);
-
-            Vector<String> topQueryWords = new Vector<String>();
-            writer.println("::SNIPPETS::");
-            for (Snippet s : rankedSnippets) {
-              topQueryWords.addAll(Arrays.asList(s.queryText.split("\\s")));
-              writer.println(s.producedByTrueQuery + "::" + s.queryText + " :: " + s.original + "\n---");
-            }
-
-            List<Entry<String, Double>> rankedWords = Utils.entriesSortedByValues(Utils.buildDistribution(topQueryWords), "dec");
-            for (Entry<String, Double> e : rankedWords) {
-              System.out.println(e.getValue() + "::" + e.getKey());
-              writer.println(decimalFormat.format(e.getValue()) + " :: " + e.getKey());
-            }*/
-
-      }
-      qidsStmt.close();
-      qids.close();
-      writer.close();
-
-            
-
-    } catch (SQLException e) {
-      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-      System.exit(0);
-    } catch (FileNotFoundException e) {
-      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-      System.exit(0);
-    }
-  }
-
-
-  public static Vector<Snippet> simpleIntersection (String question, Vector<String> answers, Vector<Snippet> snippets) {
-  /// only do slight preprocessing - remove punctuation (no stopping or stemming)
-  /// compare words intersection - (question + collective answer) and (snippet)
-
-    String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
-    Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
-
-    Joiner joiner = Joiner.on(" ");
-    String collectiveAnswer = Utils.shrinkRepeatedChars(joiner.join(answers));
-    collectiveAnswer = Utils.shrinkRepeatedChars(Utils.removePunct(collectiveAnswer.toLowerCase()));
-    Vector<String> aTokens = new Vector<String>(Arrays.asList(collectiveAnswer.split("\\s")));
-
-    HashSet<String> qaWords = new HashSet<String>(qTokens);
-    qaWords.addAll(aTokens);
-
-    qaWords.removeAll(Arrays.asList(query.split("\\s")));
-
-
-    for (Snippet snippet : snippets) {
-      HashSet<String> sWords = new HashSet<String>(snippet.tokens());
-      double sLength = 1.0 * sWords.size();
-      sWords.retainAll(qaWords);
-      double score = sWords.size() / sLength;
-      snippet.setSimScore(score);
-    }
-    return snippets;
-  }
-  
-  public static Vector<Snippet> simpleIntersectionNoQuery (String question, Vector<String> answers, Vector<Snippet> snippets) {
-  /// only do slight preprocessing - remove punctuation (no stopping or stemming)
-  /// % of intersectiong words that were not in the query
-  /// ((question + answer) \ (query) ) and (snippet)
-
-    String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
-    Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
-
-    Joiner joiner = Joiner.on(" ");
-    String collectiveAnswer = Utils.shrinkRepeatedChars(joiner.join(answers));
-    collectiveAnswer = Utils.shrinkRepeatedChars(Utils.removePunct(collectiveAnswer.toLowerCase()));
-    Vector<String> aTokens = new Vector<String>(Arrays.asList(collectiveAnswer.split("\\s")));
-
-    HashSet<String> qaWords = new HashSet<String>(qTokens);
-    qaWords.addAll(aTokens);
-    // qaWords.removeAll(Arrays.asList(query.split("\\s")));
-
-
-    for (Snippet snippet : snippets) {
-      Vector<String> queryTokens = new Vector<String>(Arrays.asList(snippet.queryText.split("\\s")));
-      HashSet<String> sWords = new HashSet<String>(snippet.tokens());
-      // System.out.println(sWords);
-      sWords.removeAll(queryTokens);
-
-      HashSet<String> qaWordsNoQuery = new HashSet<String>(qaWords);
-      qaWordsNoQuery.removeAll(queryTokens);
-
-      
-      // System.out.println(snippet.queryText);
-      // System.out.println(sWords);
-      // System.out.println(qaWordsNoQuery);
-
-      double sLength = 1.0 * sWords.size();
-      sWords.retainAll(qaWordsNoQuery);
-      double score = sWords.size() / sLength;
-      snippet.setSimScore(score);
-
-
-      // input.next();
-    }
-    return snippets;
-  }
-
-  public static Vector<Snippet> simpleIntersectionWeighted(String question, Vector<String> answers, Vector<Snippet> snippets, double questSimWeight, double answerSimWeight) {
-  /// Do simple intersection between question and snippet, answer and snippet 
-  /// The final score is composed of  questSimWeight * SimWithQuestion + answerSimWeight * SimWithAnswer
-    String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
-    Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
-
-    Joiner joiner = Joiner.on(" ");
-    String collectiveAnswer = Utils.shrinkRepeatedChars(joiner.join(answers));
-    collectiveAnswer = Utils.shrinkRepeatedChars(Utils.removePunct(collectiveAnswer.toLowerCase()));
-    Vector<String> aTokens = new Vector<String>(Arrays.asList(collectiveAnswer.split("\\s")));
-
-    for (Snippet snippet : snippets) {
-      Vector<String> queryTokens = new Vector<String>(Arrays.asList(snippet.queryText.split("\\s")));
-      HashSet<String> sWords = new HashSet<String>(snippet.tokens());
-      sWords.removeAll(queryTokens);
-      double sLength = 1.0 * sWords.size();
-
-      // sim with question
-      qTokens.removeAll(queryTokens);
-      sWords.retainAll(qTokens);
-      double questScore = sWords.size() / sLength;
-
-      // sim with answers
-      sWords = new HashSet<String>(snippet.tokens());
-      sWords.removeAll(queryTokens);
-      aTokens.removeAll(queryTokens);
-      sWords.retainAll(aTokens);
-      double answerScore = sWords.size() / sLength;
-
-      double finalScore = questSimWeight * questScore + answerSimWeight * answerScore;
-      snippet.setSimScore(finalScore);
-    }
-    return snippets;
-
-  }
-
-  public static Vector<Snippet> simpleIntersectionTopWords(String question, Vector<String> answers, Vector<Snippet> snippets, double questSimWeight, double answerSimWeight, PrintWriter writer) {
-  /// The score is the percentage of snippet words intersecting with top words from question and top words from answer
-  /// Top words from question are the words with the highest pointwise KLD score (or it can be only title words)
-  /// Top words from the answers are the words repeating throughout the answers (redundancy)
-
-    // get top words from the question
-    String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
-    Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
-    qTokens = Utils.removeShortTokens(qTokens, 2);
-
-    List<Entry<String, Double>> highKLDQuestion = Utils.sliceCollection(Utils.pointwiseKLD(qTokens, luc),0, 5);
-    // System.out.println("quest::: " + highKLDQuestion);
-
-    Vector<String> topQuestionWords = new Vector<String>();
-    for (Entry<String, Double> e : highKLDQuestion) {
-      topQuestionWords.add(e.getKey());
-    }
-
-    Vector<String> cleanAnswers = new Vector<String>();
-    for (String a: answers) {
-      String newAnswer = Utils.shrinkRepeatedChars(Utils.removePunct(a.toLowerCase()));
-      Vector<String> aTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
-      aTokens = Utils.removeShortTokens(aTokens, 2);
-      newAnswer = Utils.join_vector(aTokens, " ");
-
-      cleanAnswers.add(newAnswer);
-    }
-
-    Vector<Entry<String, Double>> repAnswers = Utils.answersIntersection(cleanAnswers, 0.4, luc);
-    List<Entry<String, Double>> sortedRepAnswers = Utils.entriesSortedByValues(repAnswers, "dec");
-
-    Vector<Entry<String, Double>> copySortedRepAnswers = new Vector<Entry<String, Double>>();
-    copySortedRepAnswers.addAll(sortedRepAnswers);
-
-    List<Entry<String, Double>> topEntriesAnswers = Utils.sliceCollection(copySortedRepAnswers ,0, 5);
-    // System.out.println("asw::: " + topEntriesAnswers);
-    Vector<String> topAnswersWords = new Vector<String>();
-    for (Entry<String, Double> e : topEntriesAnswers) {
-      topAnswersWords.add(e.getKey());
-    }
-
-    HashSet<String> topWords = new HashSet<String>();
-    topWords.addAll(topAnswersWords);
-    topWords.addAll(topQuestionWords);
-    // System.out.println("TOTAL:: " + topWords); 
-
-    writer.println("::TOP WORDS FROM QUESTION:: " + topQuestionWords);
-    writer.println("::TOP WORDS FROM ANSWERS:: " + topAnswersWords);
-
-
-
-    for (Snippet snippet : snippets) {
-      HashSet<String> sWords = new HashSet<String>(snippet.tokens());
-
-      Vector<String> queryTokens = new Vector<String>(Arrays.asList(snippet.queryText.split("\\s")));
-      sWords.removeAll(queryTokens);
-
-      Vector<String> copySWords = new Vector<String> (sWords);
-
-
-
-      double sLength = 1.0 * sWords.size();
-      sWords.retainAll(topQuestionWords);
-      double questionScore = sWords.size()*1.0 / sLength;
-
-      copySWords.retainAll(topAnswersWords);
-      double answersScore = copySWords.size()*1.0 / sLength;
-
-
-      snippet.setSimScore(questSimWeight*questionScore + answerSimWeight*answersScore);
-    }
-    return snippets;
-  
-  }
-
-  public static Vector<Snippet> kldSimilarity(String question, Vector<String> answers, Vector<Snippet> snippets) {
-  //// Concat together question, collective answer and use it to compute KLD btw that and each snippet   
-    String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
-    Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
-
-    Joiner joiner = Joiner.on(" ");
-    String collectiveAnswer = Utils.shrinkRepeatedChars(joiner.join(answers));
-    collectiveAnswer = Utils.shrinkRepeatedChars(Utils.removePunct(collectiveAnswer.toLowerCase()));
-    Vector<String> aTokens = new Vector<String>(Arrays.asList(collectiveAnswer.split("\\s")));
-
-    aTokens.addAll(qTokens);
-    Vector<String> background = new Vector<String>(aTokens);
-    int minShortTokenLength = 2;
-    background = Utils.removeShortTokens(background, minShortTokenLength);
-
-    for (Snippet s : snippets) {
-      try {
-        // input.next();
-        Vector<String> foreground = Utils.removeShortTokens(s.tokens(), minShortTokenLength);
-        // System.out.println("foreground = " + foreground);
-        // System.out.println("background = " + background);
-        double kldSimScore = Utils.KLD_JelinekMercerSmoothing(foreground, background, 0.9, luc);
-        s.setSimScore(kldSimScore);
-
-        System.out.println(s.original);
-        System.out.println(kldSimScore);
-        System.out.println("\n***");
-      } catch (IOException e) {
-        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-        continue;
-      } catch (ParseException e) {
-        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-        continue;
-      }
-    }
-
-    return snippets;
-  }
-
-  public static Vector<String> getRandomQueriesForQuetsionID(int questID, int sampleSize) {
-  //// Given question id, find all the queries constructed for it and then select a random sample,
-  //// which hopefully should be uniform
-    Vector<String> randomQueries = new Vector<String>();
-    try {
-      String sql = "select query from queries where qid in (select distinct queryid from qqp where questid=" + questID + ");";
-      Statement queriesStmt = dbConnection.createStatement();
-      ResultSet queriesRS = queriesStmt.executeQuery(sql);
-
-      Vector<String> allQueries = Utils.resultSet2Vect(queriesRS, "query");
-      randomQueries = Utils.pickRandomSample(allQueries, sampleSize);
-
-
-      Vector<String> words = new Vector<String>();
-      for (String q : randomQueries) {
-        words.addAll(Utils.str2vect(q));
-      }
-
-      HashMap<String, Double> distr = Utils.buildDistribution(words);
-      for (Entry<String, Double> e : distr.entrySet()) {
-        System.out.println(e.getValue() + ":::" + e.getKey());
-      }
-
-
-      queriesStmt.close();
-      queriesRS.close();
-
-    } catch (SQLException e) {
-      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-      System.exit(0);
-    }
-    return randomQueries;
-  }
-
-  public static Vector<Snippet> bigramsIntersection(String question, Vector<String> answers, Vector<Snippet> snippets) {
-    //// count the number of intersecting bigrams in the snippet and question/answer
-    HashSet<String> questionBigrams = new HashSet<String>(Utils.bigramsFromSentence(question));
-
-    Vector<String> answersBigrams = new Vector<String>();
-
-    for (String a : answers) {
-      answersBigrams.addAll(Utils.bigramsFromSentence(a));
-    }
-    System.out.println(Utils.entriesSortedByValues(Utils.buildDistribution(answersBigrams), "dec"));
-
-    HashSet<String> allBigrams = new HashSet<String>(questionBigrams);
-    allBigrams.addAll(answersBigrams);
-
-    for (Snippet s : snippets) {
-      s.generateBigrams();
-      // System.out.println("SNIPPET: " + s.original);
-      // System.out.println("BIGRAMS: " + s.getBigrams());
-      // input.next();
-      HashSet<String> intersectionBigrams = new HashSet<String>(s.getBigrams());
-      double total = s.getBigrams().size();
-
-      intersectionBigrams.retainAll(allBigrams);
-      double intersect = intersectionBigrams.size();
-
-      
-      if (intersectionBigrams.size() != 0) {
-        // System.out.println(intersectionBigrams);
-        // System.out.println(s.original);
-        // System.out.println(s.queryText + "\n\n");
-      }
-
-      s.setSimScore(intersect);
-
-    }
-    return snippets;
-  }
-
-  public static Vector<String> scoreProbes(String question, Vector<String> answers, Vector<Snippet> snippets) {
-    HashMap<String, Vector<Snippet>> snippetsSplitByProbe = Snippet.splitSnippetsToProbes(snippets);
-
-    HashMap<String, Double> scoredProbesMap = new HashMap<String, Double>();
-
-    Vector<String> topQuestionWords = getTopQuestionWords(question, 10);
-    Vector<String> topAnswersWords = getTopAnswerWords(answers, 10);
-
-    // System.out.println(topQuestionWords);
-    // System.out.println(topAnswersWords);
-
-
-
-    for (Entry<String, Vector<Snippet>> e : snippetsSplitByProbe.entrySet()) {
-      
-      Double score = new Double(scoreForSingleProbe(topQuestionWords, topAnswersWords, e.getValue()));
-      // System.out.println(e.getKey() + " :: " + score);
-      scoredProbesMap.put(e.getKey(), score);
-
-    }
-    Vector<String> topProbes = new Vector<String>();
-    List<Entry<String, Double>> scoredProbes = Utils.sliceCollection(Utils.entriesSortedByValues(scoredProbesMap, "dec"), 0, 10);
-    for (Entry<String, Double> e : scoredProbes) {
-      topProbes.add(e.getKey());
-    }
-    
-    return topProbes;
-
-  }
-
-  public static double scoreForSingleProbe(Vector<String> topQuestionWords, Vector<String> topAnswersWords, Vector<Snippet> snippets) {
-    //// average intersection with question across snippets
-    double aveQuestionIntersection = averageIntersection(snippets, topQuestionWords);
-    double aveAnswersIntersection = averageIntersection(snippets, topAnswersWords);
-
-    //// now intersection of all snippets with answer
-    double questionIntersection = allSnippetsIntersection(snippets, topQuestionWords);
-    double answersIntersection = allSnippetsIntersection(snippets, topAnswersWords);
-
-    double probeScore = aveQuestionIntersection + aveAnswersIntersection + questionIntersection + answersIntersection;
-    return probeScore;
-  }
-
-  public static double allSnippetsIntersection(Vector<Snippet> snippets, Vector<String> tokens) {
-    HashSet<String> snippetsTokens = new HashSet<String>();
-
-    for (Snippet s : snippets) {
-      snippetsTokens.addAll(s.tokens());
-    }
-    snippetsTokens.retainAll(tokens);
-    double length = tokens.size() * 1.0;
-    return snippetsTokens.size()* 1.0 / length; 
-
-  }
-  public static double averageIntersection(Vector<Snippet> snippets, Vector<String> tokens) {
-    double length = tokens.size() * 1.0;
-    int accumScore = 0;
-    // System.out.println(tokens + "\n***\n\n");
-    for (Snippet s : snippets) {
-      // System.out.println(s.tokens());
-      HashSet<String> sTokens = new HashSet<String>(s.tokens());
-      sTokens.retainAll(tokens);
-      accumScore += sTokens.size();
-      // System.out.println(sTokens + "\n\n");
-    }
-    double aveScore = accumScore / length;
-    return aveScore;
-  }
-
-  public static Vector<String> getTopQuestionWords (String question, int topNumWords) {
-    String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
-    Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
-    qTokens = Utils.removeShortTokens(qTokens, 2);
-    List<Entry<String, Double>> highKLDQuestion = Utils.sliceCollection(Utils.pointwiseKLD(qTokens, luc),0, topNumWords);
-
-    Vector<String> topQuestionWords = new Vector<String>();
-    for (Entry<String, Double> e : highKLDQuestion) {
-      topQuestionWords.add(e.getKey());
-    }
-    return topQuestionWords;
-  }
-
-  public static Vector<String> getTopAnswerWords (Vector<String> answers, int topNumWords) {
-    if (answers.size() < 3) {
-      String collectiveAnswer = Utils.join_vector(answers, " ");
-      return getTopQuestionWords(collectiveAnswer, 10);
-    }
-
-    Vector<Vector<String>> cleanAnswers = new Vector<Vector<String>>();
-    for (String a: answers) {
-      String newAnswer = Utils.shrinkRepeatedChars(Utils.removePunct(a.toLowerCase()));
-      Vector<String> aTokens = new Vector<String>(Arrays.asList(newAnswer.split("\\s")));
-      aTokens = Utils.removeShortTokens(aTokens, 2);
-      cleanAnswers.add(aTokens);
-    }
-
-    List<Entry<String, Double>> topScoredWords = Utils.getTopWordsFromAnswers(cleanAnswers, luc, topNumWords);
-    Vector<String> topAnswersWords = new Vector<String>();
-    for (Entry<String, Double> e : topScoredWords) {
-      topAnswersWords.add(e.getKey());
-    }
-    return topAnswersWords;
-  }
-
-  // public static Vcetor<String> getTopWordsQA(String question, Vector<String> answers) {
-  //   String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
-  //   Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
-
-  //   List<Entry<String, Double>> highKLDQuestion = Utils.sliceCollection(Utils.pointwiseKLD(qTokens), 0, 5);
-  //   Vector<String> topQuestionWords = new Vector<
-
-  // }
-
-
-
-public static void main(String[] args) throws IOException, ParseException, JSONException, FileNotFoundException, ParseException {
-  if (args.length < 2) {
-      System.out.println("Input arguments: index_path, query string");
-      return;
-  }
-  setThingsUp(args);
-  // addGoogleSearchDocs();
-  // addBingSearchResultsFromFile();
-  testSimilarityMeasures1();
-  // populateDBWithRawQA();
-}
 
 }
 
@@ -1790,6 +1667,10 @@ public static void main(String[] args) throws IOException, ParseException, JSONE
       System.exit(0);
     }
     */
+
+
+///// SOME CODE THAT MIGHT BE USEFUL
+
 
 
 

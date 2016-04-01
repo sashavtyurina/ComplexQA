@@ -15,6 +15,41 @@ import java.util.*;
 public class GoogleSearch {
  
     private static final String GOOGLE_SEARCH_URL = "https://www.google.com/search";
+    private static final String BING_SEARCH_URL = "http://www.bing.com/search"; //?q=dog+eats+rocks";
+
+    public static HashMap<String, String> searchSnippetsBing(String searchQuery) {
+        // maps url -- snippet
+        HashMap<String, String> resultDocs = new HashMap<String, String>();
+
+        try {
+            String searchURL = BING_SEARCH_URL + "?q="+searchQuery;
+            System.out.println(searchURL);
+            Document doc = Jsoup.connect(searchURL).userAgent("Mozilla/5.0").get();
+            System.out.println("connected");
+
+            
+
+            Elements results = doc.select("li.b_algo");
+            for (Element r : results) {
+
+                String href = r.select("h2 > a").get(0).attr("href");
+                String title = r.select("h2").get(0).text();
+                String snippet = r.select("p").get(0).text();
+
+                resultDocs.put(href, title + " " + snippet);
+
+            }   
+
+        } catch (IOException e) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+        return resultDocs;
+
+    }
+
+
+
     public static HashMap<String, String> searchTermsSnippets(String searchQuery, int num) throws IOException {
         // Taking search term input from console
         // Scanner scanner = new Scanner(System.in);

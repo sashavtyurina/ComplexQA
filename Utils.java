@@ -986,7 +986,7 @@ public static void addtoDB () {
       }
     }
 
-      public static Vector<String> removeDuplicateTokens(Vector<String> tokens) {
+  public static Vector<String> removeDuplicateTokens(Vector<String> tokens) {
     Vector<String> result = new Vector<String>();
     for (int i = 0; i < tokens.size(); ++i) {
       if (!(result.contains(tokens.get(i)))) {
