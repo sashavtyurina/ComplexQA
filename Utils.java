@@ -59,6 +59,25 @@ public class Utils {
     return result;
   }
 
+  public static String spellCheckQuestion(String question, Vector<String> questionTokens, LuceneHelper luc) {
+    StringBuilder newQuestion = new StringBuilder();
+    int i = 0;
+
+    for (String qt : questionTokens) {
+      newQuestion.append(Utils.spellCheckToken(question, questionTokens, qt, luc));
+      i++;
+    }
+
+    return newQuestion.toString();
+  }
+
+  public static String spellCheckToken(String question, Vector<String> questionTokens, String token, LuceneHelper luc) {
+    Vector<String> suggestions = luc.spellChecker(token);
+
+    return "";
+  }
+
+
   public static Vector<String> bigramsFromSentence(String sentence) {
     String processed = Utils.shrinkRepeatedChars(Utils.removePunct(sentence.toLowerCase()));
 
@@ -215,7 +234,6 @@ public static void addtoDB () {
 
     rbo *= (1 - p);
     return rbo;
-
   }
 
   // public static <T> double averageOverlap(Vector<T> a, Vector<T> b, int k) {
@@ -748,9 +766,14 @@ public static void addtoDB () {
       try {
         double p_i = e.getValue();
         double q_i = (double)(luc.totalTermFreq(e.getKey())) / (double)(luc.totalTerms());
+        
         if (q_i == 0) {
           continue;
         } 
+
+        if (luc.totalTermFreq(e.getKey()) <= 1) { // if the word doesn't appear at all, or only appears once, discard it. Should remove extremely weird words
+          continue;
+        }
 
         double kldScore = p_i * Math.log(p_i / q_i);
         kldValues.put(e.getKey(), new Double(kldScore));

@@ -371,6 +371,20 @@ public class LuceneHelper {
         return this.reader.getSumDocFreq(FIELD_BODY);
     }
 
+    public Vector<String> spellChecker(String word) {
+        /// given a token, suggests most popular spellings
+        DirectSpellChecker checker = new DirectSpellChecker();
+        Vector<String> suggestionsVect = new Vector<String>();
+        Term t = new Term(FIELD_BODY, word);
+        try {
+            SuggestWord[] suggestions = checker.suggestSimilar(t, 10, this.dictReader, SuggestMode.valueOf("SUGGEST_MORE_POPULAR"));
+            // suggestionsVect.addAll(Arrays.asList(suggestions));
+        } catch (IOException e) {
+                System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        return suggestionsVect;
+    }
+
 
 
     public void testStuff() throws IOException, ParseException {
