@@ -397,7 +397,12 @@ public static void extractingKeywords() {
     ResultSet questIDsRS = questIDStmt.executeQuery(sql);
     PrintWriter writer = new PrintWriter(new FileOutputStream(new File("ExtractingKeywords.txt"), false));
 
+    int counter = 0;
+    int allQuestions = 0;
+
     while (questIDsRS.next()) {
+      allQuestions ++;
+
       int curQuestID = questIDsRS.getInt("qid");
       Statement qidsStmt = dbConnection.createStatement();
       sql = "select qid, rawQuestion, gtquery, qtitle, qbody from questions where qid=" + curQuestID + ";";
@@ -414,11 +419,21 @@ public static void extractingKeywords() {
       Vector<String> blocks = Keywords.splitQuestionIntoBlocks(rawQuestion);
       Vector<String> importantWords = Keywords.wordsFromRepeatedBigrams(blocks);
       Vector<String> topQuestionWords = similarity.getTopQuestionWords(rawQuestion, qtitle, qbody, 10, importantWords);
+      Vector<String> topQuestionWordsOld = similarity.getTopQuestionWords(rawQuestion, qtitle, qbody, 10);
 
+      if (topQuestionWords.containsAll(Utils.str2vect(gtQuery))) {
+        counter ++;
+      } else {
+        System.out.println(gtQuery);
+        System.out.println(topQuestionWords);
+        System.out.println("***");  
+      }
+      
       qidsStmt.close();
       qids.close();
     }
 
+    System.out.println("Out of " + allQuestions + ", " + counter + " contained gt query words");
     questIDStmt.close();
     questIDsRS.close();
     writer.close();
