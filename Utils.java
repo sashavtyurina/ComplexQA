@@ -77,6 +77,18 @@ public class Utils {
     return "";
   }
 
+  public static Map<String, Integer> buildFrequency(Vector<String> tokens) {
+    Map<String, Integer> frequency = new HashMap<String, Integer>();
+    for (String t : tokens) {
+      if (frequency.containsKey(t)) {
+        frequency.put(t, frequency.get(t) + 1);
+      } else {
+        frequency.put(t, new Integer(1));
+      }
+    }
+    return frequency;
+  }
+
 
   public static Vector<String> bigramsFromSentence(String sentence) {
     String processed = Utils.shrinkRepeatedChars(Utils.removePunct(sentence.toLowerCase()));
@@ -383,7 +395,7 @@ public static void addtoDB () {
       }
   }
 
-  private static Vector<String> s_stemmer(Vector<String> tokens) {
+  public static Vector<String> s_stemmer(Vector<String> tokens) {
     Vector<String> stemmed = new Vector<String>();
     for (int i = 0; i < tokens.size(); ++i) {
       String word = tokens.get(i);
@@ -766,7 +778,7 @@ public static void addtoDB () {
       try {
         double p_i = e.getValue();
         double q_i = (double)(luc.totalTermFreq(e.getKey())) / (double)(luc.totalTerms());
-        
+
         if (q_i == 0) {
           continue;
         } 

@@ -141,14 +141,6 @@ public class KeywordRanking {
             answersStmt.close();
             answersRS.close();
 
-          // for this question get all its snippets 
-  /*            sql = "select snippetID, queryID, questID, queryText, snippet, docURL from NewSnippets where questID=" + curQuestID + ";";
-            Statement snippetsStmt = dbConnection.createStatement();
-            ResultSet snippetsRS = snippetsStmt.executeQuery(sql);
-            Vector<Snippet> snippets = Snippet.rsToSnippetList(snippetsRS);
-            snippetsStmt.close();
-            snippetsRS.close();*/
-
           // for this question get all its snippets from FullProbes
             // sql = "select snippetID, questID, queryText, snippet, docURL from FullProbes where questID=" + curQuestID + ";";
             sql = "select snippetID, questID, queryText, snippet, docURL from NewSnippets where questID=" + curQuestID + ";";
@@ -179,8 +171,8 @@ public class KeywordRanking {
             gtSnippetsRS.close();
 
             snippets.addAll(gtSnippets);
-            
-/*          Vector<String> allSortedProbes = scoreProbes(rawQuestion, answers, snippets, writer, qtitle, qbody);
+
+            Vector<String> allSortedProbes = scoreProbes(rawQuestion, answers, snippets, writer, qtitle, qbody);
             Vector<String> topProbes = new Vector<String>(Utils.sliceCollection(allSortedProbes, 0, 10));
             // System.out.println(topProbes);
 
@@ -191,102 +183,14 @@ public class KeywordRanking {
               topQueryWords.addAll(Arrays.asList(s.split("\\s")));
             }
 
-            // writer.println("\nTOP RANKED WORDS WITH FULL PROBES :: ");
-            List<Entry<String, Double>> rankedWords = Utils.entriesSortedByValues(Utils.buildDistribution(topQueryWords), "dec");
-            for (Entry<String, Double> e : rankedWords) {
-              // System.out.println(e.getValue() + "::" + e.getKey());
-              writer.println(decimalFormat.format(e.getValue()) + " :: " + e.getKey());
-
-            }
-*/
-            /// Now we want to check if top-ranked words are in the top words, extracted from question and answer ealier. 
-            // Vector<String> topRankedWords = Utils.removeDuplicateTokens(topQueryWords);
-            Vector<String> topQuestionWords = similarity.getTopQuestionWords(rawQuestion, qtitle, qbody, 10);
-            Vector<String> topQuestionWordsNoReweighting = similarity.getTopQuestionWordsNoReweighting(rawQuestion, qtitle, qbody, 10);
-            
-
-            
-            writer.println("\n\n");
-            // writer.println("TOP RANKED WORDS WITH FULL PROBES :: \n" + topRankedWords + "\n");
-            writer.println("TOP WORDS EXTRACTED FROM QUESTION :: \n" + topQuestionWords + "\n");
-            writer.println("TOP WORDS EXTRACTED FROM QUESTION NO REWEIGHTING:: \n" + topQuestionWordsNoReweighting + "\n");
-
-            // writer.println("RBO SCORE :: " + Utils.RBO(topRankedWords, topQuestionWords, 0.5, topRankedWords.size()));
-            // writer.println("RBO SCORE NO REWEIGHTING:: " + Utils.RBO(topRankedWords, topQuestionWordsNoReweighting, 0.5, topRankedWords.size()));
-            // writer.println("\n");
-
-            Vector<String> gtQueryVect = Utils.str2vect(gtQuery);
-            writer.println("TOP QUESTION WORDS CONTAIN ALL GT QUERY WORDS :: " + topQuestionWords.containsAll(gtQueryVect));
-            writer.println("TOP QUESTION WORDS (NO REWEIGHTING) CONTAIN ALL GT QUERY WORDS :: " + topQuestionWordsNoReweighting.containsAll(gtQueryVect));
-
-            // writer.println("RBO SCORE :: " + Utils.RBO(gtQueryVect, topQuestionWords, 0.5, gtQueryVect.size()));
-            // writer.println("RBO SCORE NO REWEIGHTING:: " + Utils.RBO(gtQueryVect, topQuestionWordsNoReweighting, 0.5, gtQueryVect.size()));
-            // writer.println("\n");
-
-            // topRankedWords.removeAll(topQuestionWords);
-            // writer.println("TOP RANKED WORDS THAT WE MISSED :: \n" + topRankedWords + "\n");
-
-
-            /*Vector<String> topWordsProbes = Utils.composeQueries1(topQuestionWords, 3).get(3);
-            writer.println(topWordsProbes.size() + " queries constructed");
-
-            sql = "select distinct queryText from NewSnippets where questID=" + curQuestID + ";";
-            Statement existingProbesStmt = dbConnection.createStatement();
-            ResultSet existingProbesRS = snippetsStmt.executeQuery(sql);
-            Vector<String> existingProbes = new Vector<String>();
-            while (existingProbesRS.next()) {
-              String query = existingProbesRS.getString("queryText");
-              existingProbes.add(query);
-            }
-            existingProbesStmt.close();
-            existingProbesRS.close();
-
-            topWordsProbes.removeAll(existingProbes);
-
-
-            PrintWriter queryWriter = new PrintWriter(new FileOutputStream(new File("TopQuestWordsQueries/QueriesForQuestion" + curQuestID + ".txt"), true));
-            for (String p : topWordsProbes) {
-              queryWriter.println(p);
-            }
-            queryWriter.close();
-            writer.println(topWordsProbes.size() + " queries already exist in DB");
-
-
-
-
-            writer.println("\n---------------------------------\n");*/
-            
-            
-            // topRankedWords.removeAll(topQuestionWords);
-            // writer.println("TOP RANKED WORDS THAT WERE NOT TOP EXTRACTED WORDS :: " + topRankedWords);
-
-
-
-          // apply different similarities here
-            // Vector<Snippet> scoredSnippets = simpleIntersection(rawQuestion, answers, snippets);
-            // Vector<Snippet> scoredSnippets = simpleIntersectionNoQuery(rawQuestion, answers, snippets);
-            // Vector<Snippet> scoredSnippets = kldSimilarity(rawQuestion, answers, snippets);
-            // double questSimWeight = 0.3;
-            // double answerSimWeight = 0.7;
-            // Vector<Snippet> scoredSnippets = simpleIntersectionWeighted(rawQuestion, answers, snippets, questSimWeight, answerSimWeight);
-            // bigramsIntersection(rawQuestion, answers, snippets);
-            // Vector<Snippet> scoredSnippets = simpleIntersectionTopWords(rawQuestion, answers, snippets, questSimWeight, answerSimWeight, writer);
-
-    //// Ranking separate snippets        
-      /*    List<Snippet> rankedSnippets = Utils.sliceCollection(Snippet.sortSnippetsByScore(scoredSnippets, "dec"), 0, 10);
-
-            Vector<String> topQueryWords = new Vector<String>();
-            writer.println("::SNIPPETS::");
-            for (Snippet s : rankedSnippets) {
-              topQueryWords.addAll(Arrays.asList(s.queryText.split("\\s")));
-              writer.println(s.producedByTrueQuery + "::" + s.queryText + " :: " + s.original + "\n---");
-            }
-
+            writer.println("\nTOP RANKED WORDS WITH FULL PROBES :: ");
             List<Entry<String, Double>> rankedWords = Utils.entriesSortedByValues(Utils.buildDistribution(topQueryWords), "dec");
             for (Entry<String, Double> e : rankedWords) {
               System.out.println(e.getValue() + "::" + e.getKey());
               writer.println(decimalFormat.format(e.getValue()) + " :: " + e.getKey());
-            }*/
+
+            }
+
             qidsStmt.close();
             qids.close();
       }
@@ -295,9 +199,6 @@ public class KeywordRanking {
       questIDsRS.close();
       
       writer.close();
-
-            
-
     } catch (SQLException e) {
       System.err.println( e.getClass().getName() + ": " + e.getMessage() );
       System.exit(0);
@@ -406,7 +307,7 @@ public class KeywordRanking {
             queryWriter.println(query);
 
 
-/*            // will make a long sleep every 3-6 probes
+          /*            // will make a long sleep every 3-6 probes
             if (randomProbeNumber == 0) {
 
               int minLongSleep = 2 * 60 * 1000; // 4 mins - 250000 // reduced to 2 mins
@@ -485,6 +386,56 @@ public class KeywordRanking {
 
 /* TRY TO PROBE WITH ALL POSSIBLE COMBINATIONS OF WORDS. END. */ 
 
+
+/* EXTRACTING KEYWORDS FROM QUESTION */
+
+public static void extractingKeywords() {
+  try {
+
+    String sql = "select distinct qid from questions;";  
+    Statement questIDStmt = dbConnection.createStatement();
+    ResultSet questIDsRS = questIDStmt.executeQuery(sql);
+    PrintWriter writer = new PrintWriter(new FileOutputStream(new File("ExtractingKeywords.txt"), false));
+
+    while (questIDsRS.next()) {
+      int curQuestID = questIDsRS.getInt("qid");
+      Statement qidsStmt = dbConnection.createStatement();
+      sql = "select qid, rawQuestion, gtquery, qtitle, qbody from questions where qid=" + curQuestID + ";";
+      ResultSet qids = qidsStmt.executeQuery(sql);
+      String rawQuestion = qids.getString("rawQuestion");
+      String gtQuery = qids.getString("gtquery");
+      String qtitle = qids.getString("qtitle");
+      String qbody = qids.getString("qbody");
+
+      Vector<String> gtQueryVect = Utils.str2vect(gtQuery);
+
+      /// KLD scores. Title words get added weight. 
+      
+      Vector<String> blocks = Keywords.splitQuestionIntoBlocks(rawQuestion);
+      Vector<String> importantWords = Keywords.wordsFromRepeatedBigrams(blocks);
+      Vector<String> topQuestionWords = similarity.getTopQuestionWords(rawQuestion, qtitle, qbody, 10, importantWords);
+
+      qidsStmt.close();
+      qids.close();
+    }
+
+    questIDStmt.close();
+    questIDsRS.close();
+    writer.close();
+
+  } catch (SQLException e) {
+    System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    System.exit(0);
+  } catch (FileNotFoundException e) {
+    System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    System.exit(0);
+  }
+}
+
+/* EXTRACTING KEYWORDS FROM QUESTION. END. */
+
+
+
 /* TEST SHIT */
 
 public static void testShit(){
@@ -501,10 +452,11 @@ public static void main(String[] args) throws IOException, ParseException, JSONE
   setThingsUp(args);
   // addGoogleSearchDocs();
   // addBingSearchResultsFromFile();
-  testSimilarityMeasures1();
+  // testSimilarityMeasures1();
   // Utils.spellCheckQuestion("question", null, luc);
   // populateDBWithRawQA();
   // probeWithAllQueries();
+  extractingKeywords();
 }
 
 
