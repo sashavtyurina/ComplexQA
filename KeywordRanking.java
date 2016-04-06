@@ -397,8 +397,19 @@ public static void extractingKeywords() {
     ResultSet questIDsRS = questIDStmt.executeQuery(sql);
     PrintWriter writer = new PrintWriter(new FileOutputStream(new File("ExtractingKeywords.txt"), false));
 
-    int counter = 0;
+    int counterContainsAll = 0;
+    int counterMissesOne = 0;
     int allQuestions = 0;
+
+    PrintWriter containAll = new PrintWriter(new FileOutputStream(new File("containAll.txt"), false));
+    PrintWriter missingAtMostOne = new PrintWriter(new FileOutputStream(new File("missingAtMostOne.txt"), false));
+    PrintWriter missingTwoOrMore = new PrintWriter(new FileOutputStream(new File("missingTwoOrMore.txt"), false));
+
+    containAll.println("TOP 10 QUESTION WORDS CONTAIN ALL GROUND TRUTH QUERY WORDS\n\n");
+    missingAtMostOne.println("TOP 10 QUESTION WORDS MISSING AT MOST 1 GROUND TRUTH QUERY WORD\n\n");
+    missingTwoOrMore.println("TOP 10 QUESTION WORDS MISSING 2 OR MORE GROUND TRUTH QUERY WORDS\n\n");
+
+    
 
     while (questIDsRS.next()) {
       allQuestions ++;
@@ -414,29 +425,59 @@ public static void extractingKeywords() {
 
       Vector<String> gtQueryVect = Utils.str2vect(gtQuery);
 
+      String processedQBody = Utils.shrinkRepeatedChars(qbody.toLowerCase());
+      // Vector<String> sentences = Keywords.splitQuestionIntoSentences(processedQBody);
+      // for (String s : sentences) {
+      //   System.out.println(s);
+      //   System.out.println("--");
+      // }
+      // System.out.println("***");
+
       /// KLD scores. Title words get added weight. 
       
       Vector<String> blocks = Keywords.splitQuestionIntoBlocks(rawQuestion);
       Vector<String> importantWords = Keywords.wordsFromRepeatedBigrams(blocks);
       Vector<String> topQuestionWords = similarity.getTopQuestionWords(rawQuestion, qtitle, qbody, 10, importantWords);
-      Vector<String> topQuestionWordsOld = similarity.getTopQuestionWords(rawQuestion, qtitle, qbody, 10);
 
-      if (topQuestionWords.containsAll(Utils.str2vect(gtQuery))) {
-        counter ++;
+      Vector<String> gtQueryWords = Utils.s_stemmer(Utils.str2vect(gtQuery.toLowerCase()));
+
+      if (topQuestionWords.containsAll(gtQueryWords)) {
+        counterContainsAll ++;
+        containAll.println("Question :: " + rawQuestion + "\n");
+        containAll.println("Ground truth query :: " + gtQuery);
+        containAll.println("Top 10 wirds from the question :: " + topQuestionWords);
+        containAll.println("\n---------------\n");
       } else {
-        System.out.println(gtQuery);
-        System.out.println(topQuestionWords);
-        System.out.println("***");  
+        gtQueryWords.removeAll(topQuestionWords);
+        if (gtQueryWords.size() < 2) {
+          counterMissesOne++;
+          missingAtMostOne.println("Question :: " + rawQuestion + "\n");
+          missingAtMostOne.println("Ground truth query :: " + gtQuery);
+          missingAtMostOne.println("Top 10 wirds from the question :: " + topQuestionWords);
+          missingAtMostOne.println("\n---------------\n");
+        } else {
+          missingTwoOrMore.println("Question :: " + rawQuestion + "\n");
+          missingTwoOrMore.println("Ground truth query :: " + gtQuery);
+          missingTwoOrMore.println("Top 10 wirds from the question :: " + topQuestionWords);
+          missingTwoOrMore.println("\n---------------\n");   
+        }
+        
       }
       
       qidsStmt.close();
       qids.close();
     }
 
-    System.out.println("Out of " + allQuestions + ", " + counter + " contained gt query words");
+    System.out.println("Out of " + allQuestions + ", " + counterContainsAll + " contained all gt query words");
+    System.out.println("Out of " + allQuestions + ", " + counterMissesOne + " missed at most one gt query word");
+    System.out.println("Out of " + allQuestions + ", " + (allQuestions-counterMissesOne-counterContainsAll) + " missed more than one gt query word");
     questIDStmt.close();
     questIDsRS.close();
     writer.close();
+
+    containAll.close();
+    missingAtMostOne.close();
+    missingTwoOrMore.close();
 
   } catch (SQLException e) {
     System.err.println( e.getClass().getName() + ": " + e.getMessage() );

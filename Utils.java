@@ -776,16 +776,17 @@ public static void addtoDB () {
 
     for (Entry<String, Double> e : fore_distr.entrySet()) {
       try {
+        String token = e.getKey();
         double p_i = e.getValue();
-        double q_i = (double)(luc.totalTermFreq(e.getKey())) / (double)(luc.totalTerms());
+        double q_i = (double)(luc.totalTermFreq(token)) / (double)(luc.totalTerms());
 
         if (q_i == 0) {
           continue;
         } 
 
-        if (luc.totalTermFreq(e.getKey()) <= 1) { // if the word doesn't appear at all, or only appears once, discard it. Should remove extremely weird words
-          continue;
-        }
+        // if (luc.totalTermFreq(e.getKey()) <= 1) { // if the word doesn't appear at all, or only appears once, discard it. Should remove extremely weird words
+        //   continue;
+        // }
 
         double kldScore = p_i * Math.log(p_i / q_i);
         kldValues.put(e.getKey(), new Double(kldScore));

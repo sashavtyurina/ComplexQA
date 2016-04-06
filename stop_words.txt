@@ -18,6 +18,14 @@
 -
 /
 +
+i've
+i'm
+i'd
+you've
+you're
+you'd
+he's
+she's
 ve
 n't
 a
@@ -87,6 +95,9 @@ contrariwise
 cos
 could
 cu
+didn't
+haven't
+weren't
 day
 do
 does
