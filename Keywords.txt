@@ -1,4 +1,4 @@
-TOP 10 QUESTION WORDS CONTAIN ALL GROUND TRUTH QUERY WORDS
+# TOP 10 QUESTION WORDS CONTAIN ALL GROUND TRUTH QUERY WORDS
 
 
 Question :: Why is my 5 month old pit bull puppy eating rocks? My dog is very active and has a really good appetite. She loves to play and is very well mannered. Lately she has been eating small pea gravel from my landscaping. Is she just being a puppy or is something wrong?
@@ -180,7 +180,7 @@ Top 10 wirds from the question :: [bassoon, 305585, 7c0, musiciansfriend, m98, e
 
 ---------------
 
-TOP 10 QUESTION WORDS MISSING AT MOST 1 GROUND TRUTH QUERY WORD
+# TOP 10 QUESTION WORDS MISSING AT MOST 1 GROUND TRUTH QUERY WORD
 
 
 Question :: Microsoft Points for 360? I got bored, so I was looking around on my xbox 360 dashboard, when i came to the whole page that told you completely about microsoft points. It said you can buy them, and that you can also get them from promotions and stuff.
@@ -295,7 +295,7 @@ Top 10 wirds from the question :: [song, called, commericial, start, played, che
 
 ---------------
 
-TOP 10 QUESTION WORDS MISSING 2 OR MORE GROUND TRUTH QUERY WORDS
+# TOP 10 QUESTION WORDS MISSING 2 OR MORE GROUND TRUTH QUERY WORDS
 
 
 Question :: Okay, i need actual help here? Okay, so last night the american music awards were on and i was SO psyced that i just had to watch it so decided to record Veronica Mars and watch it later. The problem was that my VCR had been on the wrong channel and i got a black screen for the entire hour. This eppie was supposed to be So good and i really need to see it.
