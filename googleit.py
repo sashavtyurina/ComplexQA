@@ -25,14 +25,14 @@ def ask_bing(query, filename, questID):
             searchResults.append(searchHit)
 
 
-        jsonObject = {'query': query, 'snippets': searchResults, 'questID': 27}
+        jsonObject = {'query': query, 'snippets': searchResults, 'questID': questID}
         f.write('%s\n' % jsonObject)
 
 
 
 
 def main ():
-    mypath = 'TopQuestWordsQueries/'
+    mypath = 'QueriesFromKeywords/'
     onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     for ff in onlyfiles:
         with open(mypath + ff) as f:
@@ -45,7 +45,7 @@ def main ():
                 print('Working with query %d :: %s' % (counter, line))
                 counter += 1
 
-                questID = ff[ff.index('QueriesForQuestion')+len('QueriesForQuestion'):ff.index(".txt")]
+                questID = ff[ff.index('QueriesFromKeywordsQuestion')+len('QueriesFromKeywordsQuestion'):ff.index(".txt")]
                 print(questID)
                 newFilename = mypath + ff[0:ff.index(".txt")] + "SearchResults.txt"
                 ask_bing(line, newFilename, questID)

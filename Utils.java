@@ -718,13 +718,12 @@ public static void addtoDB () {
     return new_queries;
   }
 
-  public static String join_vector(Vector<String> vect, String delim) {
-    // String res = "";
-    // for (int i = 0; i < vect.size() - 1; ++i) {
-    //   res += vect.get(i) + delim;
-    // }
-    // res += vect.get(vect.size() - 1);
-    // return res;
+  // public static String join_vector(Vector<String> vect, String delim) {
+  //   Joiner joiner = Joiner.on(delim);
+  //   return joiner.join(vect);
+  // }
+
+  public static <T> String join_vector(Vector<T> vect, String delim) {
     Joiner joiner = Joiner.on(delim);
     return joiner.join(vect);
   }
