@@ -58,19 +58,9 @@ import java.util.TreeMap;
 import java.util.Vector;
 import org.apache.lucene.codecs.blocktree.FieldReader;
 import org.apache.lucene.index.Term;
-// import org.apache.lucene.index.TermFreqVector;
-// import org.apache.lucene.search.spell.SpellChecker;
-import org.apache.lucene.search.spell.SpellChecker;
-import org.apache.lucene.search.spell.PlainTextDictionary;
-// import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.MultiTerms;
-// import org.apache.lucene.search.similarities.Distribution;
-// import org.apache.lucene.search.similarities.LMSimilarity;
 import org.apache.lucene.search.similarities.BasicStats;
 import java.util.Arrays;
-import org.apache.lucene.search.spell.SuggestMode;
-import org.apache.lucene.search.spell.DirectSpellChecker;
-import org.apache.lucene.search.spell.SuggestWord;
 import org.apache.lucene.analysis.util.CharArraySet;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -87,7 +77,6 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import org.apache.lucene.analysis.TokenStream;
 import java.io.StringReader;
-// import org.apache.lucene.analysis.tokenattributes;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.util.AttributeSource;
 
@@ -122,7 +111,7 @@ public class LuceneHelper {
     public IndexReader reader;
     public IndexReader dictReader;
 
-    public String dictIndexPath = "/home/avtyurin/ComplexQA/LuceneSpell/";
+    // public String dictIndexPath = "/home/avtyurin/ComplexQA/LuceneSpell/";
     public String FIELD_BODY = "contents"; // primary field name where all the text is stored
     public String FIELD_ID = "id";
 
@@ -162,8 +151,8 @@ public class LuceneHelper {
         this.parser = new QueryParser(FIELD_BODY, new EnglishAnalyzer());
         this.parser.setDefaultOperator(QueryParser.Operator.OR);
 
-        Path dictPath = Paths.get(dictIndexPath);
-        this.dictReader = DirectoryReader.open(FSDirectory.open(dictPath));
+        // Path dictPath = Paths.get(dictIndexPath);
+        // this.dictReader = DirectoryReader.open(FSDirectory.open(dictPath));
         
 	}
 
@@ -371,19 +360,20 @@ public class LuceneHelper {
         return this.reader.getSumDocFreq(FIELD_BODY);
     }
 
-    public Vector<String> spellChecker(String word) {
-        /// given a token, suggests most popular spellings
-        DirectSpellChecker checker = new DirectSpellChecker();
-        Vector<String> suggestionsVect = new Vector<String>();
-        Term t = new Term(FIELD_BODY, word);
-        try {
-            SuggestWord[] suggestions = checker.suggestSimilar(t, 10, this.dictReader, SuggestMode.valueOf("SUGGEST_MORE_POPULAR"));
-            // suggestionsVect.addAll(Arrays.asList(suggestions));
-        } catch (IOException e) {
-                System.err.println(e.getClass().getName() + ": " + e.getMessage());
-        }
-        return suggestionsVect;
-    }
+    // public Vector<String> spellChecker(String word) {
+    //     // /// given a token, suggests most popular spellings
+    //     // DirectSpellChecker checker = new DirectSpellChecker();
+    //     // Vector<String> suggestionsVect = new Vector<String>();
+    //     // Term t = new Term(FIELD_BODY, word);
+    //     // try {
+    //     //     SuggestWord[] suggestions = checker.suggestSimilar(t, 10, this.dictReader, SuggestMode.valueOf("SUGGEST_MORE_POPULAR"));
+    //     //     // suggestionsVect.addAll(Arrays.asList(suggestions));
+    //     // } catch (IOException e) {
+    //     //         System.err.println(e.getClass().getName() + ": " + e.getMessage());
+    //     // }
+    //     // return suggestionsVect;
+    //     return null;
+    // }
 
 
 
@@ -433,7 +423,7 @@ public class LuceneHelper {
 
         // // IndexWriterConfig conf = new IndexWriterConfig(new EnglishAnalyzer());
         // // spellchecker.indexDictionary(new PlainTextDictionary(dictPath), conf, false);
-///Spell checker ///
+        ///Spell checker ///
         // DirectSpellChecker checker = new DirectSpellChecker();
 
         // Vector<String> words = new Vector<String>();
@@ -462,119 +452,15 @@ public class LuceneHelper {
         //         System.out.println("No suggestions");
         //     }
         // }
-///Spell checker ///     
+        ///Spell checker ///     
 
-/// test bigram token stream
-// StringReader emptyStopwords = new StringReader("");
-    Analyzer theAnalyzer = new Analyzer(){
-  @Override
-   // protected TokenStreamComponents createComponents(String fieldName, Reader theReader) {
-  protected TokenStreamComponents createComponents(String fieldName) {
-     Tokenizer source = new StandardTokenizer();
-     // source.setReader(theReader);
-
-     ShingleFilter filter = new ShingleFilter(source, 3);
-     filter.setOutputUnigrams(true);
-     // filter = new BarFilter(filter);
-     return new TokenStreamComponents(source, filter);
-   }
- };
-
- Reader daReader = new StringReader("these are some important meaningful words");
- TokenStream tokenStream = theAnalyzer.tokenStream("contents", daReader);
- CharTermAttribute term = tokenStream.addAttribute(CharTermAttribute.class);
- tokenStream.reset();
- while(tokenStream.incrementToken()) {
-         System.out.print("[" + term.toString() + "] ");
-      }
-
-
-// // String theSentence = "these are some important meaningful words";
-// // StringReader reader = new StringReader(theSentence);
-// // TokenStream tokenStream = analyzer.tokenStream("content", reader);
-// // ShingleFilter theFilter = new ShingleFilter(tokenStream, 3);
-// // theFilter.setOutputUnigrams(true);
-
-// // CharTermAttribute charTermAttribute = theFilter.addAttribute(CharTermAttribute.class);
-// // theFilter.reset();
-
-// // while (theFilter.incrementToken()) {
-// //     System.out.println(charTermAttribute.toString());
-// // }
-
-// // theFilter.end();
-// // theFilter.close();
-
-// // Analyzer analyzer = new StandardAnalyzer();
-// // ShingleAnalyzerWrapper shingleAnalyzer = new ShingleAnalyzerWrapper(analyzer,2,4);
-
-// // String theSentence = "some important meaningful words";
-// // StringReader reader = new StringReader(theSentence);
-// // TokenStream tokenStream = shingleAnalyzer.tokenStream("content", reader);
-// // ShingleFilter theFilter = new ShingleFilter(tokenStream);
-// // theFilter.setOutputUnigrams(false);
-
-// // CharTermAttribute charTermAttribute = theFilter.addAttribute(CharTermAttribute.class);                                                                                   
-// // theFilter.reset();
-
-// //  while (theFilter.incrementToken()) {                                                 
-// //             System.out.println(charTermAttribute.toString());                                  
-// //  }
-
-// //  theFilter.end();
-// //  theFilter.close();
-
-//  /*        int min =1;
-//         int max =3;
-//         WhitespaceAnalyzer analyzer = new WhitespaceAnalyzer();
-//         String text ="hello my world";
-//         TokenStream tokenStream = analyzer.tokenStream("Data", new StringReader(text));
-
-
-//         NGramTokenFilter myfilter = new NGramTokenFilter(tokenStream,min,max);
-//         OffsetAttribute offsetAttribute2 = myfilter.addAttribute(OffsetAttribute.class);
-//         CharTermAttribute charTermAttribute2 = myfilter.addAttribute(CharTermAttribute.class);
-//         while (myfilter.incrementToken()) {
-//             int startOffset = offsetAttribute2.startOffset();
-//             int endOffset = offsetAttribute2.endOffset();
-//             String term = charTermAttribute2.toString();
-//             System.out.println(term);
-//         };*/
-
-// Analyzer ana = CustomAnalyzer.builder().withTokenizer("standard").
-// /// test bigram token stream
-
-
-    }
-
-    public void indexDictionary() throws IOException {
-        Path dictPath = Paths.get("/home/avtyurin/ComplexQA/LuceneSpell");
-        Directory dir = FSDirectory.open(dictPath);
-        CharArraySet stop_words = new CharArraySet(new Vector<String>(), true);
-        IndexWriter writer = new IndexWriter(dir, new IndexWriterConfig(new StandardAnalyzer(stop_words)));
-
-        FileInputStream fstream = new FileInputStream("/home/avtyurin/ComplexQA/LuceneSpell/fulldictionary00.txt");
-        BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-
-        String strLine;
-        int id = 0;
-        while ((strLine = br.readLine()) != null) {
-            String w = strLine.trim().toLowerCase();
-            id ++;
-            // make a new, empty document
-            Document document = new Document();
-
-            // document ID
-            document.add(new StringField(FIELD_ID, String.valueOf(id), Field.Store.YES));
-            document.add(new TextField(FIELD_BODY, w, Field.Store.YES));
-
-            
-            writer.addDocument(document);
         }
-        writer.commit();
-        writer.close();
+
+
+
+
     }
-}
+
 
 
 

@@ -72,7 +72,7 @@ public class Utils {
   }
 
   public static String spellCheckToken(String question, Vector<String> questionTokens, String token, LuceneHelper luc) {
-    Vector<String> suggestions = luc.spellChecker(token);
+    // Vector<String> suggestions = luc.spellChecker(token);
 
     return "";
   }
