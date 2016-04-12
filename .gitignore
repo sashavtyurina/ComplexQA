@@ -1,0 +1,14 @@
+*.class
+FullProbes/*
+.gradle/*
+KeywordRankingDB.db
+PyHelpers/addingYahooAnswersToClueweb/*
+QueriesFromKeywords/*
+StealingSnippetsFromBing.0.0.txt
+TopQuestWordsQueries/*
+__pycache__/*
+build/*
+checkRetrievedDocuments/*
+jaspell/*
+lib/*
+results/*
