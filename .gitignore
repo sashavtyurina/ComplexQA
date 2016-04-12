@@ -10,5 +10,7 @@ __pycache__/*
 build/*
 checkRetrievedDocuments/*
 jaspell/*
+spellIndexDirectory/*
+LuceneSpell/*
 lib/*
 results/*
