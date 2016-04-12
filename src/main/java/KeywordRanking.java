@@ -56,6 +56,9 @@ public class KeywordRanking {
   private static Random rand = null;
   private static Similarity similarity = null;
 
+  private static String OUTPUT_FOLDER = "results/";
+  private static String INPUT_FOLDER = "data/";
+
 
   static public String FIELD_BODY = "contents"; // primary field name where all the text is stored
   static public String FIELD_ID = "id";
@@ -89,14 +92,16 @@ public class KeywordRanking {
       }
     }
 
-    public static void setThingsUp(String[] args) throws IOException, FileNotFoundException, ParseException {
-      index_path = args[0].toString();
+    public static void setThingsUp() throws IOException, FileNotFoundException, ParseException {
+      // index_path = args[0].toString();
+      index_path = "/home/avtyurin/Anserini/lucene-index.cw09b_pos.cnt/";
       luc = new LuceneHelper(index_path); 
       loggerSetup();
-      query = args[1].toString();
+      // query = args[1].toString();
+      query = "query";
       decimalFormat = new DecimalFormat("#.###");
       setupDBConnection();
-      fstream = new FileInputStream("gtQuestions.txt");
+      fstream = new FileInputStream("data/gtQuestions.txt");
       br = new BufferedReader(new InputStreamReader(fstream));
       rand = new Random();
       similarity = new Similarity(luc, dbConnection);
@@ -113,7 +118,7 @@ public class KeywordRanking {
       
       Statement questIDStmt = dbConnection.createStatement();
       ResultSet questIDsRS = questIDStmt.executeQuery(sql);
-      PrintWriter writer = new PrintWriter(new FileOutputStream(new File("EvalSnippetsFromKeywords.txt"), false));
+      PrintWriter writer = new PrintWriter(new FileOutputStream(new File(OUTPUT_FOLDER + "EvalSnippetsFromKeywords.txt"), false));
 
       while (questIDsRS.next()) {
           int curQuestID = questIDsRS.getInt("questID");
@@ -529,15 +534,14 @@ public static void testShit(){
   
 
 public static void main(String[] args) throws IOException, ParseException, JSONException, FileNotFoundException, ParseException {
-  if (args.length < 2) {
-      System.out.println("Input arguments: index_path, query string");
-      return;
-  }
-  setThingsUp(args);
+  // if (args.length < 2) {
+  //     System.out.println("Input arguments: index_path, query string");
+  //     return;
+  // }
+  setThingsUp();
   // addGoogleSearchDocs();
   // addBingSearchResultsFromFile();
   testSimilarityMeasures1();
-  // Utils.spellCheckQuestion("question", null, luc);
   // populateDBWithRawQA();
   // probeWithAllQueries();
   // evalQuestionKeywords();

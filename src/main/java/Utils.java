@@ -43,6 +43,8 @@ import com.google.common.base.Joiner;
 
 
 public class Utils {
+  private static String INPUT_FOLDER = "data/";
+  
   private static Vector<String> stopwords;
   private static Scanner input = new Scanner(System.in);
 
@@ -380,7 +382,7 @@ public static void addtoDB () {
   private static void loadStopWords() {
       Utils.stopwords = new Vector<String>();
       try {
-        FileInputStream fstream = new FileInputStream("stop_words.txt");
+        FileInputStream fstream = new FileInputStream(INPUT_FOLDER + "stop_words.txt");
         BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
         String strLine;
         
