@@ -262,7 +262,8 @@ public class Similarity {
       return allIntersect;
     }
 
-    public double scoreForSingleProbe(Vector<String> topQuestionWords, Vector<String> topAnswersWords, Vector<Snippet> snippets) {
+    public double scoreForSingleProbe(Vector<String> topQuestionWords, Vector<String> topAnswersWords, Vector<Snippet> snippets, 
+      double aveQuestionIntersectionWeight, double aveAnswersIntersectionWeight, double questionIntersectionWeight, double answersIntersectionWeight) {
     //// given a list of snippets for a probe and quesion's and answers' top words, find a score for this probe
       //// average intersection with question across snippets
 
@@ -315,7 +316,11 @@ public class Similarity {
       }
 
 
-      double probeScore = 0.25*aveQuestionIntersection + 0.25*aveAnswersIntersection + 0.25*questionIntersection + 0.25*answersIntersection;
+      // double probeScore = 0.125*aveQuestionIntersection + 0.375*aveAnswersIntersection + 0.125*questionIntersection + 0.375*answersIntersection;
+      double probeScore = aveQuestionIntersectionWeight*aveQuestionIntersection 
+                        + aveAnswersIntersectionWeight*aveAnswersIntersection
+                        + questionIntersectionWeight*questionIntersection
+                        + answersIntersectionWeight*answersIntersection;
       return probeScore;
     }
 

@@ -44,9 +44,19 @@ import com.google.common.base.Joiner;
 
 public class Utils {
   private static String INPUT_FOLDER = "data/";
-  
+
   private static Vector<String> stopwords;
   private static Scanner input = new Scanner(System.in);
+
+
+  public static Vector<String> extendVectorToLength(Vector<String> vect, int length, String elem) {
+    if (!(vect.size() > length)) { 
+      while (vect.size() != length) {
+        vect.add(elem);
+      }
+    }
+    return vect;
+  }
 
   public static Vector<String> resultSet2Vect(ResultSet rs, String fieldName) {
     Vector<String> result = new Vector<String>();
