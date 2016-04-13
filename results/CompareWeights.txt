@@ -1,3 +1,35 @@
+1. Extract keywords from the question
+2. Make sure all the words from the true query are in there
+3. Construct all possible queries out of those keywords
+4. For each query we have 10 snippets
+5. Compare those snippets to the question + to the answer. 
+Here we change the weights of sim_score between snippet and answer, snippet and question. 
+
+The weights are:
+averageQuestionIntersectionWeight - average (across 10 snippets) number of words overlapping with the question
+averageAnswersIntersectionWeight  - average (across 10 snippets) number of words overlapping with the answers 
+questionIntersectionWeight - number of overlapping words between question and all snippets combined together
+answersIntersectionWeight - number of overlapping words between all answers combined together and all snippets combined together
+
+EQUAL WEIGHTS: 0.25 for all 4 of them
+
+QESTION DOMINATES: 0.375 for averageQuestionIntersectionWeight and questionIntersectionWeight; 0.125 for averageAnswersIntersectionWeight and answersIntersectionWeight
+
+ANSWERS DOMINATE: 0.125 for averageQuestionIntersectionWeight and questionIntersectionWeight; 0.375 for averageAnswersIntersectionWeight and answersIntersectionWeight
+
+****************************************
+
+Guesses:
+The choice of the weights should depend on the number of answers and their quality. (Answers providing only links, or short answers are not helpful).
+
+****************************************
+Equal weights are best in 7 questions
+Question domination is the best in 2 questions
+Answers domination is the best in 7 questions
+Equal weights and answer doimnation are the same for 4 questions
+****************************************
+
+
 QUESTION :: 1
 
 Why is my 5 month old pit bull puppy eating rocks? My dog is very active and has a really good appetite. She loves to play and is very well mannered. Lately she has been eating small pea gravel from my landscaping. Is she just being a puppy or is something wrong?
@@ -1024,10 +1056,3 @@ RBO score is :: 0.04
 Answer domination is better
 
 ------------------------------------------------------------
-
-
-
-Equal weights are best in 7 questions
-Question domination is the best in 2 questions
-Answers domination is the best in 7 questions
-Equal weights and answer doimnation are the same for 4 questions
