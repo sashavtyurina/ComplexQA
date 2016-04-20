@@ -267,53 +267,12 @@ public class Similarity {
     //// given a list of snippets for a probe and quesion's and answers' top words, find a score for this probe
       //// average intersection with question across snippets
 
-      // System.out.println(topQuestionWords);
-      // System.out.println(topAnswersWords);
-      // System.out.println("aveQuestionIntersection");
-      double aveQuestionIntersection = this.averageIntersection(snippets, topQuestionWords);
-
-      if (aveQuestionIntersection > 1) {
-        System.out.println("aveQuestionIntersection");
-        System.out.println(aveQuestionIntersection);
-        System.out.println(topQuestionWords);
-        System.out.println(topAnswersWords);
-        System.out.println(snippets);
-        input.next();
-      }
-      
-      // System.out.println("aveAnswersIntersection");
+      double aveQuestionIntersection = this.averageIntersection(snippets, topQuestionWords);      
       double aveAnswersIntersection = this.averageIntersection(snippets, topAnswersWords);
-      if (aveAnswersIntersection > 1) {
-        System.out.println("aveAnswersIntersection");
-        System.out.println(aveQuestionIntersection);
-        System.out.println(topQuestionWords);
-        System.out.println(topAnswersWords);
-        System.out.println(snippets);
-        input.next();
-      }
-
 
       //// now intersection of all snippets with answer
-      // System.out.println("questionIntersection");
       double questionIntersection = this.allSnippetsIntersection(snippets, topQuestionWords);
-      if (questionIntersection > 1) {
-        System.out.println("questionIntersection");
-        System.out.println(aveQuestionIntersection);
-        System.out.println(topQuestionWords);
-        System.out.println(topAnswersWords);
-        System.out.println(snippets);
-        input.next();
-      }
-      // System.out.println("answersIntersection");
       double answersIntersection = this.allSnippetsIntersection(snippets, topAnswersWords);
-      if (answersIntersection > 1) {
-        System.out.println("answersIntersection");
-        System.out.println(aveQuestionIntersection);
-        System.out.println(topQuestionWords);
-        System.out.println(topAnswersWords);
-        System.out.println(snippets);
-        input.next();
-      }
 
 
       // double probeScore = 0.125*aveQuestionIntersection + 0.375*aveAnswersIntersection + 0.125*questionIntersection + 0.375*answersIntersection;

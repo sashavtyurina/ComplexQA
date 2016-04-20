@@ -58,6 +58,20 @@ public class Utils {
     return vect;
   }
 
+  public static <T> double RBP(Vector<T> relevantDocs, Vector<T> rankedDocs, double persistence) {
+    double accumScore = 0.0;
+    double p = 1.0;
+
+    for (T item : rankedDocs) {
+      if (relevantDocs.contains(item)) {
+        accumScore += p;
+      }
+      p *= persistence;
+    }
+    accumScore *= (1 - persistence);
+    return accumScore;
+  }
+
   public static Vector<String> resultSet2Vect(ResultSet rs, String fieldName) {
     Vector<String> result = new Vector<String>();
     try {
