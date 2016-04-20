@@ -26,3 +26,14 @@
   2. Retrieve their snippets from Bing
   3. Compare the snippets with question + answer
   4. Rank the probes 
+
+* ###### EvalKLDExtractedWords.txt
+
+  Given a question, extract top 10 keywords based on KLD only. 
+  Extract top 10 keywords with reweighting on top of KLD. Reweighting increases intial KLD score of a word by 1.5 if:
+  
+    * the word appears in the title
+    * the word appears in a question sentence
+    * the word appears in a bigram, that is repeated at least twice throughout the question
+  
+  
