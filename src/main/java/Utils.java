@@ -49,6 +49,56 @@ public class Utils {
   private static Scanner input = new Scanner(System.in);
 
 
+  public static void getQuerySnippetFromRS(ResultSet rs, HashMap<String, String> querySnippet) {
+    try {
+      while (rs.next()) {
+        String query = rs.getString("queryText");
+        String snippet = rs.getString("snippet");
+        querySnippet.put(query, snippet);
+      }
+    } catch (SQLException e) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    }
+  }
+
+  public static Vector<Vector<String>> convertProbesToVectors(Vector<String> probes) {
+    Vector<Vector<String>> vectorProbes = new Vector<Vector<String>>();
+    for (String p : probes) {
+      vectorProbes.add(Utils.str2vect(p));
+    }
+    return vectorProbes;
+  }
+
+  public static boolean containsQuery(Vector<Vector<String>> allProbes, String query) {
+    Vector<String> vectQuery = Utils.str2vect(query);
+    for (Vector<String> p : allProbes) {
+      if (p.containsAll(vectQuery)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static String getQuery(Vector<Vector<String>> allProbes, String query) {
+    Vector<String> vectQuery = Utils.str2vect(query);
+    for (Vector<String> p : allProbes) {
+      if (p.containsAll(vectQuery)) {
+        return Utils.join_vector(p, " ");
+      }
+    }
+    return "";
+  }
+
+
+  public static Vector<String> splitIntoTokens(String queston) {
+    String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(queston.toLowerCase()));
+    Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
+    qTokens = Utils.dropStopWords(qTokens);
+    qTokens = Utils.removeShortTokens(qTokens, 2);
+    return qTokens;
+  }
+
+
   public static Vector<String> extendVectorToLength(Vector<String> vect, int length, String elem) {
     if (!(vect.size() > length)) { 
       while (vect.size() != length) {
@@ -610,7 +660,7 @@ public static void addtoDB () {
       return similarity;
   }
 
-    private static boolean containsQuery(Vector<String> vect, String str) {
+    private static boolean containsQuery1(Vector<String> vect, String str) {
     Vector<String> t2 = new Vector<String>(Arrays.asList(str.split("\\s")));
     for (String s : vect) {
       Vector<String> t1 = new Vector<String>(Arrays.asList(s.split("\\s")));
@@ -648,7 +698,7 @@ public static void addtoDB () {
                   if (! (prevSequence.get(iii).contains(tokens.get(ii)))) {
                     String new_query = prevSequence.get(iii) + " " + tokens.get(ii);
                     // String new_query = prevSequence.get(iii) + tokens.get(ii);
-                    if (! Utils.containsQuery (newCombinations, new_query)) {
+                    if (! Utils.containsQuery1 (newCombinations, new_query)) {
                       newCombinations.add(new_query);
                     }
                   }       
@@ -806,12 +856,8 @@ public static void addtoDB () {
         double q_i = (double)(luc.totalTermFreq(token)) / (double)(luc.totalTerms());
 
         if (q_i == 0) {
-          continue;
+          q_i = 1.0 / (double)(luc.totalTerms());
         } 
-
-        // if (luc.totalTermFreq(e.getKey()) <= 1) { // if the word doesn't appear at all, or only appears once, discard it. Should remove extremely weird words
-        //   continue;
-        // }
 
         double kldScore = p_i * Math.log(p_i / q_i);
         kldValues.put(e.getKey(), new Double(kldScore));

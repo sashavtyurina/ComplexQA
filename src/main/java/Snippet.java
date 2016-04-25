@@ -57,6 +57,31 @@ public class Snippet {
 		return snippetsList;
 	}
 
+	public static Vector<Snippet> rsToSnippetListGoogleSearchDocs (ResultSet snippetsRS) {
+	//// the ResultSet should contain snippetText, query, queryID, quesrtionID, snippetID
+		Vector<Snippet> snippetsList = new Vector<Snippet>();
+		try {
+			while (snippetsRS.next()) {
+				String docURL = snippetsRS.getString("url");
+				if (docURL.contains("answers.yahoo.")) {
+					continue;
+				}
+				String snippet = snippetsRS.getString("snippet");
+				String query = snippetsRS.getString("queryText");
+				int snipID = snippetsRS.getInt("docID");
+				// int querID = snippetsRS.getInt("queryID");
+				int querID = -1;
+				int questID = snippetsRS.getInt("questID");
+				snippetsList.add(new Snippet(snippet, query, snipID, querID, questID, false));
+
+			}
+		} catch (SQLException e) {
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      		System.exit(0);
+		}
+		return snippetsList;
+	}
+
 	public String toString() {
 		return simScore + "::" + original;
 	}

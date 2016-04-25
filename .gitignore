@@ -14,3 +14,7 @@ spellIndexDirectory/*
 LuceneSpell/*
 lib/*
 results/*
+KLDVSProbing/*
+data/*
+Logs/*
+PyHelpers/__pycache__/*

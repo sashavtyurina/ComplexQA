@@ -1,7 +1,7 @@
 #ACCOUNT_KEY = '/Mf56CFpuSUUQKdutUsoquPduXPWJBjflVKxHC3GQAk' # sasha.vtyurina account
 # ACCOUNT_KEY = 'yxckQrsJG08opmtaZroAT9hMrAiD6CBgxK/NbWYFQns=' # mal.raynolds account
-ACCOUNT_KEY = '7ntaEOCRdOwFmQQg3NkTfwv/g+xfo2ZCHnxnMvpFdnQ' # ross.thedivorcer@outlook.com
-#ACCOUNT_KEY = 'mTrHvU3N4LLH6yl2RvjAJpkqhRG++wf7Jl4IjU8VN6w' # monica.velula.geller@outlook.com
+# ACCOUNT_KEY = '7ntaEOCRdOwFmQQg3NkTfwv/g+xfo2ZCHnxnMvpFdnQ' # ross.thedivorcer@outlook.com
+ACCOUNT_KEY = 'mTrHvU3N4LLH6yl2RvjAJpkqhRG++wf7Jl4IjU8VN6w' # monica.velula.geller@outlook.com
 TOP_DOC = 10
 import bing
 from os import listdir
@@ -32,7 +32,7 @@ def ask_bing(query, filename, questID):
 
 
 def main ():
-    mypath = 'QueriesFromKeywords/'
+    mypath = '/home/avtyurin/ComplexQA/KLDVSProbing/Queries1/'
     onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     for ff in onlyfiles:
         with open(mypath + ff) as f:
@@ -45,7 +45,7 @@ def main ():
                 print('Working with query %d :: %s' % (counter, line))
                 counter += 1
 
-                questID = ff[ff.index('QueriesFromKeywordsQuestion')+len('QueriesFromKeywordsQuestion'):ff.index(".txt")]
+                questID = ff[ff.index('QueriesQuestion')+len('QueriesQuestion'):ff.index(".txt")]
                 print(questID)
                 newFilename = mypath + ff[0:ff.index(".txt")] + "SearchResults.txt"
                 ask_bing(line, newFilename, questID)

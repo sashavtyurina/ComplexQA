@@ -17,6 +17,34 @@ public class Similarity {
   }
 
   //// SIMILARITY BASED ON INTERSECTION OF SNIPPETS AND QUESTION AND ANSWERS
+    public Vector<String> getTopQuestionWords (String question, int topNumWords) {
+    //// given a question returns top N words according to pointwise KLD score
+      String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
+      Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));  
+      qTokens = Utils.dropStopWords(qTokens);
+      qTokens = Utils.removeShortTokens(qTokens, 2);
+
+      /// we calculate KLD of all words in the question and we want to give to those in the title higher weight
+      List<Entry<String, Double>> allKLDQuestion = Utils.pointwiseKLD(qTokens, luc);
+
+
+      // now we sort words by their KLD score
+      Collections.sort(allKLDQuestion, new Comparator<Entry<String, Double>>() {
+        @Override
+        public int compare(Entry<String, Double> e1, Entry<String, Double> e2) {
+          return e2.getValue().compareTo(e1.getValue()); 
+        }
+      });
+
+      List<Entry<String, Double>> highKLDQuestion = Utils.sliceCollection(allKLDQuestion, 0, topNumWords);
+      Vector<String> topQuestionWords = new Vector<String>();
+      for (Entry<String, Double> e : highKLDQuestion) {
+        topQuestionWords.add(e.getKey());
+      }
+      return topQuestionWords;
+    }
+
+
 
     public Vector<String> getTopQuestionWords (String question, String title, String body, int topNumWords) {
     //// given a question returns top N words according to pointwise KLD score
@@ -28,12 +56,13 @@ public class Similarity {
 
       /// we calculate KLD of all words in the question and we want to give to those in the title higher weight
       List<Entry<String, Double>> allKLDQuestion = Utils.pointwiseKLD(qTokens, luc);
-      List<Entry<String, Double>> highKLDQuestionBeforeReweighting = allKLDQuestion;
+
+/*      List<Entry<String, Double>> highKLDQuestionBeforeReweighting = allKLDQuestion;
       for (Entry<String, Double> e : allKLDQuestion) {
         if (title.contains(e.getKey())) {
           e.setValue(e.getValue() * 1.5);
         }
-      }
+      }*/
 
       // now we sort reweighted words
       Collections.sort(allKLDQuestion, new Comparator<Entry<String, Double>>() {
@@ -50,18 +79,19 @@ public class Similarity {
       return topQuestionWords;
     }
 
-    public Vector<String> getTopQuestionWords (String question, String title, String body, int topNumWords, Vector<String> importantTokens) {
+    public Vector<String> getTopQuestionWords1 (String question, String title, String body, int topNumWords) { //, Vector<String> importantTokens) {
     //// given a question returns top N words according to pointwise KLD score
       String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
       Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
       
       qTokens = Utils.dropStopWords(qTokens);
       qTokens = Utils.removeShortTokens(qTokens, 2);
-      qTokens = Utils.s_stemmer(qTokens);
+      // qTokens = Utils.s_stemmer(qTokens);
 
       /// we calculate KLD of all words in the question and we want to give to those in the title higher weight
       List<Entry<String, Double>> allKLDQuestion = Utils.pointwiseKLD(qTokens, luc);
-      List<Entry<String, Double>> highKLDQuestionBeforeReweighting = allKLDQuestion;
+
+      /*List<Entry<String, Double>> highKLDQuestionBeforeReweighting = allKLDQuestion;
       for (Entry<String, Double> e : allKLDQuestion) {
         if (title.contains(e.getKey())) {
           e.setValue(e.getValue() * 1.5);
@@ -70,7 +100,7 @@ public class Similarity {
         if (importantTokens.contains(e.getKey())) {
           e.setValue(e.getValue() * 1.5); 
         }
-      }
+      }*/
 
       // now we sort reweighted words
       Collections.sort(allKLDQuestion, new Comparator<Entry<String, Double>>() {

@@ -1,0 +1,1891 @@
+:compileJava UP-TO-DATE
+:processResources UP-TO-DATE
+:classes UP-TO-DATE
+:run
+Opened database successfully
+
+Ground truth query ::
+
+puppy
+rocks
+eating
+gravel
+
+*****
+
+
+Words by KL divergence
+
+puppy
+eating
+gravel
+appetite
+pea
+pit
+bull
+mannered
+landscaping
+wrong
+
+***
+
+
+Words reranked after probing :: 
+
+mannered
+puppy
+bull
+eating
+pit
+pea
+appetite
+gravel
+wrong
+
+***
+
+RBP for KLD :: 0.875
+RBP for probing :: 0.31640625
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+Microsoft
+points
+free
+promotions
+360
+
+*****
+
+
+Words by KL divergence
+
+360
+microsoft
+promotions
+points
+dashboard
+bored
+xbox
+told
+stuff
+came
+
+***
+
+
+Words reranked after probing :: 
+
+360
+promotions
+stuff
+points
+bored
+dashboard
+microsoft
+told
+came
+xbox
+
+***
+
+RBP for KLD :: 0.6875
+RBP for probing :: 0.8125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+schoolers
+hours
+high
+perfect
+
+*****
+
+
+Words by KL divergence
+
+lunch
+periods
+schoolers
+hours
+give
+class
+long
+realistic
+perfect
+answers
+
+***
+
+
+Words reranked after probing :: 
+
+periods
+lunch
+schoolers
+long
+hours
+class
+give
+answers
+perfect
+
+***
+
+RBP for KLD :: 0.189453125
+RBP for probing :: 0.158203125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+fishing
+troops
+Boston
+boats
+
+*****
+
+
+Words by KL divergence
+
+40's
+30's
+busalacchi
+boat
+wwii
+nina
+troops
+sold
+seven
+boston
+
+***
+
+
+Words reranked after probing :: 
+
+wwii
+boat
+boston
+busalacchi
+40's
+nina
+sold
+troops
+seven
+30's
+
+***
+
+RBP for KLD :: 0.0078125
+RBP for probing :: 0.00390625
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+cayenne
+plants
+hurt
+cat
+
+*****
+
+
+Words by KL divergence
+
+cayenne
+cat
+plants
+hurt
+deter
+roommates
+roommate
+squirt
+squirts
+loves
+
+***
+
+
+Words reranked after probing :: 
+
+squirts
+roommate
+cayenne
+plants
+squirt
+deter
+roommates
+loves
+
+***
+
+RBP for KLD :: 0.9375
+RBP for probing :: 0.1875
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+jeans
+guys
+fit
+look
+value
+quality
+
+*****
+
+
+Words by KL divergence
+
+jeans
+guys
+metrosexuality
+best
+pair
+ladies
+combine
+fit
+value
+quality
+
+***
+
+
+Words reranked after probing :: 
+
+jeans
+guys
+quality
+value
+pair
+best
+fit
+ladies
+
+***
+
+RBP for KLD :: 0.7568359375
+RBP for probing :: 0.9453125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+love
+know
+
+*****
+
+
+Words by KL divergence
+
+dad
+love
+reat
+cussed
+talk
+he'll
+know
+thats
+life
+forgive
+
+***
+
+
+Words reranked after probing :: 
+
+dad
+reat
+forgive
+thats
+he'll
+cussed
+talk
+love
+know
+
+***
+
+RBP for KLD :: 0.2578125
+RBP for probing :: 0.005859375
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+song
+sad
+slow
+drama
+
+*****
+
+
+Words by KL divergence
+
+songs
+nxt
+performance
+sad
+washing
+dishes
+drama
+slow
+em
+chatting
+
+***
+
+
+Words reranked after probing :: 
+
+slow
+sad
+drama
+washing
+songs
+em
+dishes
+chatting
+
+***
+
+RBP for KLD :: 0.07421875
+RBP for probing :: 0.875
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+optimized
+website
+800x600
+
+*****
+
+
+Words by KL divergence
+
+800x600
+inches
+viewable
+alright
+create
+webpage
+optimal
+optimized
+span
+wish
+
+***
+
+
+Words reranked after probing :: 
+
+800x600
+inches
+webpage
+wish
+optimal
+create
+span
+viewable
+optimized
+
+***
+
+RBP for KLD :: 0.50390625
+RBP for probing :: 0.501953125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+veronica
+mars
+online
+
+*****
+
+
+Words by KL divergence
+
+okay
+psyced
+eppisode
+eppie
+10pts
+actually
+watch
+hour
+vcr
+give
+
+***
+
+
+Words reranked after probing :: 
+
+eppisode
+okay
+hour
+actually
+eppie
+give
+watch
+vcr
+psyced
+
+***
+
+RBP for KLD :: 0.0
+RBP for probing :: 0.0
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+prom
+tickets
+style
+
+*****
+
+
+Words by KL divergence
+
+tickets
+chaperones
+dunno
+card
+plz
+prom
+envelope
+junior
+input
+huge
+
+***
+
+
+Words reranked after probing :: 
+
+prom
+envelope
+junior
+huge
+card
+chaperones
+tickets
+input
+dunno
+
+***
+
+RBP for KLD :: 0.515625
+RBP for probing :: 0.5078125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+newest
+elements
+names
+
+*****
+
+
+Words by KL divergence
+
+scientist
+insitution
+wil
+chemist's
+newest
+approve
+discover
+element
+elements
+committee
+
+***
+
+
+Words reranked after probing :: 
+
+chemist's
+element
+approve
+scientist
+elements
+discover
+committee
+insitution
+newest
+wil
+
+***
+
+RBP for KLD :: 0.033203125
+RBP for probing :: 0.033203125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+wear
+legs
+shave
+
+*****
+
+
+Words by KL divergence
+
+shave
+outfit
+pants
+shower
+legs
+wear
+minutes
+recently
+
+***
+
+
+Words reranked after probing :: 
+
+shave
+outfit
+minutes
+pants
+recently
+legs
+shower
+wear
+
+***
+
+RBP for KLD :: 0.546875
+RBP for probing :: 0.51953125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+dance
+classes
+
+*****
+
+
+Words by KL divergence
+
+dance
+poms
+class
+hiphop
+take
+ballet
+jazz
+think
+classes
+know
+
+***
+
+
+Words reranked after probing :: 
+
+hiphop
+poms
+take
+classes
+class
+ballet
+think
+jazz
+know
+
+***
+
+RBP for KLD :: 0.501953125
+RBP for probing :: 0.0625
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+king
+hill
+favorite
+episode
+
+*****
+
+
+Words by KL divergence
+
+o'h
+pregant
+guy
+hill
+favorite
+luanne
+king
+sneaks
+bobby
+crazy
+
+***
+
+
+Words reranked after probing :: 
+
+luanne
+sneaks
+bobby
+pregant
+crazy
+hill
+king
+guy
+favorite
+
+***
+
+RBP for KLD :: 0.1015625
+RBP for probing :: 0.025390625
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+serial
+killer
+symphtoms
+
+*****
+
+
+Words by KL divergence
+
+killers
+serial
+symphtoms
+peple
+finished
+wondering
+grow
+watching
+thing
+going
+
+***
+
+
+Words reranked after probing :: 
+
+symphtoms
+killers
+serial
+peple
+grow
+watching
+thing
+going
+
+***
+
+RBP for KLD :: 0.375
+RBP for probing :: 0.625
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+aguilera
+set
+list
+christina
+songs
+
+*****
+
+
+Words by KL divergence
+
+aguilera
+christina
+obliged
+concert
+thursday
+wait
+songs
+know
+knows
+plays
+
+***
+
+
+Words reranked after probing :: 
+
+aguilera
+songs
+wait
+obliged
+christina
+knows
+thursday
+plays
+concert
+
+***
+
+RBP for KLD :: 0.7578125
+RBP for probing :: 0.78125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+limp
+iron
+hematologist
+
+*****
+
+
+Words by KL divergence
+
+it's
+scared
+sick
+know
+hematologist
+monday
+blood
+limp
+bothering
+nervous
+
+***
+
+
+Words reranked after probing :: 
+
+hematologist
+limp
+bothering
+sick
+nervous
+monday
+scared
+blood
+know
+it's
+
+***
+
+RBP for KLD :: 0.03515625
+RBP for probing :: 0.75
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+neck
+spasms
+tmj
+cause
+jaw
+
+*****
+
+
+Words by KL divergence
+
+neck
+spasms
+occassionally
+causes
+tmj
+spasm
+omg
+jaw
+dying
+happen
+
+***
+
+
+Words reranked after probing :: 
+
+jaw
+spasms
+occassionally
+spasm
+happen
+tmj
+neck
+omg
+causes
+
+***
+
+RBP for KLD :: 0.78515625
+RBP for probing :: 0.7734375
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+jeans
+bath
+fit
+
+*****
+
+
+Words by KL divergence
+
+bath
+sit
+jeans
+fit
+better
+long
+make
+wash
+heard
+right
+
+***
+
+
+Words reranked after probing :: 
+
+jeans
+bath
+make
+better
+sit
+fit
+long
+right
+heard
+wash
+
+***
+
+RBP for KLD :: 0.6875
+RBP for probing :: 0.765625
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+cheaper
+preppy
+pants
+
+*****
+
+
+Words by KL divergence
+
+pants
+preppy
+hollister
+cheaper
+afford
+similar
+tell
+money
+style
+
+***
+
+
+Words reranked after probing :: 
+
+cheaper
+pants
+hollister
+preppy
+similar
+style
+money
+tell
+afford
+
+***
+
+RBP for KLD :: 0.8125
+RBP for probing :: 0.8125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+boy
+friend
+shouts
+bosses
+bullys
+
+*****
+
+
+Words by KL divergence
+
+shud
+wat
+2me
+did'nt
+startin
+siad
+sayin
+hav
+unfairly
+wen
+
+***
+
+
+Words reranked after probing :: 
+
+2me
+shud
+wen
+did'nt
+siad
+startin
+hav
+sayin
+wat
+
+***
+
+RBP for KLD :: 0.0
+RBP for probing :: 0.0
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+contract
+discontinue
+reimburse
+service
+
+*****
+
+
+Words by KL divergence
+
+montths
+discontinue
+kunk
+contract
+reimburse
+they'll
+fu
+berkeley
+expertise
+specify
+
+***
+
+
+Words reranked after probing :: 
+
+kunk
+montths
+they'll
+specify
+discontinue
+expertise
+reimburse
+fu
+berkeley
+
+***
+
+RBP for KLD :: 0.34375
+RBP for probing :: 0.0390625
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+scan
+classify
+find
+MS
+file
+word
+
+*****
+
+
+Words by KL divergence
+
+scanner
+recomend
+scan
+easily
+classify
+clippings
+able
+magazine
+word
+buy
+
+***
+
+
+Words reranked after probing :: 
+
+scanner
+clippings
+scan
+easily
+recomend
+buy
+able
+magazine
+classify
+word
+
+***
+
+RBP for KLD :: 0.158203125
+RBP for probing :: 0.1279296875
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+firefox
+yahoo
+login
+button
+
+*****
+
+
+Words by KL divergence
+
+button
+yahoo
+login
+sbc
+firefox
+agreement
+put
+thanks
+
+***
+
+
+Words reranked after probing :: 
+
+firefox
+sbc
+put
+agreement
+button
+thanks
+login
+yahoo
+
+***
+
+RBP for KLD :: 0.90625
+RBP for probing :: 0.54296875
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+girlfriend
+kids
+
+*****
+
+
+Words by KL divergence
+
+girlfriend
+friends
+stags
+rude
+gossip
+judgmental
+aren't
+closer
+hang
+time
+
+***
+
+
+Words reranked after probing :: 
+
+judgmental
+hang
+closer
+friends
+girlfriend
+aren't
+rude
+time
+stags
+
+***
+
+RBP for KLD :: 0.5
+RBP for probing :: 0.03125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+flute
+websites
+dynamics
+
+*****
+
+
+Words by KL divergence
+
+flute
+different
+dynamics
+websites
+trouble
+teach
+lot
+tell
+talk
+playing
+
+***
+
+
+Words reranked after probing :: 
+
+flute
+websites
+teach
+dynamics
+lot
+different
+trouble
+playing
+tell
+talk
+
+***
+
+RBP for KLD :: 0.6875
+RBP for probing :: 0.8125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+breastpump
+producing
+day
+
+*****
+
+
+Words by KL divergence
+
+bottle
+breastpump
+long
+frustrating
+confused
+milk
+breast
+incorporate
+min
+tried
+
+***
+
+
+Words reranked after probing :: 
+
+breastpump
+incorporate
+bottle
+frustrating
+long
+min
+breast
+confused
+milk
+
+***
+
+RBP for KLD :: 0.25
+RBP for probing :: 0.5
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+make-up
+brown
+green
+eyes
+hair
+
+*****
+
+
+Words by KL divergence
+
+hairand
+eyes
+curly
+tart
+look
+thirteen
+colours
+wear
+enhance
+brown
+
+***
+
+
+Words reranked after probing :: 
+
+colours
+hairand
+wear
+eyes
+enhance
+tart
+thirteen
+curly
+brown
+
+***
+
+RBP for KLD :: 0.2509765625
+RBP for probing :: 0.064453125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+spouse
+pay
+presents
+
+*****
+
+
+Words by KL divergence
+
+christmas
+great
+cheque
+unexpected
+spouse
+disturbing
+suddenly
+125
+bought
+wife
+
+***
+
+
+Words reranked after probing :: 
+
+christmas
+spouse
+125
+great
+unexpected
+bought
+cheque
+suddenly
+disturbing
+wife
+
+***
+
+RBP for KLD :: 0.03125
+RBP for probing :: 0.25
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+mydatajob
+experience
+
+*****
+
+
+Words by KL divergence
+
+mydatajob
+spare
+99
+49
+utilize
+com
+positive
+asking
+experience
+presently
+
+***
+
+
+Words reranked after probing :: 
+
+mydatajob
+49
+utilize
+asking
+experience
+positive
+com
+presently
+
+***
+
+RBP for KLD :: 0.501953125
+RBP for probing :: 0.53125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+yahoo
+questions
+missclassified
+
+*****
+
+
+Words by KL divergence
+
+questions
+theres
+perverted
+miscatagorized
+section
+dating
+hasnt
+yahoo
+woah
+realted
+
+***
+
+
+Words reranked after probing :: 
+
+perverted
+miscatagorized
+realted
+hasnt
+dating
+theres
+woah
+questions
+section
+yahoo
+
+***
+
+RBP for KLD :: 0.50390625
+RBP for probing :: 0.0048828125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+relationship
+married
+other
+
+*****
+
+
+Words by KL divergence
+
+relationship
+love
+infatuation
+kids
+end
+constantly
+doubt
+reminded
+truly
+gone
+
+***
+
+
+Words reranked after probing :: 
+
+infatuation
+truly
+doubt
+relationship
+gone
+reminded
+constantly
+kids
+end
+
+***
+
+RBP for KLD :: 0.5
+RBP for probing :: 0.0625
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+word
+wordpad
+association
+icon
+
+*****
+
+
+Words by KL divergence
+
+wordpad
+word
+icon
+reinstall
+association
+documents
+uninstall
+open
+annoying
+files
+
+***
+
+
+Words reranked after probing :: 
+
+reinstall
+wordpad
+association
+open
+icon
+documents
+word
+uninstall
+annoying
+
+***
+
+RBP for KLD :: 0.90625
+RBP for probing :: 0.4140625
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+diabetes
+discounted
+
+*****
+
+
+Words by KL divergence
+
+pays
+cammie
+lancets
+nose
+meds
+prescriptions
+diabetes
+diabetics
+strips
+sis
+
+***
+
+
+Words reranked after probing :: 
+
+diabetics
+lancets
+sis
+prescriptions
+pays
+meds
+strips
+
+***
+
+RBP for KLD :: 0.0078125
+RBP for probing :: 0.0
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+kidney
+failure
+protein
+
+*****
+
+
+Words by KL divergence
+
+kidney
+failure
+urine
+protein
+suffering
+dialysis
+rid
+specialist
+confirmed
+stage
+
+***
+
+
+Words reranked after probing :: 
+
+protein
+kidney
+stage
+failure
+rid
+dialysis
+specialist
+suffering
+urine
+
+***
+
+RBP for KLD :: 0.8125
+RBP for probing :: 0.8125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+china
+manufacture
+america
+produce
+
+*****
+
+
+Words by KL divergence
+
+china
+america
+long
+take
+wouldn't
+capability
+wild
+fix
+ports
+happen
+
+***
+
+
+Words reranked after probing :: 
+
+america
+capability
+take
+fix
+happen
+wouldn't
+wild
+china
+ports
+long
+
+***
+
+RBP for KLD :: 0.75
+RBP for probing :: 0.50390625
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+gallstones
+rid
+stones
+
+*****
+
+
+Words by KL divergence
+
+gallstones
+gallblatter
+rid
+surgery
+diagnosed
+told
+stones
+suggestions
+open
+knows
+
+***
+
+
+Words reranked after probing :: 
+
+gallblatter
+suggestions
+knows
+open
+rid
+told
+gallstones
+diagnosed
+surgery
+
+***
+
+RBP for KLD :: 0.6328125
+RBP for probing :: 0.0390625
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+girl
+just
+friend
+
+*****
+
+
+Words by KL divergence
+
+knew
+stuff
+lot
+better
+girl
+asked
+think
+friend
+question
+say
+
+***
+
+
+Words reranked after probing :: 
+
+asked
+stuff
+friend
+knew
+lot
+think
+girl
+better
+say
+question
+
+***
+
+RBP for KLD :: 0.03515625
+RBP for probing :: 0.1328125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+word
+inspiration
+
+*****
+
+
+Words by KL divergence
+
+that's
+inspirational
+cheesy
+cliche
+word
+encompassing
+art
+mood
+trouble
+imagine
+
+***
+
+
+Words reranked after probing :: 
+
+mood
+art
+cliche
+cheesy
+word
+that's
+encompassing
+inspirational
+
+***
+
+RBP for KLD :: 0.03125
+RBP for probing :: 0.03125
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+pregnant
+after
+tubal
+
+*****
+
+
+Words by KL divergence
+
+tubal
+togather
+pregnant
+husband
+abusive
+wonderful
+birth
+son
+baby
+left
+
+***
+
+
+Words reranked after probing :: 
+
+tubal
+husband
+left
+son
+baby
+wonderful
+birth
+togather
+abusive
+
+***
+
+RBP for KLD :: 0.625
+RBP for probing :: 0.5
+
+------------------------------------------------------------
+
+
+Ground truth query ::
+
+god
+mock
+insulting
+
+*****
+
+
+Words by KL divergence
+
+god
+mock
+atheists
+dare
+believe
+mocked
+insulting
+okay
+preferably
+particular
+
+***
+
