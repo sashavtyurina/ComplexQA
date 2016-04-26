@@ -108,7 +108,7 @@ public class Keywords {
     Vector<String> importantWords = new Vector<String>(repBigramWords);
     importantWords.addAll(qSentWords);
 
-    Vector<String> topQuestionWords = similarity.getTopQuestionWords(rawQuestion, qtitle, qbody, 10); //, importantWords);
+    Vector<String> topQuestionWords = similarity.getTopQuestionWordsNoScore(rawQuestion, 10); //, importantWords);
     return topQuestionWords;
   }
 
@@ -124,7 +124,7 @@ public class Keywords {
     Vector<String> importantWords = new Vector<String>(repBigramWords);
     importantWords.addAll(qSentWords);
 
-    Vector<Entry<String, Double>> topQuestionWords = similarity.getTopQuestionWordsWithCertainty(rawQuestion, qtitle, qbody, 10, importantWords, cutoff);
+    Vector<Entry<String, Double>> topQuestionWords = new Vector<Entry<String, Double>>(similarity.getTopQuestionWordsWithScore(rawQuestion, 10));
     return topQuestionWords;
   }
 

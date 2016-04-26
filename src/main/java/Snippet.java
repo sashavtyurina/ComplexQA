@@ -37,12 +37,14 @@ public class Snippet {
 		try {
 			while (snippetsRS.next()) {
 				String docURL = snippetsRS.getString("docURL");
+				String snippet = snippetsRS.getString("snippet");
 				if (docURL.contains("answers.yahoo.")) {
+					// System.out.println("DELETING THIS SNIPPET :: " + snippet);
 					continue;
 				}
-				String snippet = snippetsRS.getString("snippet");
+				
 				String query = snippetsRS.getString("queryText");
-				int snipID = snippetsRS.getInt("snippetID");
+				int snipID = snippetsRS.getInt("sid");
 				// int querID = snippetsRS.getInt("queryID");
 				int querID = -1;
 				int questID = snippetsRS.getInt("questID");
@@ -68,7 +70,7 @@ public class Snippet {
 				}
 				String snippet = snippetsRS.getString("snippet");
 				String query = snippetsRS.getString("queryText");
-				int snipID = snippetsRS.getInt("docID");
+				int snipID = -1; // snippetsRS.getInt("snippetID");
 				// int querID = snippetsRS.getInt("queryID");
 				int querID = -1;
 				int questID = snippetsRS.getInt("questID");

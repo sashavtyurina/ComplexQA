@@ -17,9 +17,20 @@ public class Similarity {
   }
 
   //// SIMILARITY BASED ON INTERSECTION OF SNIPPETS AND QUESTION AND ANSWERS
-    public Vector<String> getTopQuestionWords (String question, int topNumWords) {
-    //// given a question returns top N words according to pointwise KLD score
-      String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
+    public Vector<String> getTopQuestionWordsNoScore (String question, int topNumWords) {
+      //// given a question returns top N words according to pointwise KLD score
+      List<Entry<String, Double>> highKLDQuestion = this.getTopQuestionWordsWithScore(question, topNumWords);
+      Vector<String> topQuestionWords = new Vector<String>();
+      for (Entry<String, Double> e : highKLDQuestion) {
+        topQuestionWords.add(e.getKey());
+      }
+      return topQuestionWords;
+    }
+
+
+
+    public List<Entry<String, Double>> getTopQuestionWordsWithScore (String question, int topNumWords) {
+     String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
       Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));  
       qTokens = Utils.dropStopWords(qTokens);
       qTokens = Utils.removeShortTokens(qTokens, 2);
@@ -36,7 +47,22 @@ public class Similarity {
         }
       });
 
+      /// if there's no topNumWords, we just return the entire list
+      if (topNumWords == -1 ){
+        topNumWords = allKLDQuestion.size();
+      }
+
       List<Entry<String, Double>> highKLDQuestion = Utils.sliceCollection(allKLDQuestion, 0, topNumWords);
+      return highKLDQuestion;
+    }
+
+
+    public Vector<String> getTopQuestionWordsReweightingNoScore(String question, String title, String body, int topNumWords) {//, Vector<String> importantTokens) {
+
+      /// first get all the words with their KLD score and then reweight those in the titile, question setences and repeating bigrams
+      /// we calculate KLD of all words in the question and we want to give to those in the title higher weight
+
+      List<Entry<String, Double>> highKLDQuestion = this.getTopQuestionWordsReweightingWithScore(question, title, body, topNumWords);
       Vector<String> topQuestionWords = new Vector<String>();
       for (Entry<String, Double> e : highKLDQuestion) {
         topQuestionWords.add(e.getKey());
@@ -44,99 +70,29 @@ public class Similarity {
       return topQuestionWords;
     }
 
+    public List<Entry<String, Double>> getTopQuestionWordsReweightingWithScore(String question, String title, String body, int topNumWords) {//, Vector<String> importantTokens) {
 
-
-    public Vector<String> getTopQuestionWords (String question, String title, String body, int topNumWords) {
-    //// given a question returns top N words according to pointwise KLD score
-      String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
-      Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
-      
-      qTokens = Utils.dropStopWords(qTokens);
-      qTokens = Utils.removeShortTokens(qTokens, 2);
-
+      /// first get all the words with their KLD score and then reweight those in the titile, question setences and repeating bigrams
       /// we calculate KLD of all words in the question and we want to give to those in the title higher weight
-      List<Entry<String, Double>> allKLDQuestion = Utils.pointwiseKLD(qTokens, luc);
+      List<Entry<String, Double>> allKLDQuestion = this.getTopQuestionWordsWithScore(question, topNumWords);
 
-/*      List<Entry<String, Double>> highKLDQuestionBeforeReweighting = allKLDQuestion;
-      for (Entry<String, Double> e : allKLDQuestion) {
-        if (title.contains(e.getKey())) {
-          e.setValue(e.getValue() * 1.5);
-        }
-      }*/
-
-      // now we sort reweighted words
-      Collections.sort(allKLDQuestion, new Comparator<Entry<String, Double>>() {
-        @Override
-        public int compare(Entry<String, Double> e1, Entry<String, Double> e2) {
-          return e2.getValue().compareTo(e1.getValue()); 
-        }
-      });
-      List<Entry<String, Double>> highKLDQuestion = Utils.sliceCollection(allKLDQuestion, 0, topNumWords);
-      Vector<String> topQuestionWords = new Vector<String>();
-      for (Entry<String, Double> e : highKLDQuestion) {
-        topQuestionWords.add(e.getKey());
-      }
-      return topQuestionWords;
-    }
-
-    public Vector<String> getTopQuestionWords1 (String question, String title, String body, int topNumWords) { //, Vector<String> importantTokens) {
-    //// given a question returns top N words according to pointwise KLD score
-      String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
-      Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
-      
-      qTokens = Utils.dropStopWords(qTokens);
-      qTokens = Utils.removeShortTokens(qTokens, 2);
-      // qTokens = Utils.s_stemmer(qTokens);
-
-      /// we calculate KLD of all words in the question and we want to give to those in the title higher weight
-      List<Entry<String, Double>> allKLDQuestion = Utils.pointwiseKLD(qTokens, luc);
-
-      /*List<Entry<String, Double>> highKLDQuestionBeforeReweighting = allKLDQuestion;
-      for (Entry<String, Double> e : allKLDQuestion) {
-        if (title.contains(e.getKey())) {
-          e.setValue(e.getValue() * 1.5);
-        }
-
-        if (importantTokens.contains(e.getKey())) {
-          e.setValue(e.getValue() * 1.5); 
-        }
-      }*/
-
-      // now we sort reweighted words
-      Collections.sort(allKLDQuestion, new Comparator<Entry<String, Double>>() {
-        @Override
-        public int compare(Entry<String, Double> e1, Entry<String, Double> e2) {
-          return e2.getValue().compareTo(e1.getValue()); 
-        }
-      });
-      List<Entry<String, Double>> highKLDQuestion = Utils.sliceCollection(allKLDQuestion, 0, topNumWords);
-      Vector<String> topQuestionWords = new Vector<String>();
-      for (Entry<String, Double> e : highKLDQuestion) {
-        topQuestionWords.add(e.getKey());
-      }
-      return topQuestionWords;
-    }
-
-
-
-    public Vector<Entry<String, Double>> getTopQuestionWordsWithCertainty(String question, String title, String body, int topNumWords, Vector<String> importantTokens, double cutOff) {
-    //// given a question returns top N words according to pointwise KLD score
-      String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
-      Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
-      
-      qTokens = Utils.dropStopWords(qTokens);
-      qTokens = Utils.removeShortTokens(qTokens, 2);
-      qTokens = Utils.s_stemmer(qTokens);
-
-      /// we calculate KLD of all words in the question and we want to give to those in the title higher weight
-      List<Entry<String, Double>> allKLDQuestion = Utils.pointwiseKLD(qTokens, luc);
       List<Entry<String, Double>> highKLDQuestionBeforeReweighting = allKLDQuestion;
+
+      Vector<String> wordsFromQuestionSent = Keywords.wordsFromQuestionSentences(question);
+
+      Vector<String> blocks = Keywords.splitQuestionIntoBlocks(question);
+      Vector<String> wordsFromRepBigrams = Keywords.wordsFromRepeatedBigrams(blocks);
+
       for (Entry<String, Double> e : allKLDQuestion) {
-        if (title.contains(e.getKey())) {
+        if (title.toLowerCase().contains(e.getKey())) {
           e.setValue(e.getValue() * 1.5);
         }
 
-        if (importantTokens.contains(e.getKey())) {
+        if (wordsFromQuestionSent.contains(e.getKey())) {
+          e.setValue(e.getValue() * 1.5); 
+        }
+
+        if (wordsFromRepBigrams.contains(e.getKey())) {
           e.setValue(e.getValue() * 1.5); 
         }
       }
@@ -149,59 +105,20 @@ public class Similarity {
         }
       });
 
-      List<Entry<String, Double>> highKLDQuestion = Utils.sliceCollection(allKLDQuestion, 0, topNumWords);
-      // Vector<String> topQuestionWords = new Vector<String>();
-      // for (Entry<String, Double> e : highKLDQuestion) {
-      //   topQuestionWords.add(e.getKey());
-      // }
-      Vector<Entry<String, Double>> allEntries = new Vector<Entry<String, Double>> (highKLDQuestion);
-      if (cutOff < 0) {
-        return allEntries;
+      if (topNumWords == -1 ){
+        topNumWords = allKLDQuestion.size();
       }
 
-      Vector<Entry<String, Double>> cutoffEntries = new Vector<Entry<String, Double>>();
-      for (int i = 0; i < allEntries.size(); ++i) {
-        if (allEntries.get(i).getValue() > cutOff) {
-          cutoffEntries.add(allEntries.get(i));
-        }
-      }
-      return cutoffEntries;
+      List<Entry<String, Double>> highKLDQuestion = Utils.sliceCollection(allKLDQuestion, 0, topNumWords);
+      return highKLDQuestion;
     }
 
 
-
-
-    public Vector<String> getTopQuestionWordsNoReweighting (String question, String title, String body, int topNumWords) {
-    //// given a question returns top N words according to pointwise KLD score
-      String processedQuestion = Utils.shrinkRepeatedChars(Utils.removePunct(question.toLowerCase()));
-      Vector<String> qTokens = new Vector<String>(Arrays.asList(processedQuestion.split("\\s")));
-      
-      qTokens = Utils.dropStopWords(qTokens);
-      qTokens = Utils.removeShortTokens(qTokens, 2);
-
-      /// we calculate KLD of all words in the question and we want to give to those in the title higher weight
-      List<Entry<String, Double>> allKLDQuestion = Utils.pointwiseKLD(qTokens, luc);
-
-
-      // List<Entry<String, Double>> highKLDQuestion = Utils.sliceCollection(Utils.pointwiseKLD(qTokens, luc),0, topNumWords);
-      List<Entry<String, Double>> highKLDQuestion = Utils.sliceCollection(allKLDQuestion, 0, topNumWords);
-      
-      
-      // System.out.println("After reweighting :: " + allKLDQuestion + "\n");
-      // input.next();
-      Vector<String> topQuestionWords = new Vector<String>();
-      for (Entry<String, Double> e : highKLDQuestion) {
-        topQuestionWords.add(e.getKey());
-      }
-      // System.out.println(topQuestionWords);
-      return topQuestionWords;
-    }
-
-     public Vector<String> getTopAnswerWords (Vector<String> answers, int topNumWords) {
+     public Vector<String> getTopAnswerWords(Vector<String> answers, int topNumWords) {
     //// given a set of questions return top N words 
       if (answers.size() < 3) { // if there're less than 3 answers, concat all answers and find words using KLD
         String collectiveAnswer = Utils.join_vector(answers, " ");
-        return getTopQuestionWords(collectiveAnswer, "", "", 10);
+        return getTopQuestionWordsNoScore(collectiveAnswer, 10);
       }
 
       // if there're more than 3 answers, find words that are repeated between answers 
@@ -222,6 +139,8 @@ public class Similarity {
       return topAnswersWords;
     }
 
+
+
     public double averageIntersection(Vector<Snippet> snippets, Vector<String> tokens_) {
     //// given a list of snippets, find an average number of intersecting words with given list of tokens
 
@@ -238,15 +157,22 @@ public class Similarity {
         tokens.add(newStr);
       }
       Vector<String> probeTokens = new Vector<String>(Arrays.asList(snippets.get(0).queryText.split("\\s")));
-      tokens.removeAll(probeTokens);
+      // System.out.println("probe tokens :: " + probeTokens);
+      // System.out.println("importatnt tokens  :: " + tokens);
+      // tokens.removeAll(probeTokens);
 
       double length = tokens.size() * 1.0;
 
       for (Snippet s : snippets) {
+        // System.out.println("snippet :: " + s.original);
+        // System.out.println("snippet tokens :: " + s.tokens());
         HashSet<String> sTokens = new HashSet<String>(s.tokens());
+
         sTokens.removeAll(probeTokens);
         sTokens.retainAll(tokens);
+        System.out.println(sTokens);
         accumScore += sTokens.size();
+
       }
 
       double aveIntersection = accumScore / (snippets.size() * 1.0);
@@ -255,7 +181,7 @@ public class Similarity {
       
       if (Double.isNaN(aveScore)) {
         System.out.println("Tokens :: " + tokens);
-        System.out.println("Probe tokens :: " + probeTokens);
+        // System.out.println("Probe tokens :: " + probeTokens);
         
         input.next();
       }
@@ -276,14 +202,16 @@ public class Similarity {
         tokens.add(newStr);
       }
 
-      tokens.removeAll(probeTokens);
+      // tokens.removeAll(probeTokens);
       double length = tokens.size() * 1.0;
 
       for (Snippet s : snippets) {
+        // System.out.println("snippet :: " + s.original);
         snippetsTokens.addAll(s.tokens());
       }
       snippetsTokens.removeAll(probeTokens);
       snippetsTokens.retainAll(tokens);
+      System.out.println(snippetsTokens);
 
       double allIntersect = snippetsTokens.size()* 1.0 / length; 
 
@@ -296,13 +224,31 @@ public class Similarity {
       double aveQuestionIntersectionWeight, double aveAnswersIntersectionWeight, double questionIntersectionWeight, double answersIntersectionWeight) {
     //// given a list of snippets for a probe and quesion's and answers' top words, find a score for this probe
       //// average intersection with question across snippets
+      // System.out.println("top question words :: " +  topQuestionWords);
+      // System.out.println("top answers words :: " +  topAnswersWords);
 
+      System.out.println("Average question intersection :: ");
       double aveQuestionIntersection = this.averageIntersection(snippets, topQuestionWords);      
+      System.out.println(aveQuestionIntersection);
+      System.out.println("Average answers intersection :: ");
       double aveAnswersIntersection = this.averageIntersection(snippets, topAnswersWords);
+      System.out.println(aveAnswersIntersection);
+      // System.out.println("aveQuestionIntersection :: " + aveQuestionIntersection);
+      // System.out.println("aveAnswersIntersection :: " + aveAnswersIntersection);
 
       //// now intersection of all snippets with answer
+      // System.out.println(topQuestionWords);
+      // System.out.println(topAnswersWords);
+
+      System.out.println("All question intersection :: ");
       double questionIntersection = this.allSnippetsIntersection(snippets, topQuestionWords);
+      System.out.println(questionIntersection);
+      System.out.println("All answers intersection :: ");
       double answersIntersection = this.allSnippetsIntersection(snippets, topAnswersWords);
+      System.out.println(answersIntersection);
+
+      // System.out.println("questionIntersection :: " + questionIntersection);
+      // System.out.println("answersIntersection :: " + answersIntersection);
 
 
       // double probeScore = 0.125*aveQuestionIntersection + 0.375*aveAnswersIntersection + 0.125*questionIntersection + 0.375*answersIntersection;
