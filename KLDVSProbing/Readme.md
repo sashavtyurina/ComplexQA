@@ -140,3 +140,11 @@ Also, when evaluating probes and comparing them to snippets, we exteneded the li
 The result files are v3_fixedYahooQIDS.txt and v3_fixedYahooQIDS.png
 
 
+### v2.txt
+
+Before we made two changes: extended the list of top words from 10 to 20, and fixed the filtering out of yahoo answer pages. After making these changes, the results seem to have become better. In this version we again use top-10 words from question/answers to evaluate the goodness of the queries. We want to make see which of the above changes made the results better. 
+
+The results for v2 are approximately the same (or a tiny bit better) as in v1. Which tells us that the increase that we got in v3 is coming from the expansion of the top words list from 10 to 20 words.
+
+
+

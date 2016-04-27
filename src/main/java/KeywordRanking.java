@@ -800,10 +800,10 @@ public static String getGTQueryForQuestion(int questID) {
         System.out.println("words after reweighting :: " + reweightedWords);*/
 
         // use top-20 question words for intersection
-        Vector<String> top20QuestionWords = new Vector<String>(Utils.sliceCollection(similarity.getTopQuestionWordsNoScore(rawQuestion, -1), 0, 20));
+        Vector<String> top20QuestionWords = new Vector<String>(Utils.sliceCollection(similarity.getTopQuestionWordsNoScore(rawQuestion, -1), 0, 10));
         System.out.println("top 20 question words :: " + top20QuestionWords);
 
-        Vector<String> topAnswerWords = similarity.getTopAnswerWords(answers, 20);
+        Vector<String> topAnswerWords = similarity.getTopAnswerWords(answers, 10);
         System.out.println("top 20 answer words :: " + topAnswerWords);
 
 
