@@ -7,6 +7,7 @@ public class Snippet {
 	public String processed;
 	private Vector<String> tokens;
 	private Vector<String> bigrams;
+	public String docURL;
 
 
 	public int snippetID;
@@ -23,6 +24,7 @@ public class Snippet {
 		queryID = _queryID;
 		questionID = _questionID;
 		queryText = _queryText;
+		docURL = "";
 
 		processed = Utils.shrinkRepeatedChars(Utils.removePunct(original.toLowerCase()));
 		tokens = Utils.removeShortTokens(new Vector<String>(Arrays.asList(processed.split("\\s"))), 2);
@@ -38,17 +40,20 @@ public class Snippet {
 			while (snippetsRS.next()) {
 				String docURL = snippetsRS.getString("docURL");
 				String snippet = snippetsRS.getString("snippet");
-				if (docURL.contains("answers.yahoo.")) {
-					// System.out.println("DELETING THIS SNIPPET :: " + snippet);
-					continue;
-				}
+				// if (docURL.contains("answers.yahoo.")) {
+				// 	// System.out.println("DELETING THIS SNIPPET :: " + snippet);
+				// 	continue;
+				// }
 				
 				String query = snippetsRS.getString("queryText");
 				int snipID = snippetsRS.getInt("sid");
 				// int querID = snippetsRS.getInt("queryID");
 				int querID = -1;
 				int questID = snippetsRS.getInt("questID");
-				snippetsList.add(new Snippet(snippet, query, snipID, querID, questID, false));
+
+				Snippet s = new Snippet(snippet, query, snipID, querID, questID, false);
+				s.docURL = docURL;
+				snippetsList.add(s);
 
 			}
 		} catch (SQLException e) {

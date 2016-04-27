@@ -118,7 +118,7 @@ public class Similarity {
     //// given a set of questions return top N words 
       if (answers.size() < 3) { // if there're less than 3 answers, concat all answers and find words using KLD
         String collectiveAnswer = Utils.join_vector(answers, " ");
-        return getTopQuestionWordsNoScore(collectiveAnswer, 10);
+        return getTopQuestionWordsNoScore(collectiveAnswer, topNumWords);
       }
 
       // if there're more than 3 answers, find words that are repeated between answers 

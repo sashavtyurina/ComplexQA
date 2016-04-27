@@ -748,7 +748,7 @@ public static String getGTQueryForQuestion(int questID) {
       /// get the top words from the probes
 
       /// get questions with manual queries - ok
-      String sql = "select qid, rawQuestion, gtquery, qtitle, qbody from questions;"; 
+      String sql = "select qid, yahooqid, rawQuestion, gtquery, qtitle, qbody from questions;"; 
       Statement qStmt = dbConnection.createStatement();
       ResultSet qRS = qStmt.executeQuery(sql);
       int qNum = 1;
@@ -759,6 +759,10 @@ public static String getGTQueryForQuestion(int questID) {
         System.out.println("qNum :: " + qNum);
 
 
+
+        String yahooqid = qRS.getString("yahooqid").toLowerCase();
+        System.out.println("yahooqid :: " + yahooqid);
+        System.out.println("got yahooqid normally");
         String qtitle = qRS.getString("qtitle").toLowerCase();
         String qbody = qRS.getString("qbody").toLowerCase();
         String rawQuestion = qRS.getString("rawQuestion").toLowerCase();
@@ -783,8 +787,6 @@ public static String getGTQueryForQuestion(int questID) {
 
         /// sort question's terms by kld and take the top 20 - ok
         Vector<String> topQuestionWordsByKLD = similarity.getTopQuestionWordsNoScore(rawQuestion, 10);
-        Vector<String> topAnswerWords = similarity.getTopAnswerWords(answers, 10);
-        System.out.println("top answer words :: " + topAnswerWords);
         
         System.out.println("\nWords by KL divergence\n");
         for (String w : topQuestionWordsByKLD) {
@@ -797,9 +799,12 @@ public static String getGTQueryForQuestion(int questID) {
         /*Vector<String> reweightedWords = similarity.getTopQuestionWordsReweightingNoScore(rawQuestion, qtitle, qbody, 10);
         System.out.println("words after reweighting :: " + reweightedWords);*/
 
-        // use all question words for intersection
-        // Vector<String> top20QuestionWords = new Vector<String>(Utils.sliceCollection(similarity.getTopQuestionWordsNoScore(rawQuestion, -1), 0, 20));
-        // System.out.println("allQuestionWords :: " + top20QuestionWords);
+        // use top-20 question words for intersection
+        Vector<String> top20QuestionWords = new Vector<String>(Utils.sliceCollection(similarity.getTopQuestionWordsNoScore(rawQuestion, -1), 0, 20));
+        System.out.println("top 20 question words :: " + top20QuestionWords);
+
+        Vector<String> topAnswerWords = similarity.getTopAnswerWords(answers, 20);
+        System.out.println("top 20 answer words :: " + topAnswerWords);
 
 
         /// compose all possible queries out of 10 top words - ok
@@ -811,7 +816,7 @@ public static String getGTQueryForQuestion(int questID) {
           ResultSet gtSnippetsRS = gtSnippetsStmt.executeQuery(sql);
           KLDProbes.add(gtSnippetsRS.getString("queryText"));
           gtSnippetsStmt.close();
-          gtSnippetsRS.close();        
+          gtSnippetsRS.close();
         
         /// get snippets for these probes - ok
         Vector<Snippet> KLDSnippets = new Vector<Snippet>();
@@ -819,16 +824,34 @@ public static String getGTQueryForQuestion(int questID) {
         for (String p : KLDProbes) {
           /// for every probe find its corresponding snippets. 
           System.out.println("probe :: " + p);
-          sql = "select snippet, queryText, sid, docURL, questID from AllSnippets where" queryText=\"" + p + "\";"; 
+          sql = "select snippet, queryText, sid, docURL, questID from AllSnippets where queryText=\"" + p + "\";"; 
           Statement snippetsStmt = dbConnection.createStatement();
           ResultSet snippetsRS = snippetsStmt.executeQuery(sql);
+
           Vector<Snippet> newSnippets = Snippet.rsToSnippetList(snippetsRS);
           if (newSnippets.size() == 0) {
             System.out.println(p + " was not found");
             continue;
           }
+
+          Vector<Snippet> snippetsToDelete = new Vector<Snippet>();
+          if (! yahooqid.equals("novalue")) {
+            for (Snippet s : newSnippets) {
+              System.out.println("docurl :: " + s.docURL);
+              if (s.docURL.toLowerCase().contains("answers.yahoo.") && s.docURL.toLowerCase().contains(yahooqid)) {
+                System.out.println("Removing snippet :: " + s.docURL);
+                snippetsToDelete.add(s);
+              }
+            }
+          }
+          newSnippets.removeAll(snippetsToDelete);
+
+          Double score = new Double(0.0);
+
+          if (newSnippets.size() != 0) {
+            score = new Double(similarity.scoreForSingleProbe(top20QuestionWords, topAnswerWords, newSnippets, 0.25, 0.25, 0.25, 0.25));
+          }
           
-          Double score = new Double(similarity.scoreForSingleProbe(topQuestionWordsByKLD, topAnswerWords, newSnippets, 0.25, 0.25, 0.25, 0.25));
           probeScores.put(p, score);
           System.out.println("probe :: " + p + " :: " + score);
 

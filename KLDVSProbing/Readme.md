@@ -127,3 +127,16 @@ All question intersection :: [bull, puppy]
 All answers intersection :: [puppies, eat, don't, puppy, dog]
 
 Total score ::  0.23
+
+
+### v3_fixedYahooQIDS.txt
+
+Before we would filter out a snippet if it came from Yahoo answers website (i.e. if url contains answers.yahoo.). We did that to eliminate the question itself being retrived. 
+But that way some pages from Yahoo answers were filtered out, even though that was a different question. In this version we also keep track of question ids, so we can do a better job filtering out the snippets coming from the questions themselves. 
+
+
+Also, when evaluating probes and comparing them to snippets, we exteneded the list pf top question words and top answer words. We used to have 10 words in each list, and now it's 20. The reason behind this is that some of the relevant to the question words sometines don't make it to the top-10 list. Therefore, when we get a good snippet, it doesn't get a good score, because the intersection with the question/answer top-10 words is low. 
+
+The result files are v3_fixedYahooQIDS.txt and v3_fixedYahooQIDS.png
+
+
