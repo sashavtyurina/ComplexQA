@@ -747,6 +747,8 @@ public static String getGTQueryForQuestion(int questID) {
       /// rank the probes - ok
       /// get the top words from the probes
 
+
+      PrintWriter probeWriter = new PrintWriter(new FileOutputStream("KLDVSProbing/topRankedProbes_v4.txt"));
       /// get questions with manual queries - ok
       String sql = "select qid, yahooqid, rawQuestion, gtquery, qtitle, qbody from questions;"; 
       Statement qStmt = dbConnection.createStatement();
@@ -754,20 +756,33 @@ public static String getGTQueryForQuestion(int questID) {
       int qNum = 1;
 
       while (qRS.next()) {
-        int questID = qRS.getInt("qid");
+        Vector<String> gtquery = new Vector<String>(Arrays.asList(qRS.getString("gtquery").toLowerCase().split("\\s")));
+        System.out.println(gtquery);
+
+        String rawQuestion = qRS.getString("rawQuestion").toLowerCase();
+        Vector<String> scores = similarity.getTopQuestionWordsNoScore(rawQuestion, 10);
+        gtquery.removeAll(scores);
+
+        System.out.println("Missing :: " + gtquery);
+        for (String e : scores) {
+          System.out.println(e);
+        }
+        System.out.println("\n****\n");
+
+/*        int questID = qRS.getInt("qid");
         System.out.println("qid :: " + questID);
         System.out.println("qNum :: " + qNum);
 
 
 
-        String yahooqid = qRS.getString("yahooqid").toLowerCase();
+        Vector<String> yahooqid = new Vector<String>(Arrays.asList(qRS.getString("yahooqid").toLowerCase().split("&&")));
         System.out.println("yahooqid :: " + yahooqid);
         System.out.println("got yahooqid normally");
         String qtitle = qRS.getString("qtitle").toLowerCase();
         String qbody = qRS.getString("qbody").toLowerCase();
         String rawQuestion = qRS.getString("rawQuestion").toLowerCase();
         String gtquery = qRS.getString("gtquery").toLowerCase();
-        Vector<String> gtTokens = Utils.str2vect(gtquery);
+        Vector<String> gtTokens = Utils.s_stemmer(Utils.str2vect(gtquery));
         System.out.println("\nGround truth query ::\n");
         for (String t : gtTokens) {
           System.out.println(t);
@@ -794,16 +809,11 @@ public static String getGTQueryForQuestion(int questID) {
         }
         System.out.println("\n***\n");
 
-
-        /// change normally ranked words by KLD to words ranked with reweighting 
-        /*Vector<String> reweightedWords = similarity.getTopQuestionWordsReweightingNoScore(rawQuestion, qtitle, qbody, 10);
-        System.out.println("words after reweighting :: " + reweightedWords);*/
-
         // use top-20 question words for intersection
-        Vector<String> top20QuestionWords = new Vector<String>(Utils.sliceCollection(similarity.getTopQuestionWordsNoScore(rawQuestion, -1), 0, 10));
+        Vector<String> top20QuestionWords = Utils.s_stemmer(new Vector<String>(Utils.sliceCollection(similarity.getTopQuestionWordsNoScore(rawQuestion, -1), 0, 20)));
         System.out.println("top 20 question words :: " + top20QuestionWords);
 
-        Vector<String> topAnswerWords = similarity.getTopAnswerWords(answers, 10);
+        Vector<String> topAnswerWords = Utils.s_stemmer(similarity.getTopAnswerWords(answers, 20));
         System.out.println("top 20 answer words :: " + topAnswerWords);
 
 
@@ -835,12 +845,16 @@ public static String getGTQueryForQuestion(int questID) {
           }
 
           Vector<Snippet> snippetsToDelete = new Vector<Snippet>();
-          if (! yahooqid.equals("novalue")) {
+          if (! yahooqid.contains("novalue")) {
             for (Snippet s : newSnippets) {
               System.out.println("docurl :: " + s.docURL);
-              if (s.docURL.toLowerCase().contains("answers.yahoo.") && s.docURL.toLowerCase().contains(yahooqid)) {
-                System.out.println("Removing snippet :: " + s.docURL);
-                snippetsToDelete.add(s);
+              if (s.docURL.toLowerCase().contains("answers.yahoo.")) {
+                for (String yqid : yahooqid) {
+                  if (s.docURL.toLowerCase().contains(yqid)) {
+                    System.out.println("Removing snippet :: " + s.docURL);
+                    snippetsToDelete.add(s);
+                  }
+                }
               }
             }
           }
@@ -862,11 +876,15 @@ public static String getGTQueryForQuestion(int questID) {
         // / rank the probes - ok
         List<Entry<String, Double>> scoredProbes = Utils.sliceCollection(Utils.entriesSortedByValues(probeScores, "dec"), 0, 10);
 
+        probeWriter.println(rawQuestion + "\n\n");
+
         Vector<String> allWords = new Vector<String>();
         for (Entry<String, Double> scoredProbe : scoredProbes) {
+          probeWriter.println(scoredProbe.getKey());
           System.out.println(scoredProbe.getKey() + " :: " + decimalFormat.format(scoredProbe.getValue()));
           allWords.addAll(Utils.str2vect(scoredProbe.getKey()));
         }
+        probeWriter.println("\n------------------------------------------------------------\n");
 
         System.out.println("\nWords reranked after probing :: \n");
         Vector<String> rerankedWords = new Vector<String>();
@@ -883,9 +901,10 @@ public static String getGTQueryForQuestion(int questID) {
         System.out.println("RBP for probing :: " + probing);        
 
         System.out.println("\n------------------------------------------------------------\n");
-        qNum ++;
+        qNum ++;*/
       }
     
+      probeWriter.close();
       qStmt.close();
       qRS.close();
     } catch (SQLException e) {
@@ -985,10 +1004,18 @@ public static void main(String[] args) throws IOException, ParseException, JSONE
   //     System.out.println("Input arguments: index_path, query string");
   //     return;
   // }
+
   setThingsUp();
-  // exportGTQueries();
   KLDvsProbing();
-  
+  // String q = "Okay, i need actual help here? Okay, so last night the american music awards were on and i was SO psyced that i just had to watch it so decided to record Veronica Mars and watch it later. The problem was that my VCR had been on the wrong channel and i got a black screen for the entire hour. This eppie was supposed to be So good and i really need to see it. So, i've been looking online for the past hour for sites that have the eppisode online and can't find any. So can someone ACTUALLY look and not just give me something that would have vids on it like youtube, because i looked there and it wasn't on there. Also tried to cw site and everywhere else. If someone can actually find the site with the video on it, i'll give you 10pts. <33";
+  // List<Entry<String, Double>> scores = similarity.getTopQuestionWordsWithScore(q, -1);
+
+  // for (Entry<String, Double> e : scores) {
+  //   System.out.println(e.getKey() + " :: " + e.getValue());
+  // }
+
+
+  // exportGTQueries();
   // addGoogleSearchDocs();
   // addBingSearchResultsFromFile();
   // testSimilarityMeasures1();

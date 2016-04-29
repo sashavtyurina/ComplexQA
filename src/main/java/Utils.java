@@ -859,8 +859,20 @@ public static void addtoDB () {
           q_i = 1.0 / (double)(luc.totalTerms());
         } 
 
+        double alpha = 0.5;
+        p_i = alpha*p_i + (1 - alpha)*q_i;
+
         double kldScore = p_i * Math.log(p_i / q_i);
         kldValues.put(e.getKey(), new Double(kldScore));
+
+        // System.out.println("WORD :: " + token);
+        // System.out.println("Total term freq in clueweb:: " + luc.totalTermFreq(token));
+        // System.out.println("Total terms in clueweb :: " + luc.totalTerms());
+        // System.out.println("P :: " + p_i);
+        // System.out.println("Q :: " + q_i);
+        // System.out.println("KLD score :: " + kldScore);
+        // System.out.println("\n****\n");
+
       } catch (IOException exc) {
         System.out.println(exc.getMessage());
         continue;

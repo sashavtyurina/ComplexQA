@@ -23,11 +23,11 @@ public class Snippet {
 		snippetID = _snippetID;
 		queryID = _queryID;
 		questionID = _questionID;
-		queryText = _queryText;
+		queryText = Utils.join_vector(Utils.s_stemmer(Utils.str2vect(_queryText)), " ");
 		docURL = "";
 
 		processed = Utils.shrinkRepeatedChars(Utils.removePunct(original.toLowerCase()));
-		tokens = Utils.removeShortTokens(new Vector<String>(Arrays.asList(processed.split("\\s"))), 2);
+		tokens = Utils.removeShortTokens(Utils.s_stemmer(new Vector<String>(Arrays.asList(processed.split("\\s")))), 2);
 		simScore = -1.0;
 		producedByTrueQuery = _producedByTrueQuery;
 		this.bigrams = new Vector<String>();

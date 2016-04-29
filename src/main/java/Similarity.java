@@ -156,7 +156,7 @@ public class Similarity {
         String newStr = new String(s);
         tokens.add(newStr);
       }
-      Vector<String> probeTokens = new Vector<String>(Arrays.asList(snippets.get(0).queryText.split("\\s")));
+      Vector<String> probeTokens = Utils.s_stemmer(new Vector<String>(Arrays.asList(snippets.get(0).queryText.split("\\s"))));
       // System.out.println("probe tokens :: " + probeTokens);
       // System.out.println("importatnt tokens  :: " + tokens);
       // tokens.removeAll(probeTokens);
@@ -193,7 +193,7 @@ public class Similarity {
     public double allSnippetsIntersection(Vector<Snippet> snippets, Vector<String> tokens_) {
     //// Create one big snippet from all the given snippets, and find its intersection with the givem list of tokens
       HashSet<String> snippetsTokens = new HashSet<String>();
-      Vector<String> probeTokens = new Vector<String>(Arrays.asList(snippets.get(0).queryText.split("\\s")));
+      Vector<String> probeTokens = Utils.s_stemmer(new Vector<String>(Arrays.asList(snippets.get(0).queryText.split("\\s"))));
 
       Vector<String> tokens = new Vector<String>();
 
